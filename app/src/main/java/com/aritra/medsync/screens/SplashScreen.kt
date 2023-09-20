@@ -1,4 +1,4 @@
-package com.aritra.medsync
+package com.aritra.medsync.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -40,7 +40,7 @@ fun SplashScreen(navController: NavController) {
         startAnimation = true
         delay(2000L)
         navController.popBackStack()
-        navController.navigate(route = MedSyncScreens.Login.name)
+        navController.navigate(route = MedSyncScreens.Home.name)
     }
     Surface {
         Column(

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aritra.medsync.LogInScreen
-import com.aritra.medsync.SplashScreen
+import com.aritra.medsync.screens.HomeScreen
+import com.aritra.medsync.screens.SplashScreen
 
 @Composable
 fun MedSyncApp() {
@@ -18,8 +18,8 @@ fun MedSyncApp() {
         composable(MedSyncScreens.Splash.name) {
             SplashScreen(navController = navController)
         }
-        composable(MedSyncScreens.Login.name) {
-            LogInScreen(navController = navController)
+        composable(MedSyncScreens.Home.name) {
+            HomeScreen()
         }
     }
 
