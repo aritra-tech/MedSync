@@ -47,8 +47,13 @@ fun HomeScreen(
         },
     ) {
         Surface(modifier = Modifier.padding(it)) {
-            Greetings()
-            OverviewCard()
+
+            Column(modifier = Modifier.fillMaxSize()) {
+                Greetings()
+                OverviewCard()
+
+                NoMedication()
+            }
         }
     }
 }
@@ -57,7 +62,7 @@ fun HomeScreen(
 fun Greetings() {
     Column {
         Text(
-            modifier = Modifier.padding(top = 10.dp,start = 12.dp),
+            modifier = Modifier.padding(top = 10.dp, start = 16.dp),
             text = "Good morning,",
             style = MaterialTheme.typography.displaySmall
         )
@@ -73,10 +78,9 @@ fun Greetings() {
 @Composable
 fun OverviewCard() {
 
-    Spacer(modifier = Modifier.height(100.dp))
     Card(
         modifier = Modifier
-            .padding(16.dp, 150.dp, 16.dp, 0.dp)
+            .padding(16.dp)
             .height(220.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
@@ -110,11 +114,33 @@ fun OverviewCard() {
 
             // TODO: Will be replacing with the users image or if the user is female then it will show female doctor else male
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
                 horizontalArrangement = Arrangement.End
             ) {
-                Image(painter = painterResource(id = R.drawable.female_doctor), contentDescription = "Doctor")
+                Image(
+                    painter = painterResource(id = R.drawable.female_doctor),
+                    contentDescription = "Doctor"
+                )
             }
         }
     }
 }
+
+@Composable
+fun NoMedication() {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 30.dp, start = 16.dp)
+    ) {
+        Text(
+            text = "Add your meds",
+            fontWeight = FontWeight.Medium,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+    }
+}
+
