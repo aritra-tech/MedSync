@@ -19,7 +19,12 @@ fun MedSyncApp() {
             SplashScreen(navController = navController)
         }
         composable(MedSyncScreens.Home.name) {
-            HomeScreen()
+            HomeScreen(
+                onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
+                navigateToUpdateScreen = { medicineID ->
+                    navController.navigate("${MedSyncScreens.UpdateMedication.name}/$medicineID")
+                }
+            )
         }
     }
 
