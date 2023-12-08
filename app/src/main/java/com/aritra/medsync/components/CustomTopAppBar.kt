@@ -20,14 +20,13 @@ import com.aritra.medsync.ui.theme.normal22
 fun CustomTopAppBar(
     title: String,
     shouldShowBackButton: Boolean = true,
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(BackgroundDark), onBackPress: () -> Unit
+    onBackPress: () -> Unit
 ) {
     TopAppBar(
         title = {
             Text(
                 text = title,
                 style = normal22,
-                color = OnBackgroundDark
             )
         },
         navigationIcon = {
@@ -42,11 +41,9 @@ fun CustomTopAppBar(
                 }
             }
         },
-        colors = colors
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun CustomTopAppBarPreview() {
