@@ -26,6 +26,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
+import com.aritra.medsync.ui.theme.bold18
+import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.medium18
+import com.aritra.medsync.ui.theme.normal12
 
 
 @Composable
@@ -64,13 +68,12 @@ fun Greetings() {
         Text(
             modifier = Modifier.padding(top = 10.dp, start = 16.dp),
             text = "Good morning,",
-            style = MaterialTheme.typography.displaySmall
+            style = bold18
         )
         Text(
             modifier = Modifier.padding(start = 12.dp),
             text = "Aritra!",
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.displaySmall
+            style = bold18
         )
     }
 }
@@ -98,16 +101,16 @@ fun OverviewCard() {
                 Text(
                     text = "Your plan for today",
                     fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = medium16,
                 )
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(
                     text = "1 medicine done",
-                    style = MaterialTheme.typography.titleSmall,
+                    style = normal12,
                 )
                 Text(
                     text = "3 medicine in progress",
-                    style = MaterialTheme.typography.titleSmall,
+                    style = normal12,
                 )
                 // TODO: Add a progress bar to track the medications taken and left
             }
@@ -138,8 +141,7 @@ fun NoMedication() {
     ) {
         Text(
             text = "Add your meds",
-            fontWeight = FontWeight.Medium,
-            style = MaterialTheme.typography.headlineSmall,
+            style = medium18,
         )
     }
 }
