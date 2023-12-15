@@ -28,7 +28,7 @@ fun MedSyncApp() {
             )
         }
         composable(MedSyncScreens.AddMedication.name) {
-            AddMedication(navController)
+            AddMedication()
         }
     }
 
