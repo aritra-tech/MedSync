@@ -44,6 +44,7 @@ fun AddMedication(
     var pillsAmount by rememberSaveable { mutableStateOf("") }
     var pillsEndDate by rememberSaveable { mutableStateOf("") }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
+    var reminder by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -74,7 +75,7 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -97,12 +98,14 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // TODO: Add drop-down to choose the frequency of the medicine taken
+
                 OutlinedTextField(
                     modifier = Modifier.width(152.dp),
                     value = pillsAmount,
@@ -123,7 +126,7 @@ fun AddMedication(
                     }
                 )
 
-                // TODO: Add drop-down to choose the frequency of the medicine taken
+                // TODO: Need to do some research regarding the frequency
 
                 OutlinedTextField(
                     modifier = Modifier.width(152.dp),
@@ -141,7 +144,7 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -164,7 +167,24 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // TODO: Need to change the leading icon
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = reminder,
+                onValueChange = { reminder = it },
+                placeholder = { Text(text = "11:00 AM") },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.calendar_fill_img),
+                        contentDescription = "end_date"
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(200.dp))
 
             Spacer(modifier = Modifier.weight(1f))
              MedSyncButton(
