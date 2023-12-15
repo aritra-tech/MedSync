@@ -38,7 +38,7 @@ fun SplashScreen(navController: NavController) {
     )
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(2000L)
+        delay(1000L)
         navController.popBackStack()
         navController.navigate(route = MedSyncScreens.Home.name)
     }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.aritra.medsync.screens.AddMedication
 import com.aritra.medsync.screens.HomeScreen
 import com.aritra.medsync.screens.SplashScreen
 
@@ -19,7 +20,15 @@ fun MedSyncApp() {
             SplashScreen(navController = navController)
         }
         composable(MedSyncScreens.Home.name) {
-            HomeScreen()
+            HomeScreen(
+                onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
+                navigateToUpdateScreen = { medicineID ->
+                    navController.navigate("${MedSyncScreens.UpdateMedication.name}/$medicineID")
+                }
+            )
+        }
+        composable(MedSyncScreens.AddMedication.name) {
+            AddMedication()
         }
     }
 
