@@ -7,8 +7,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.normal22
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
@@ -16,7 +18,8 @@ import com.aritra.medsync.ui.theme.normal22
 fun CustomTopAppBar(
     title: String,
     shouldShowBackButton: Boolean = true,
-    onBackPress: () -> Unit
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(Background),
+    onBackPress: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -37,11 +40,6 @@ fun CustomTopAppBar(
                 }
             }
         },
+        colors = colors
     )
-}
-
-@Preview
-@Composable
-fun CustomTopAppBarPreview() {
-    CustomTopAppBar("Title goes here") {}
 }

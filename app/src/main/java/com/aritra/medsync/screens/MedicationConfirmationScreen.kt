@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,6 +32,7 @@ import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.medium16
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationConfirmationScreen(navController: NavHostController) {
 
@@ -40,7 +43,10 @@ fun MedicationConfirmationScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CustomTopAppBar(title = "") {
+            CustomTopAppBar(
+                title = "",
+                colors = TopAppBarDefaults.topAppBarColors(backgroundColor)
+            ) {
                 navController.popBackStack()
             }
         }
