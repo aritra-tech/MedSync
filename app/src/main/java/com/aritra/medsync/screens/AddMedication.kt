@@ -1,6 +1,7 @@
 package com.aritra.medsync.screens
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -21,23 +20,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
-import com.aritra.medsync.ui.theme.bold28
+import com.aritra.medsync.navigation.MedSyncScreens
+import com.aritra.medsync.ui.theme.backgroundColor
+import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal14
 
 @Composable
 fun AddMedication(
-//    navigateBack: NavHostController
+    navController: NavHostController
 ) {
 
     var medicineName by rememberSaveable { mutableStateOf("") }
@@ -50,27 +54,29 @@ fun AddMedication(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CustomTopAppBar(title = "") {
-//                navigateBack.popBackStack()
+                navController.popBackStack()
             }
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
+                .background(backgroundColor)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+         ) {
 
             Text(
-                text = "Add Plan",
-                style = bold28,
+                text = stringResource(R.string.add_plan),
+                style = bold32,
                 color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(
-                text = "Pill Name",
+                text = stringResource(R.string.pill_name),
                 style = medium16,
                 color = Color.Black
             )
@@ -93,7 +99,7 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Amount & Frequency",
+                text = stringResource(R.string.amount_frequency),
                 style = medium16,
                 color = Color.Black
             )
@@ -139,7 +145,7 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "How Long?",
+                text = stringResource(R.string.how_long),
                 style = medium16,
                 color = Color.Black
             )
@@ -162,7 +168,7 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Reminder",
+                text = stringResource(R.string.reminder),
                 style = medium16,
                 color = Color.Black
             )
@@ -184,14 +190,13 @@ fun AddMedication(
                 }
             )
 
-            Spacer(modifier = Modifier.height(200.dp))
-
             Spacer(modifier = Modifier.weight(1f))
+
              MedSyncButton(
                  modifier = Modifier.fillMaxWidth(),
                  text = "Done"
              ) {
-                 
+                 navController.navigate(route = MedSyncScreens.MedicationConfirmScreen.name)
              }
         }
     }
@@ -200,5 +205,5 @@ fun AddMedication(
 @Preview
 @Composable
 fun AddMedsScreenPreview() {
-    AddMedication()
+    AddMedication(navController = rememberNavController())
 }
