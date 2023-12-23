@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritra.medsync.ui.theme.DMSansFontFamily
-import com.aritra.medsync.ui.theme.OutlineLight
-import com.aritra.medsync.ui.theme.PrimaryDark
+import com.aritra.medsync.ui.theme.HighlightedColor
+import com.aritra.medsync.ui.theme.OnSurface60
 
 @Composable
 fun MedSyncButton(
@@ -36,11 +36,11 @@ fun MedSyncButton(
             .then(modifier),
         onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
-            containerColor = PrimaryDark
+            containerColor = HighlightedColor
         ),
         enabled = enabled
     ) {
-        Text(text = text, color = if (enabled) Color.White else OutlineLight, fontFamily = DMSansFontFamily, fontSize = 14.sp)
+        Text(text = text, color = if (enabled) Color.White else OnSurface60, fontFamily = DMSansFontFamily, fontSize = 14.sp)
         trailingIcon?. let {
             Icon(modifier = Modifier.padding(start = 4.dp),painter = it, contentDescription = null)
         }

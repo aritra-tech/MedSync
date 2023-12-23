@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MedSync</string>
+    <string name="add_plan">Add Plan</string>
+    <string name="pill_name">Pill Name</string>
+    <string name="amount_frequency"><![CDATA[Amount & Frequency]]></string>
+    <string name="how_long">How Long?</string>
+    <string name="reminder">Reminder</string>
 </resources>
