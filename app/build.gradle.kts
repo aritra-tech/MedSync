@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin ("android")
     id ("kotlin-kapt")
+    id ("kotlin-parcelize")
     id ("com.google.devtools.ksp")
 }
 
@@ -14,7 +15,7 @@ android {
         minSdk = 25
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -53,7 +54,7 @@ android {
 
 dependencies {
 
-    val navVersion = "2.7.2"
+    val navVersion = "2.7.6"
     val lifecycleVersion = "2.6.2"
     val roomVersion = "2.5.2"
 
@@ -77,9 +78,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:$navVersion")
 
     // Material 3
-    implementation ("androidx.compose.material3:material3:1.1.1")
-    implementation ("androidx.compose.material3:material3-window-size-class:1.1.1")
-    implementation ("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation ("androidx.compose.material3:material3:1.1.2")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
 
     // Room
     implementation ("androidx.room:room-runtime:$roomVersion")
