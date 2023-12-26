@@ -1,8 +1,9 @@
 plugins {
     id("com.android.application")
     kotlin ("android")
-    id ("kotlin-kapt")
     id ("kotlin-parcelize")
+    id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
     id ("com.google.devtools.ksp")
 }
 
@@ -97,6 +98,9 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+
+    implementation ("com.google.dagger:hilt-android:2.49")
+    kapt ("com.google.dagger:hilt-compiler:2.49")
 
     // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
