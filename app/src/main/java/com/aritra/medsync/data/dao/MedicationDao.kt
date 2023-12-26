@@ -1,11 +1,13 @@
 package com.aritra.medsync.data.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.aritra.medsync.domain.model.Medication
 
+@Dao
 interface MedicationDao {
 
     @Query("SELECT * FROM medication WHERE id = :medicationId")
