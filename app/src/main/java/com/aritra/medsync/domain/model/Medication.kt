@@ -12,9 +12,9 @@ import java.util.Date
 data class Medication(
     @PrimaryKey(autoGenerate = true)
     var id : Int = 0,
-    var medicineName : String = "",
-    var pillsAmount : Int = 0,
-    var pillsFrequency : String = "",
-    var reminderTime : LocalDateTime? = null,
-    var date : Date? = null
+    var medicineName : String,
+    var pillsAmount : Int,
+    var pillsFrequency : String,
+    var reminderTime : Date,
+    var date : Date
 ) : Parcelable
