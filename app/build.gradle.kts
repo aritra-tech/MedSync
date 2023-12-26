@@ -1,7 +1,9 @@
 plugins {
     id("com.android.application")
     kotlin ("android")
+    id ("kotlin-parcelize")
     id ("kotlin-kapt")
+    id ("com.google.dagger.hilt.android")
     id ("com.google.devtools.ksp")
 }
 
@@ -14,7 +16,7 @@ android {
         minSdk = 25
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -49,11 +51,14 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 dependencies {
 
-    val navVersion = "2.7.2"
+    val navVersion = "2.7.6"
     val lifecycleVersion = "2.6.2"
     val roomVersion = "2.5.2"
 
@@ -65,6 +70,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    // Test
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -77,9 +84,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:$navVersion")
 
     // Material 3
-    implementation ("androidx.compose.material3:material3:1.1.1")
-    implementation ("androidx.compose.material3:material3-window-size-class:1.1.1")
-    implementation ("androidx.compose.material:material-icons-extended:1.5.1")
+    implementation ("androidx.compose.material3:material3:1.1.2")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
 
     // Room
     implementation ("androidx.room:room-runtime:$roomVersion")
@@ -94,6 +101,9 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+
+    implementation ("com.google.dagger:hilt-android:2.49")
+    kapt ("com.google.dagger:hilt-compiler:2.49")
 
     // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
