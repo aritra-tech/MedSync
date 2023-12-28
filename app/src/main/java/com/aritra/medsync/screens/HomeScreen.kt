@@ -1,5 +1,7 @@
 package com.aritra.medsync.screens
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,11 +29,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.ui.theme.bold18
+import com.aritra.medsync.ui.theme.bold20
+import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal12
+import java.time.LocalTime
+import java.time.ZoneId
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     onFabClicked: () -> Unit,
@@ -62,18 +69,29 @@ fun HomeScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Greetings() {
+
+    val currentHour = LocalTime.now(ZoneId.systemDefault()).hour
+
+    val greetingText = when (currentHour) {
+        in 5..11 -> "Good morning,"
+        in 12..16 -> "Good afternoon,"
+        in 17..20 -> "Good evening,"
+        else -> "Good night,"
+    }
+
     Column {
         Text(
             modifier = Modifier.padding(top = 10.dp, start = 16.dp),
-            text = "Good morning,",
-            style = bold18
+            text = greetingText,
+            style = bold24
         )
         Text(
             modifier = Modifier.padding(start = 12.dp),
             text = "Aritra!",
-            style = bold18
+            style = bold20
         )
     }
 }
