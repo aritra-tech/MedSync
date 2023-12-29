@@ -27,10 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
@@ -44,14 +42,16 @@ import com.aritra.medsync.ui.theme.normal14
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedication(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: AddMedicationViewModel
 ) {
 
     var medicineName by rememberSaveable { mutableStateOf("") }
-    var pillsAmount by rememberSaveable { mutableStateOf("") }
+    var pillsAmount by rememberSaveable { mutableStateOf("1") }
     var pillsEndDate by rememberSaveable { mutableStateOf("") }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
     var reminder by rememberSaveable { mutableStateOf("") }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -202,14 +202,25 @@ fun AddMedication(
                  modifier = Modifier.fillMaxWidth(),
                  text = "Save"
              ) {
+                 addAndValidateMedication(
+                     medicineName,
+                     pillsAmount.toIntOrNull() ?: 0,
+                     pillsFrequency,
+                     viewModel
+                 )
                  navController.navigate(route = MedSyncScreens.MedicationConfirmScreen.name)
              }
         }
     }
 }
 
-@Preview
-@Composable
-fun AddMedsScreenPreview() {
-    AddMedication(navController = rememberNavController())
+fun addAndValidateMedication(
+    medicationName: String,
+    pillsAmount: Int,
+    pillsFrequency: String,
+    addMedicationViewModel: AddMedicationViewModel
+) {
+    // TODO : Validation required while saving
+
+    val addMedication = addMedicationViewModel.createMedication(medicationName,pillsAmount,pillsFrequency)
 }
