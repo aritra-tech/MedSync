@@ -1,22 +1,28 @@
 package com.aritra.medsync.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.screens.AddMedication
+import com.aritra.medsync.screens.AddMedicationViewModel
 import com.aritra.medsync.screens.HomeScreen
 import com.aritra.medsync.screens.MedicationConfirmationScreen
 import com.aritra.medsync.screens.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MedSyncApp() {
 
     val navController = rememberNavController()
+    val viewModel: AddMedicationViewModel = hiltViewModel()
 
     NavHost(navController = navController,
         startDestination = MedSyncScreens.Splash.name,
@@ -49,7 +55,7 @@ fun MedSyncApp() {
             )
         }
         composable(MedSyncScreens.AddMedication.name) {
-            AddMedication(navController)
+            AddMedication(navController,viewModel)
         }
         composable(MedSyncScreens.MedicationConfirmScreen.name) {
             MedicationConfirmationScreen(navController)
