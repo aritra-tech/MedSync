@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.medicationConfirmation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

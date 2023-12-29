@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.homeScreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
-import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.bold20
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.medium16

@@ -11,10 +11,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aritra.medsync.screens.AddMedication
-import com.aritra.medsync.screens.AddMedicationViewModel
-import com.aritra.medsync.screens.HomeScreen
-import com.aritra.medsync.screens.MedicationConfirmationScreen
+import com.aritra.medsync.screens.addMedication.AddMedication
+import com.aritra.medsync.screens.addMedication.AddMedicationViewModel
+import com.aritra.medsync.screens.homeScreen.HomeScreen
+import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationScreen
 import com.aritra.medsync.screens.SplashScreen
 
 @RequiresApi(Build.VERSION_CODES.O)

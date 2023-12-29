@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.addMedication
 
 
 import androidx.compose.foundation.background

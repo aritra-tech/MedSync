@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.addMedication
 
 import androidx.lifecycle.ViewModel
 import com.aritra.medsync.domain.model.Medication
