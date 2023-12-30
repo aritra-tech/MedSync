@@ -15,6 +15,6 @@ data class Medication(
     var medicineName : String,
     var pillsAmount : Int,
     var pillsFrequency : String,
-    var reminderTime : Date,
-    var date : Date
+//    var reminderTime : Date,
+//    var date : Date
 ) : Parcelable

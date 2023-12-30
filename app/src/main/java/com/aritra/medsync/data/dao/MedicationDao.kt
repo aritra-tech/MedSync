@@ -13,8 +13,8 @@ interface MedicationDao {
     @Query("SELECT * FROM medication WHERE id = :medicationId")
     suspend fun getMedicationById(medicationId: Int) : Medication
 
-    @Query("SELECT * FROM medication ORDER BY date DESC")
-    suspend fun getAllMedication() : List<Medication>
+//    @Query("SELECT * FROM medication ORDER BY date DESC")
+//    suspend fun getAllMedication() : List<Medication>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(medicationModel: Medication): Long

@@ -10,4 +10,6 @@ sealed class MedSyncScreens(val name: String) {
 
     object MedicationConfirmScreen : MedSyncScreens("Confirmation")
     object UpdateMedication : MedSyncScreens("Update")
+    object History : MedSyncScreens("History")
+    object Settings : MedSyncScreens("Settings")
 }
