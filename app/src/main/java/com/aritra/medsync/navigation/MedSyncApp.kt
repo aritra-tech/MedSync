@@ -55,7 +55,10 @@ fun MedSyncApp() {
             )
         }
         composable(MedSyncScreens.AddMedication.name) {
-            AddMedication(navController,viewModel)
+            AddMedication(
+                navController,
+                viewModel
+            )
         }
         composable(MedSyncScreens.MedicationConfirmScreen.name) {
             MedicationConfirmationScreen(navController)
