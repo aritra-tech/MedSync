@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
+import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.navigation.MedSyncScreens
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold32
@@ -200,15 +201,17 @@ fun AddMedication(
 
              MedSyncButton(
                  modifier = Modifier.fillMaxWidth(),
-                 text = "Save"
+                 text = "Next"
              ) {
                  addAndValidateMedication(
-                     medicineName,
-                     pillsAmount.toIntOrNull() ?: 0,
-                     pillsFrequency,
-                     viewModel
+                     medicationName = medicineName,
+                     pillsAmount = pillsAmount.toIntOrNull() ?: 0,
+                     pillsFrequency = pillsFrequency,
+                     goToConfirmMedicationScreen = {
+                         navController.navigate("${MedSyncScreens.MedicationConfirmScreen.name}/${it}")
+                     },
+                     addMedicationViewModel = viewModel
                  )
-                 navController.navigate(route = MedSyncScreens.MedicationConfirmScreen.name)
              }
         }
     }
@@ -218,9 +221,12 @@ fun addAndValidateMedication(
     medicationName: String,
     pillsAmount: Int,
     pillsFrequency: String,
+    goToConfirmMedicationScreen: (List<Medication>) -> Unit,
     addMedicationViewModel: AddMedicationViewModel
 ) {
     // TODO : Validation required while saving
 
     val addMedication = addMedicationViewModel.createMedication(medicationName,pillsAmount,pillsFrequency)
+
+    goToConfirmMedicationScreen(addMedication)
 }
