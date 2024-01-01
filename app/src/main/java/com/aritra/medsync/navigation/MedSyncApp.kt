@@ -7,7 +7,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
@@ -31,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.addMedication.AddMedication
 import com.aritra.medsync.screens.addMedication.AddMedicationViewModel
 import com.aritra.medsync.screens.homeScreen.HomeScreen
@@ -104,6 +104,9 @@ fun MedSyncApp() {
             composable(MedSyncScreens.AddMedication.name) {
                 AddMedication(
                     navController,
+                    goToMedicationConfirmScreen = {
+                        navController.navigate("${MedSyncScreens.MedicationConfirmScreen.name}/${it}")
+                    },
                     viewModel
                 )
             }

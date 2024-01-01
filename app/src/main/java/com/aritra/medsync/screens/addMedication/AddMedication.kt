@@ -44,6 +44,7 @@ import com.aritra.medsync.ui.theme.normal14
 @Composable
 fun AddMedication(
     navController: NavHostController,
+    goToMedicationConfirmScreen: (List<Medication>) -> Unit,
     viewModel: AddMedicationViewModel
 ) {
 
@@ -72,7 +73,7 @@ fun AddMedication(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
-         ) {
+        ) {
 
             Text(
                 text = stringResource(R.string.add_plan),
@@ -199,20 +200,20 @@ fun AddMedication(
 
             Spacer(modifier = Modifier.weight(1f))
 
-             MedSyncButton(
-                 modifier = Modifier.fillMaxWidth(),
-                 text = "Next"
-             ) {
-                 addAndValidateMedication(
-                     medicationName = medicineName,
-                     pillsAmount = pillsAmount.toIntOrNull() ?: 0,
-                     pillsFrequency = pillsFrequency,
-                     goToConfirmMedicationScreen = {
-                         navController.navigate("${MedSyncScreens.MedicationConfirmScreen.name}/${it}")
-                     },
-                     addMedicationViewModel = viewModel
-                 )
-             }
+            MedSyncButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Next"
+            ) {
+                addAndValidateMedication(
+                    medicationName = medicineName,
+                    pillsAmount = pillsAmount.toIntOrNull() ?: 0,
+                    pillsFrequency = pillsFrequency,
+                    goToConfirmMedicationScreen = {
+                        goToMedicationConfirmScreen(it)
+                    },
+                    addMedicationViewModel = viewModel
+                )
+            }
         }
     }
 }
@@ -226,7 +227,8 @@ fun addAndValidateMedication(
 ) {
     // TODO : Validation required while saving
 
-    val addMedication = addMedicationViewModel.createMedication(medicationName,pillsAmount,pillsFrequency)
+    val addMedication =
+        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency)
 
     goToConfirmMedicationScreen(addMedication)
 }
