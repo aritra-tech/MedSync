@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.aritra.medsync.R
@@ -49,7 +51,7 @@ fun AddMedication(
 ) {
 
     var medicineName by rememberSaveable { mutableStateOf("") }
-    var pillsAmount by rememberSaveable { mutableStateOf("1") }
+    var pillsAmount by rememberSaveable { mutableStateOf("") }
     var pillsEndDate by rememberSaveable { mutableStateOf("") }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
     var reminder by rememberSaveable { mutableStateOf("") }
@@ -124,7 +126,7 @@ fun AddMedication(
                     modifier = Modifier.width(152.dp),
                     value = pillsAmount,
                     onValueChange = { pillsAmount = it },
-                    placeholder = { Text(text = "2", style = medium18) },
+                    placeholder = { Text(text = "0", style = medium18) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.pills_img),
@@ -137,7 +139,8 @@ fun AddMedication(
                             style = normal14,
                             color = Color.Black
                         )
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
                 // TODO: Need to do some research regarding the frequency
