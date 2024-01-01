@@ -7,7 +7,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -130,15 +135,18 @@ fun ShowBottomNavigation(
                 BottomNavItem(
                     name = "Home",
                     route = MedSyncScreens.Home.name,
+                    icon = Icons.Outlined.Home
 
                 ),
                 BottomNavItem(
                     name = "History",
-                    route = MedSyncScreens.History.name
+                    route = MedSyncScreens.History.name,
+                    icon = Icons.Outlined.History
                 ),
                 BottomNavItem(
                     name = "Setting",
-                    route = MedSyncScreens.Settings.name
+                    route = MedSyncScreens.Settings.name,
+                    icon = Icons.Outlined.Settings
                 )
             )
             bottomNavItems.forEach { item ->
