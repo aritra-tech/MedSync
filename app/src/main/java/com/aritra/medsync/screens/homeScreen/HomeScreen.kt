@@ -47,6 +47,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.padding(vertical = 90.dp),
                 onClick = { onFabClicked() }
             ) {
                 Icon(
