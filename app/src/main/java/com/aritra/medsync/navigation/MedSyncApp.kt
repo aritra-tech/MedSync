@@ -2,6 +2,7 @@ package com.aritra.medsync.navigation
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -37,6 +38,7 @@ import com.aritra.medsync.screens.homeScreen.HomeScreen
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationScreen
 import com.aritra.medsync.screens.SplashScreen
 import com.aritra.medsync.screens.history.HistoryScreen
+import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
 import com.aritra.medsync.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
@@ -69,6 +71,7 @@ fun MedSyncApp() {
     ) {
 
         val viewModel: AddMedicationViewModel = hiltViewModel()
+        val medicationConfirmViewModel : MedicationConfirmViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -105,13 +108,24 @@ fun MedSyncApp() {
                 AddMedication(
                     navController,
                     goToMedicationConfirmScreen = {
-                        navController.navigate("${MedSyncScreens.MedicationConfirmScreen.name}/${it}")
+                        val bundle = Bundle()
+                        bundle.putParcelableArrayList("medication", ArrayList(it))
+                        navController.currentBackStackEntry?.savedStateHandle.apply {
+                            this?.set("medication",bundle)
+                        }
+                        navController.navigate(MedSyncScreens.MedicationConfirmScreen.name)
                     },
                     viewModel
                 )
             }
             composable(MedSyncScreens.MedicationConfirmScreen.name) {
-                MedicationConfirmationScreen(navController)
+                val result = navController.previousBackStackEntry?.savedStateHandle?.get<Bundle>("medication")
+                val medication = result?.getParcelableArrayList<Medication>("medication")
+                MedicationConfirmationScreen(
+                    medication,
+                    navController,
+                    medicationConfirmViewModel
+                )
             }
             composable(MedSyncScreens.History.name) {
                 HistoryScreen()

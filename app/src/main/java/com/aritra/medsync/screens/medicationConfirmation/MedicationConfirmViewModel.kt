@@ -3,16 +3,16 @@ package com.aritra.medsync.screens.medicationConfirmation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aritra.medsync.domain.model.MedicationConfirmation
-import com.aritra.medsync.domain.repository.MedicationRepository
-import dagger.hilt.android.HiltAndroidApp
+import com.aritra.medsync.screens.medicationConfirmation.usecase.MedicationConfirmUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltAndroidApp
+@HiltViewModel
 class MedicationConfirmViewModel @Inject constructor(
-    private val repository: MedicationRepository
+    private val medicationConfirmUseCase : MedicationConfirmUseCase
 ) : ViewModel() {
 
     private val _medicationSaved = MutableSharedFlow<Unit>()
@@ -22,7 +22,7 @@ class MedicationConfirmViewModel @Inject constructor(
         // TODO: Need to change to runIO
         viewModelScope.launch {
             val medications = state.medication
-            val saveMedication = repository.insertMedications(medications)
+            val saveMedication = medicationConfirmUseCase.saveMedication(medications)
 
             _medicationSaved.emit(saveMedication)
         }
