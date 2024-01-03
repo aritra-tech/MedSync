@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.aritra.medsync.domain.model.Medication
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MedicationDao {
@@ -13,11 +14,11 @@ interface MedicationDao {
     @Query("SELECT * FROM medication WHERE id = :medicationId")
     suspend fun getMedicationById(medicationId: Int) : Medication
 
-//    @Query("SELECT * FROM medication ORDER BY date DESC")
-//    suspend fun getAllMedication() : List<Medication>
+    @Query("SELECT * FROM medication")
+    fun getAllMedications() : Flow<List<Medication>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNote(medicationModel: Medication): Long
+    suspend fun insertMedication(medicationModel: Medication): Long
 
     @Update
     suspend fun updateMedication(medicationModel: Medication)

@@ -17,5 +17,5 @@ import com.aritra.medsync.domain.model.Medication
 )
 
 abstract class MedicationDatabase : RoomDatabase() {
-    abstract fun medicationDao(): MedicationDao
+    abstract val medicationDao: MedicationDao
 }

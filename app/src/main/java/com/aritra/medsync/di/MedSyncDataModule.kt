@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.aritra.medsync.data.dao.MedicationDao
 import com.aritra.medsync.data.db.MedicationDatabase
+import com.aritra.medsync.domain.repository.MedicationRepository
+import com.aritra.medsync.domain.repository.MedicationRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +26,11 @@ object MedSyncDataModule {
         ).build()
     }
 
-    fun provideMedicationRepository(db: MedicationDatabase): MedicationDao {
-        return db.medicationDao()
+    @Provides
+    @Singleton
+    fun provideMedicationRepository(
+        db: MedicationDatabase
+    ): MedicationRepository {
+        return MedicationRepositoryImpl(dao = db.medicationDao)
     }
 }
