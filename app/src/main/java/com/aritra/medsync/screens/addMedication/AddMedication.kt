@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.addMedication
 
 
 import androidx.compose.foundation.background
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,13 +28,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
+import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.navigation.MedSyncScreens
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold32
@@ -44,7 +45,9 @@ import com.aritra.medsync.ui.theme.normal14
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedication(
-    navController: NavHostController
+    navController: NavHostController,
+    goToMedicationConfirmScreen: (List<Medication>) -> Unit,
+    viewModel: AddMedicationViewModel
 ) {
 
     var medicineName by rememberSaveable { mutableStateOf("") }
@@ -52,6 +55,7 @@ fun AddMedication(
     var pillsEndDate by rememberSaveable { mutableStateOf("") }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
     var reminder by rememberSaveable { mutableStateOf("") }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -71,7 +75,7 @@ fun AddMedication(
                 .padding(16.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
-         ) {
+        ) {
 
             Text(
                 text = stringResource(R.string.add_plan),
@@ -122,7 +126,7 @@ fun AddMedication(
                     modifier = Modifier.width(152.dp),
                     value = pillsAmount,
                     onValueChange = { pillsAmount = it },
-                    placeholder = { Text(text = "2", style = medium18) },
+                    placeholder = { Text(text = "0", style = medium18) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.pills_img),
@@ -135,7 +139,8 @@ fun AddMedication(
                             style = normal14,
                             color = Color.Black
                         )
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
 
                 // TODO: Need to do some research regarding the frequency
@@ -198,18 +203,35 @@ fun AddMedication(
 
             Spacer(modifier = Modifier.weight(1f))
 
-             MedSyncButton(
-                 modifier = Modifier.fillMaxWidth(),
-                 text = "Save"
-             ) {
-                 navController.navigate(route = MedSyncScreens.MedicationConfirmScreen.name)
-             }
+            MedSyncButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Next"
+            ) {
+                addAndValidateMedication(
+                    medicationName = medicineName,
+                    pillsAmount = pillsAmount.toIntOrNull() ?: 0,
+                    pillsFrequency = pillsFrequency,
+                    goToConfirmMedicationScreen = {
+                        goToMedicationConfirmScreen(it)
+                    },
+                    addMedicationViewModel = viewModel
+                )
+            }
         }
     }
 }
 
-@Preview
-@Composable
-fun AddMedsScreenPreview() {
-    AddMedication(navController = rememberNavController())
+fun addAndValidateMedication(
+    medicationName: String,
+    pillsAmount: Int,
+    pillsFrequency: String,
+    goToConfirmMedicationScreen: (List<Medication>) -> Unit,
+    addMedicationViewModel: AddMedicationViewModel
+) {
+    // TODO : Validation required while saving
+
+    val addMedication =
+        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency)
+
+    goToConfirmMedicationScreen(addMedication)
 }

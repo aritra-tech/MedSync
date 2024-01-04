@@ -1,5 +1,7 @@
-package com.aritra.medsync.screens
+package com.aritra.medsync.screens.homeScreen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -21,17 +25,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
-import com.aritra.medsync.ui.theme.bold18
+import com.aritra.medsync.components.MedicationCard
+import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.ui.theme.bold20
+import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal12
+import java.time.LocalTime
+import java.time.ZoneId
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     onFabClicked: () -> Unit,
@@ -41,6 +55,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
+                modifier = Modifier.padding(vertical = 90.dp),
                 onClick = { onFabClicked() }
             ) {
                 Icon(
@@ -56,24 +71,39 @@ fun HomeScreen(
                 Greetings()
                 OverviewCard()
 
-                NoMedication()
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(8.dp)
+                ) {
+                    Medications()
+                }
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Greetings() {
+
+    val currentHour = LocalTime.now(ZoneId.systemDefault()).hour
+
+    val greetingText = when (currentHour) {
+        in 5..11 -> "Good morning,"
+        in 12..16 -> "Good afternoon,"
+        in 17..20 -> "Good evening,"
+        else -> "Good night,"
+    }
+
     Column {
         Text(
             modifier = Modifier.padding(top = 10.dp, start = 16.dp),
-            text = "Good morning,",
-            style = bold18
+            text = greetingText,
+            style = bold24
         )
         Text(
             modifier = Modifier.padding(start = 12.dp),
             text = "Aritra!",
-            style = bold18
+            style = bold20
         )
     }
 }
@@ -132,17 +162,31 @@ fun OverviewCard() {
 }
 
 @Composable
-fun NoMedication() {
+fun Medications() {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp, start = 16.dp)
-    ) {
+    val medicationList: List<Medication> by remember {
+        mutableStateOf(emptyList())
+    }
+
+    if (medicationList.isEmpty()) {
         Text(
-            text = "Add your meds",
-            style = medium18,
+            text = "No Medications Added",
+            style = bold20,
+            color = OnPrimaryContainer
         )
+    } else {
+        LazyColumn(
+            modifier = Modifier,
+        ) {
+            items(
+                items = medicationList,
+                itemContent = {
+                    MedicationCard(
+                        medication = it
+                    )
+                }
+            )
+        }
     }
 }
 
