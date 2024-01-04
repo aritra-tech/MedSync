@@ -13,7 +13,7 @@ import com.aritra.medsync.ui.theme.medium20
 @Composable
 fun MedicationDetailsInvoice(
     attribute: String,
-    value: String?
+    value: String
 ) {
     Row(
         modifier = Modifier

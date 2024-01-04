@@ -1,6 +1,9 @@
 package com.aritra.medsync.screens.medicationConfirmation
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -16,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -29,11 +35,12 @@ import com.aritra.medsync.components.MedicationDetailsInvoice
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicationConfirmation
 import com.aritra.medsync.navigation.MedSyncScreens
+import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
-import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
+import com.aritra.medsync.ui.theme.bold20
 import com.aritra.medsync.ui.theme.medium16
-import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.utils.Utils.getMedicationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,8 +53,9 @@ fun MedicationConfirmationScreen(
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.completed_lottie_animation)
     )
-
     val medicationResult = medication?.first()
+
+    val medicationItems = medicationResult?.getMedicationItem()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -62,9 +70,10 @@ fun MedicationConfirmationScreen(
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(paddingValues)
                 .background(backgroundColor)
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LottieAnimation(
@@ -75,26 +84,49 @@ fun MedicationConfirmationScreen(
                 iterations = 1
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Text(
-                text = "Just relax",
-                style = medium20,
-                color = PrimaryContainer
+                text = stringResource(R.string.just_relax),
+                style = bold20,
+                color = OnPrimaryContainer
             )
+
             Spacer(modifier = Modifier.height(30.dp))
 
             Text(
-                text = "No need to worry we are here to remind you about your medicines",
+                text = stringResource(R.string.no_need_to_worry_we_are_here_to_remind_you_about_your_medicines),
                 style = medium16,
                 color = OnSurface20,
                 textAlign = TextAlign.Center
             )
 
-            // TODO : Need to add some prescription type ui where the details of the medicine will be written down
+            Spacer(modifier = Modifier.weight(1f))
 
-            MedicationDetailsInvoice(attribute = "Medicine Name", value = medicationResult?.medicineName)
-            MedicationDetailsInvoice(attribute = "Medicine Amount", value = medicationResult?.pillsAmount.toString())
-            MedicationDetailsInvoice(attribute = "Medicine Frequency", value = medicationResult?.pillsFrequency)
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
 
+                Image(
+                    painter = painterResource(id = R.drawable.invoice_overlay),
+                    contentDescription = "null",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 30.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (medicationItems != null) {
+                        items(medicationItems.size) { index ->
+                            val invoice = medicationItems[index]
+                            MedicationDetailsInvoice(
+                                attribute = invoice.first,
+                                value = invoice.second
+                            )
+                        }
+                    }
+                }
+            }
             Spacer(modifier = Modifier.weight(1f))
 
             MedSyncButton(
