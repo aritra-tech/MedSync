@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,9 +26,8 @@ import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.SecondarySurface
 import com.aritra.medsync.ui.theme.normal16
 
-
 @Composable
-fun TextField(
+fun MedSyncTextField(
     modifier: Modifier = Modifier,
     headerText: String = "",
     hintText: String = "",
@@ -55,6 +56,7 @@ fun TextField(
         TextEditField(
             hintText = hintText,
             value = value,
+            keyboardType = keyboardType,
             keyboardActions = keyboardActions,
             textColor = textColor,
             backgroundColor = backgroundColor,
@@ -80,6 +82,7 @@ fun TextHeader(text: String) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextEditField(
     hintText: String = "",
@@ -87,6 +90,7 @@ fun TextEditField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textColor: Color = OnSurface20,
     backgroundColor: Color = SecondarySurface,
+    keyboardType: KeyboardType = KeyboardType.Text,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -96,10 +100,21 @@ fun TextEditField(
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = value,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         onValueChange = {
             onValueChange(it)
         },
         keyboardActions = keyboardActions,
+        colors = TextFieldDefaults.textFieldColors(
+            textColor,
+            backgroundColor,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        placeholder = {
+            Text(text = hintText, color = OnSurface60, fontFamily = DMSansFontFamily)
+        },
         textStyle = textStyle,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
