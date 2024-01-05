@@ -29,8 +29,8 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.aritra.medsync.R
-import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
+import com.aritra.medsync.components.MedSyncTopAppBar
 import com.aritra.medsync.components.MedicationDetailsInvoice
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicationConfirmation
@@ -60,7 +60,7 @@ fun MedicationConfirmationScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CustomTopAppBar(
+            MedSyncTopAppBar(
                 title = "",
                 colors = TopAppBarDefaults.topAppBarColors(backgroundColor)
             ) {

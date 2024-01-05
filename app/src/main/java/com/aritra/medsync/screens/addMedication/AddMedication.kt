@@ -28,9 +28,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.aritra.medsync.R
-import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
 import com.aritra.medsync.components.MedSyncTextField
+import com.aritra.medsync.components.MedSyncTopAppBar
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
@@ -56,7 +56,7 @@ fun AddMedication(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CustomTopAppBar(
+            MedSyncTopAppBar(
                 title = "",
                 colors = TopAppBarDefaults.topAppBarColors(backgroundColor)
             ) {
