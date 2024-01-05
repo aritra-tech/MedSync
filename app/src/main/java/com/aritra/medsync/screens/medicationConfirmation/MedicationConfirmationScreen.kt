@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +58,11 @@ fun MedicationConfirmationScreen(
 
     val medicationItems = medicationResult?.getMedicationItem()
 
+    LaunchedEffect(Unit) {
+        medicationConfirmViewModel.medicationSaved.collect {
+            navController.navigate(route = MedSyncScreens.Home.name)
+        }
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -137,7 +143,7 @@ fun MedicationConfirmationScreen(
                     MedicationConfirmation(
                         it
                     )
-                }?.let { medicationConfirmViewModel.saveMedication(it) }
+                }?.let { medicationConfirmViewModel.saveMedication(MedicationConfirmation(medication)) }
                 navController.navigate(route = MedSyncScreens.Home.name)
             }
         }
