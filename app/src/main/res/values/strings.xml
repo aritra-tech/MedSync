@@ -7,4 +7,8 @@
     <string name="reminder">Reminder</string>
     <string name="no_need_to_worry_we_are_here_to_remind_you_about_your_medicines">No need to worry we are here to remind you about your medicines</string>
     <string name="just_relax">Just relax</string>
+    <string name="pills_name_hint">eg. Oxycodone, 100mg</string>
+    <string name="pills_amount_hint">eg. 1</string>
+    <string name="pills_frequency_hint">eg. Daily</string>
+    <string name="end_date_hint">eg. 20th Feb, 2023</string>
 </resources>
