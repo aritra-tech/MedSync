@@ -22,7 +22,7 @@ object MedSyncDataModule {
         return Room.databaseBuilder(
             app,
             MedicationDatabase::class.java,
-            "medication_database"
+            "medication"
         ).build()
     }
 
