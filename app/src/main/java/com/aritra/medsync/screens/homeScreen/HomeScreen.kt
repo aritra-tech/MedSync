@@ -3,7 +3,9 @@ package com.aritra.medsync.screens.homeScreen
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -22,24 +23,26 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
+import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.domain.state.HomeState
+import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold20
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.medium16
-import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal12
 import java.time.LocalTime
 import java.time.ZoneId
@@ -49,8 +52,15 @@ import java.time.ZoneId
 @Composable
 fun HomeScreen(
     onFabClicked: () -> Unit,
-    navigateToUpdateScreen: (medicineID: Int) -> Unit
+    navigateToUpdateScreen: (medicineID: Int) -> Unit,
+    homeViewModel: HomeViewModel
 ) {
+
+    val state = homeViewModel.homeState
+
+    LaunchedEffect(Unit) {
+        homeViewModel.getMedications()
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -64,20 +74,19 @@ fun HomeScreen(
                 )
             }
         },
-    ) {
-        Surface(modifier = Modifier.padding(it)) {
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(PrimarySurface)
+        ) {
+//            Greetings()
+//            OverviewCard()
+            Medications(state)
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                Greetings()
-                OverviewCard()
-
-                Column(
-                    modifier = Modifier.fillMaxSize().padding(8.dp)
-                ) {
-                    Medications()
-                }
-            }
         }
+
     }
 }
 
@@ -162,31 +171,26 @@ fun OverviewCard() {
 }
 
 @Composable
-fun Medications() {
+fun Medications(state: HomeState) {
 
-    val medicationList: List<Medication> by remember {
+    var medicationList: List<Medication> by remember {
         mutableStateOf(emptyList())
     }
+    medicationList = state.medication
 
-    if (medicationList.isEmpty()) {
-        Text(
-            text = "No Medications Added",
-            style = bold20,
-            color = OnPrimaryContainer
-        )
-    } else {
+    if (medicationList.isEmpty().not()) {
         LazyColumn(
-            modifier = Modifier,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 8.dp)
         ) {
-            items(
-                items = medicationList,
-                itemContent = {
-                    MedicationCard(
-                        medication = it
-                    )
-                }
-            )
+            items(medicationList.size) { index ->
+                val medication = medicationList[index]
+                MedicationCard(medication = medication)
+            }
         }
+    } else {
+        MedSyncEmptyState(stateTitle = "", stateDescription = "", R.raw.empty_box_animation)
     }
 }
 
