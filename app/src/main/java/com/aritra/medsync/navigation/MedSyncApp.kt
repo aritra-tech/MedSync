@@ -38,6 +38,7 @@ import com.aritra.medsync.screens.homeScreen.HomeScreen
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationScreen
 import com.aritra.medsync.screens.SplashScreen
 import com.aritra.medsync.screens.history.HistoryScreen
+import com.aritra.medsync.screens.homeScreen.HomeViewModel
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
 import com.aritra.medsync.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.theme.Background
@@ -72,6 +73,7 @@ fun MedSyncApp() {
 
         val viewModel: AddMedicationViewModel = hiltViewModel()
         val medicationConfirmViewModel : MedicationConfirmViewModel = hiltViewModel()
+        val homeViewModel : HomeViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -101,7 +103,8 @@ fun MedSyncApp() {
                     onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
                     navigateToUpdateScreen = { medicineID ->
                         navController.navigate("${MedSyncScreens.UpdateMedication.name}/$medicineID")
-                    }
+                    },
+                    homeViewModel
                 )
             }
             composable(MedSyncScreens.AddMedication.name) {
