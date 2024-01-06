@@ -23,7 +23,6 @@ import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.OnSurface60
-import com.aritra.medsync.ui.theme.SecondarySurface
 import com.aritra.medsync.ui.theme.normal16
 
 @Composable
@@ -34,7 +33,6 @@ fun MedSyncTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textColor: Color = OnSurface20,
-    backgroundColor: Color = SecondarySurface,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -59,7 +57,6 @@ fun MedSyncTextField(
             keyboardType = keyboardType,
             keyboardActions = keyboardActions,
             textColor = textColor,
-            backgroundColor = backgroundColor,
             textStyle = textStyle,
             enabled = enabled,
             leadingIcon = leadingIcon,
@@ -82,14 +79,12 @@ fun TextHeader(text: String) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextEditField(
     hintText: String = "",
     value: String = "",
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textColor: Color = OnSurface20,
-    backgroundColor: Color = SecondarySurface,
     keyboardType: KeyboardType = KeyboardType.Text,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
@@ -105,12 +100,11 @@ fun TextEditField(
             onValueChange(it)
         },
         keyboardActions = keyboardActions,
-        colors = TextFieldDefaults.textFieldColors(
-            textColor,
-            backgroundColor,
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = textColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
+            disabledIndicatorColor = Color.Transparent,
         ),
         placeholder = {
             Text(text = hintText, color = OnSurface60, fontFamily = DMSansFontFamily)
