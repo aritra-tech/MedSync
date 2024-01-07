@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncButton
 import com.aritra.medsync.components.MedSyncTextField
 import com.aritra.medsync.components.MedSyncTopAppBar
+import com.aritra.medsync.components.MedicineTypeCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
@@ -79,6 +81,19 @@ fun AddMedication(
                 color = Color.Black
             )
 
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                MedicineTypeCard(image = painterResource(id = R.drawable.pill), isSelected = false, onClick = {})
+                MedicineTypeCard(image = painterResource(id = R.drawable.capsule), isSelected = false, onClick = {})
+                MedicineTypeCard(image = painterResource(id = R.drawable.amp), isSelected = true, onClick = {})
+                MedicineTypeCard(image = painterResource(id = R.drawable.inahler), isSelected = false, onClick = {})
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
 
             MedSyncTextField(
@@ -116,6 +131,7 @@ fun AddMedication(
                     },
                     trailingIcon = {
                         // TODO: The name will change depending upon the type of medicine the user choose
+                        // TODO: For inhalers the text will be "puff"
                         Text(
                             text = "pills",
                             style = normal14,

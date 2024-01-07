@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -45,12 +44,10 @@ fun MedSyncTextField(
         horizontalAlignment = Alignment.Start
     ) {
         if (headerText.isNotEmpty()) {
-            // Try renaming it to TextFieldHeader or Header
             TextHeader(text = headerText)
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Try Renaming this too as CustomTextField
         TextEditField(
             hintText = hintText,
             value = value,
@@ -61,7 +58,7 @@ fun MedSyncTextField(
             enabled = enabled,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
-        ) { onValueChange(it) } // Use String instead of MutableState<String>
+        ) { onValueChange(it) }
     }
 }
 
