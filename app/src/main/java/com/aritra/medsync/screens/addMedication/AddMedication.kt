@@ -1,7 +1,13 @@
 package com.aritra.medsync.screens.addMedication
 
 
+import android.os.Build
+import android.util.Range
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,13 +17,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,7 +54,18 @@ import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.normal14
+import com.aritra.medsync.utils.onClick
+import com.aritra.medsync.utils.toFormattedDateString
+import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
+import com.maxkeppeler.sheets.calendar.CalendarDialog
+import com.maxkeppeler.sheets.calendar.models.CalendarConfig
+import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import java.time.LocalDate
+import java.util.Calendar
+import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedication(
@@ -50,7 +76,7 @@ fun AddMedication(
 
     var medicineName by rememberSaveable { mutableStateOf("") }
     var pillsAmount by rememberSaveable { mutableStateOf("") }
-    var pillsEndDate by rememberSaveable { mutableStateOf("") }
+    var pillsEndDate by rememberSaveable { mutableLongStateOf(Date().time) }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
     var reminder by rememberSaveable { mutableStateOf("") }
 
@@ -83,15 +109,27 @@ fun AddMedication(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                MedicineTypeCard(image = painterResource(id = R.drawable.pill), isSelected = false, onClick = {})
-                MedicineTypeCard(image = painterResource(id = R.drawable.capsule), isSelected = false, onClick = {})
-                MedicineTypeCard(image = painterResource(id = R.drawable.amp), isSelected = true, onClick = {})
-                MedicineTypeCard(image = painterResource(id = R.drawable.inahler), isSelected = false, onClick = {})
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.pill),
+                    isSelected = false,
+                    onClick = {})
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.capsule),
+                    isSelected = false,
+                    onClick = {})
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.amp),
+                    isSelected = true,
+                    onClick = {})
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.inahler),
+                    isSelected = false,
+                    onClick = {})
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -152,15 +190,7 @@ fun AddMedication(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            MedSyncTextField(
-                modifier = Modifier.fillMaxWidth(),
-                headerText = stringResource(id = R.string.how_long),
-                hintText = stringResource(R.string.end_date_hint),
-                value = pillsEndDate,
-                onValueChange = {
-                    pillsEndDate = it
-                }
-            )
+            PillsEndDate { pillsEndDate = it }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -191,6 +221,108 @@ fun AddMedication(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PillsEndDate(endDate: (Long) -> Unit) {
+
+    var shouldShowDatePicker by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val isClicked : Boolean by interactionSource.collectIsPressedAsState()
+
+    if (isClicked) {
+        shouldShowDatePicker = true
+    }
+
+    val today = Calendar.getInstance()
+    today.set(Calendar.HOUR_OF_DAY, 0)
+    today.set(Calendar.MINUTE, 0)
+    today.set(Calendar.SECOND, 0)
+    today.set(Calendar.MILLISECOND, 0)
+    val currentDayMillis = today.timeInMillis
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = System.currentTimeMillis(),
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= currentDayMillis
+            }
+        }
+    )
+
+    var selectedDate by rememberSaveable {
+        mutableStateOf(
+            datePickerState.selectedDateMillis?.toFormattedDateString() ?: ""
+        )
+    }
+    
+    EndDatePicker(
+        state = datePickerState,
+        shouldDisplay = shouldShowDatePicker,
+        onConfirmClicked = { selectedDateInMillis ->
+            selectedDate = selectedDateInMillis.toFormattedDateString()
+            endDate(selectedDateInMillis)
+        },
+        dismissRequest = {
+            shouldShowDatePicker = false
+        }
+    )
+
+    MedSyncTextField(
+        modifier = Modifier.fillMaxWidth(),
+        readOnly = true,
+        headerText = stringResource(id = R.string.how_long),
+        hintText = stringResource(R.string.end_date_hint),
+        value = selectedDate,
+        onValueChange = {}
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EndDatePicker(
+    state: DatePickerState,
+    shouldDisplay: Boolean,
+    onConfirmClicked: (selectedDateInMillis: Long) -> Unit,
+    dismissRequest: () -> Unit
+) {
+    if (shouldDisplay) {
+        DatePickerDialog(
+            onDismissRequest = dismissRequest,
+            confirmButton = {
+                Button(
+                    modifier = Modifier.padding(0.dp, 0.dp, 8.dp, 0.dp),
+                    onClick = {
+                        state.selectedDateMillis?.let {
+                            onConfirmClicked(it)
+                        }
+                        dismissRequest()
+                    }
+                ) {
+                    Text(text = "Ok")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = dismissRequest) {
+                    Text(text = "Cancel")
+                }
+            },
+            content = {
+                DatePicker(
+                    state = state,
+                    showModeToggle = false,
+                    headline = {
+                        state.selectedDateMillis?.toFormattedDateString()?.let {
+                            Text(
+                                modifier = Modifier.padding(start = 16.dp),
+                                text = it
+                            )
+                        }
+                    }
+                )
+            }
+        )
     }
 }
 
