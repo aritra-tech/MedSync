@@ -1,5 +1,6 @@
 package com.aritra.medsync.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +36,8 @@ fun MedSyncTextField(
     textColor: Color = OnSurface20,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     value: String,
@@ -56,6 +60,8 @@ fun MedSyncTextField(
             textColor = textColor,
             textStyle = textStyle,
             enabled = enabled,
+            readOnly = readOnly,
+            interactionSource = interactionSource,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
         ) { onValueChange(it) }
@@ -85,6 +91,8 @@ fun TextEditField(
     keyboardType: KeyboardType = KeyboardType.Text,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit
@@ -109,6 +117,8 @@ fun TextEditField(
         textStyle = textStyle,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        enabled = enabled
+        enabled = enabled,
+        readOnly = readOnly,
+        interactionSource = interactionSource
     )
 }

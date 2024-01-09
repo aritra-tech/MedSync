@@ -2,10 +2,8 @@ package com.aritra.medsync.screens.addMedication
 
 
 import android.os.Build
-import android.util.Range
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -54,14 +52,7 @@ import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.normal14
-import com.aritra.medsync.utils.onClick
 import com.aritra.medsync.utils.toFormattedDateString
-import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
-import com.maxkeppeler.sheets.calendar.CalendarDialog
-import com.maxkeppeler.sheets.calendar.models.CalendarConfig
-import com.maxkeppeler.sheets.calendar.models.CalendarSelection
-import com.maxkeppeler.sheets.calendar.models.CalendarStyle
-import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 
@@ -275,7 +266,8 @@ fun PillsEndDate(endDate: (Long) -> Unit) {
         headerText = stringResource(id = R.string.how_long),
         hintText = stringResource(R.string.end_date_hint),
         value = selectedDate,
-        onValueChange = {}
+        onValueChange = {},
+        interactionSource = interactionSource
     )
 }
 
