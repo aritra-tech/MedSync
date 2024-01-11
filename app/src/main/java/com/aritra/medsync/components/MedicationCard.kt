@@ -1,5 +1,6 @@
 package com.aritra.medsync.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -17,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.bold18
@@ -39,11 +43,11 @@ fun MedicationCard(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-//        Image(
-//            modifier = Modifier.size(34.dp),
-//            painter = painterResource(id = R.drawable.app_icon),
-//            contentDescription = null
-//        )
+        Image(
+            modifier = Modifier.size(40.dp),
+            painter = getMedicineImage(medication.medicineType),
+            contentDescription = null
+        )
 
         Spacer(modifier = Modifier.width(16.dp))
 
@@ -76,16 +80,13 @@ fun MedicationCard(
         
     }
 }
-
-//@Preview
-//@Composable
-//fun MedicationCardPreview() {
-//    MedicationCard(
-//        medication = Medication(
-//            id = 1,
-//            medicineName = "Oxycodone, 100mg",
-//            pillsAmount = 1,
-//            pillsFrequency = "2",
-//        )
-//    )
-//}
+@Composable
+fun getMedicineImage(medicineType: String): Painter {
+    return when(medicineType) {
+        "TABLET" -> painterResource(id = R.drawable.pill)
+        "CAPSULE" -> painterResource(id = R.drawable.capsule)
+        "SYRUP" -> painterResource(id = R.drawable.amp)
+        "INHALER" -> painterResource(id = R.drawable.inahler)
+        else -> painterResource(id = R.drawable.ic_launcher_foreground) // TODO: Need to change the image
+    }
+}
