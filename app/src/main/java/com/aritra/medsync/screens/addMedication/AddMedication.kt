@@ -44,6 +44,7 @@ import com.aritra.medsync.components.MedSyncTopAppBar
 import com.aritra.medsync.components.MedicineTypeCard
 import com.aritra.medsync.components.PillsEndDate
 import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.domain.model.MedicineType
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold32
@@ -70,6 +71,10 @@ fun AddMedication(
         saver = CalendarInformation.getStateListSaver()
     ) {
         mutableStateListOf(CalendarInformation(Calendar.getInstance()))
+    }
+
+    var selectedMedicineType by rememberSaveable {
+        mutableStateOf(MedicineType.TABLET)
     }
 
     fun addTime(time: CalendarInformation) {
@@ -111,20 +116,36 @@ fun AddMedication(
             ) {
                 MedicineTypeCard(
                     image = painterResource(id = R.drawable.pill),
-                    isSelected = false,
-                    onClick = {})
+                    isSelected = MedicineType.TABLET == selectedMedicineType,
+                    medicineType = MedicineType.TABLET,
+                    onClick = {
+                        selectedMedicineType = it
+                    }
+                )
                 MedicineTypeCard(
                     image = painterResource(id = R.drawable.capsule),
-                    isSelected = false,
-                    onClick = {})
+                    isSelected = MedicineType.CAPSULE == selectedMedicineType,
+                    medicineType = MedicineType.CAPSULE,
+                    onClick = {
+                        selectedMedicineType = it
+                    }
+                )
                 MedicineTypeCard(
                     image = painterResource(id = R.drawable.amp),
-                    isSelected = true,
-                    onClick = {})
+                    isSelected = MedicineType.SYRUP == selectedMedicineType,
+                    medicineType = MedicineType.SYRUP,
+                    onClick = {
+                        selectedMedicineType = it
+                    }
+                )
                 MedicineTypeCard(
                     image = painterResource(id = R.drawable.inahler),
-                    isSelected = false,
-                    onClick = {})
+                    isSelected = MedicineType.INHALER == selectedMedicineType,
+                    medicineType = MedicineType.INHALER,
+                    onClick = {
+                        selectedMedicineType = it
+                    }
+                )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -220,11 +241,12 @@ fun AddMedication(
                     pillsFrequency = pillsFrequency,
                     endDate = pillsEndDate,
                     reminder = selectedTimes,
-                    goToConfirmMedicationScreen = {
-                        goToMedicationConfirmScreen(it)
-                    },
+                    medicineType = MedicineType.getMedicineTypeString(selectedMedicineType),
                     addMedicationViewModel = viewModel
-                )
+                ) {
+                    goToMedicationConfirmScreen(it)
+
+                }
             }
         }
     }
@@ -235,14 +257,22 @@ fun addAndValidateMedication(
     pillsAmount: Int,
     pillsFrequency: String,
     endDate: Long,
+    medicineType: String,
     reminder: List<CalendarInformation>,
+    addMedicationViewModel: AddMedicationViewModel,
     goToConfirmMedicationScreen: (List<Medication>) -> Unit,
-    addMedicationViewModel: AddMedicationViewModel
 ) {
     // TODO : Validation required while saving
 
     val addMedication =
-        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency, Date(endDate),reminder)
+        addMedicationViewModel.createMedication(
+            medicationName,
+            pillsAmount,
+            pillsFrequency,
+            Date(endDate),
+            reminder,
+            medicineType
+        )
 
     goToConfirmMedicationScreen(addMedication)
 }

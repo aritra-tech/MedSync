@@ -14,6 +14,7 @@ class AddMedicationViewModel : ViewModel() {
         pillsFrequency: String,
         endDate: Date,
         reminderTime: List<CalendarInformation>,
+        medicineType: String,
         startDate: Date = Date(),
     ): List<Medication> {
 
@@ -28,7 +29,8 @@ class AddMedicationViewModel : ViewModel() {
                 pillsAmount = pillsAmount,
                 pillsFrequency = pillsFrequency,
                 endDate = endDate,
-                reminderTime = getMedicationTime(time, calendar)
+                reminderTime = getMedicationTime(time, calendar),
+                medicineType = medicineType
             )
             medicationsList.add(medication)
         }

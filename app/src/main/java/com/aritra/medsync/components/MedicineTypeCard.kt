@@ -24,20 +24,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
+import com.aritra.medsync.domain.model.MedicineType
 import com.aritra.medsync.ui.theme.Green
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.utils.onClick
 
 @Composable
 fun MedicineTypeCard(
     image: Painter,
     isSelected: Boolean,
-    onClick: (Boolean) -> Unit
+    medicineType: MedicineType,
+    onClick: (MedicineType) -> Unit
 ) {
     Box(
         modifier = Modifier
-            .onClick { onClick(isSelected.not()) },
+            .onClick {
+                onClick(medicineType)
+            },
         contentAlignment = Alignment.TopEnd
     ) {
 
@@ -59,7 +64,9 @@ fun MedicineTypeCard(
         }
         if (isSelected) {
             Icon(
-                modifier = Modifier.padding(horizontal = 8.dp).size(18.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(18.dp),
                 imageVector = Icons.Default.CheckCircle,
                 contentDescription = null,
                 tint = Green
@@ -73,6 +80,7 @@ fun MedicineTypeCard(
 private fun FilterCardsPreview() {
     MedicineTypeCard(
         image = painterResource(id = R.drawable.pill),
-        isSelected = true
+        isSelected = true,
+        medicineType = MedicineType.CAPSULE
     ) {}
 }
