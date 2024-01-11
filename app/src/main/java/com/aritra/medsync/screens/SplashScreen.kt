@@ -1,17 +1,13 @@
 package com.aritra.medsync.screens
 
-import android.widget.Space
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,13 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.aritra.medsync.R
 import com.aritra.medsync.navigation.MedSyncScreens
-import com.aritra.medsync.ui.theme.bold26
+import com.aritra.medsync.ui.theme.bold30
 import kotlinx.coroutines.delay
 
 @Composable
@@ -66,12 +61,10 @@ fun SplashScreen(navController: NavController) {
                 contentDescription = "null",
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 modifier = Modifier.alpha(alphaAnimation.value),
                 text = "MedSync",
-                style = bold26,
+                style = bold30,
                 color = Color.Black
             )
         }
