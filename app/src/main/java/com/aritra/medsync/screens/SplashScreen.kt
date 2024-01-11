@@ -1,14 +1,19 @@
 package com.aritra.medsync.screens
 
+import android.widget.Space
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -21,8 +26,11 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aritra.medsync.R
 import com.aritra.medsync.navigation.MedSyncScreens
+import com.aritra.medsync.ui.theme.bold26
 import kotlinx.coroutines.delay
 
 @Composable
@@ -50,12 +58,22 @@ fun SplashScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-//            Image(
-//                modifier = Modifier.alpha(alphaAnimation.value),
-//                painter = painterResource(id = R.drawable.notify_dark),
-//                contentDescription = "Splash Book",
-//                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
-//            )
+            Image(
+                modifier = Modifier
+                    .alpha(alphaAnimation.value)
+                    .size(240.dp),
+                painter = painterResource(id = R.drawable.medsync_logo),
+                contentDescription = "null",
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                modifier = Modifier.alpha(alphaAnimation.value),
+                text = "MedSync",
+                style = bold26,
+                color = Color.Black
+            )
         }
     }
 }

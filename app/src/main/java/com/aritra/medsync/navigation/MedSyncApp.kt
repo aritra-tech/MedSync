@@ -56,6 +56,7 @@ fun MedSyncApp() {
     val backStackEntry = navController.currentBackStackEntryAsState()
 
     val screensWithoutNavigationBar = listOf(
+        MedSyncScreens.Splash.name,
         MedSyncScreens.AddMedication.name,
         MedSyncScreens.MedicationConfirmScreen.name
     )
