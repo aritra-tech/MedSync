@@ -23,7 +23,9 @@ object MedSyncDataModule {
             app,
             MedicationDatabase::class.java,
             "medication"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

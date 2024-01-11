@@ -218,6 +218,8 @@ fun AddMedication(
                     medicationName = medicineName,
                     pillsAmount = pillsAmount.toIntOrNull() ?: 0,
                     pillsFrequency = pillsFrequency,
+                    endDate = pillsEndDate,
+                    reminder = selectedTimes,
                     goToConfirmMedicationScreen = {
                         goToMedicationConfirmScreen(it)
                     },
@@ -232,13 +234,15 @@ fun addAndValidateMedication(
     medicationName: String,
     pillsAmount: Int,
     pillsFrequency: String,
+    endDate: Long,
+    reminder: List<CalendarInformation>,
     goToConfirmMedicationScreen: (List<Medication>) -> Unit,
     addMedicationViewModel: AddMedicationViewModel
 ) {
     // TODO : Validation required while saving
 
     val addMedication =
-        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency)
+        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency, Date(endDate),reminder)
 
     goToConfirmMedicationScreen(addMedication)
 }

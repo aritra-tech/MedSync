@@ -77,15 +77,15 @@ fun MedicationCard(
     }
 }
 
-@Preview
-@Composable
-fun MedicationCardPreview() {
-    MedicationCard(
-        medication = Medication(
-            id = 1,
-            medicineName = "Oxycodone, 100mg",
-            pillsAmount = 1,
-            pillsFrequency = "2",
-        )
-    )
-}
+//@Preview
+//@Composable
+//fun MedicationCardPreview() {
+//    MedicationCard(
+//        medication = Medication(
+//            id = 1,
+//            medicineName = "Oxycodone, 100mg",
+//            pillsAmount = 1,
+//            pillsFrequency = "2",
+//        )
+//    )
+//}
