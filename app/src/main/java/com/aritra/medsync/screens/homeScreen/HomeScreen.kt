@@ -139,7 +139,8 @@ fun Medications(state: HomeState) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(medicationList.size) { index ->
                 val medication = medicationList[index]
@@ -147,7 +148,7 @@ fun Medications(state: HomeState) {
             }
         }
     } else {
-        MedSyncEmptyState(stateTitle = "💊No Medication found", stateDescription = "", R.raw.empty_box_animation)
+        MedSyncEmptyState(stateTitle = "", stateDescription = "", R.raw.empty_box_animation)
     }
 }
 
