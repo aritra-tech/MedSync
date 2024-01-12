@@ -31,7 +31,7 @@ fun MedSyncTheme(content: @Composable () -> Unit) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = Color.Transparent.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
         }
     }
 

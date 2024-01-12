@@ -15,7 +15,7 @@ import com.aritra.medsync.ui.theme.normal22
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun CustomTopAppBar(
+fun MedSyncTopAppBar(
     title: String,
     shouldShowBackButton: Boolean = true,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(Background),

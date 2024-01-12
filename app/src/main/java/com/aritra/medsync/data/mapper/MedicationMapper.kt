@@ -7,6 +7,9 @@ fun Medication.toMedication(): Medication {
         id = id,
         medicineName = medicineName,
         pillsAmount = pillsAmount,
-        pillsFrequency = pillsFrequency
+        pillsFrequency = pillsFrequency,
+        endDate = endDate,
+        reminderTime = reminderTime,
+        medicineType = medicineType
     )
 }
