@@ -1,6 +1,10 @@
 package com.aritra.medsync.utils
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.aritra.medsync.domain.model.Medication
+import java.time.LocalTime
+import java.time.ZoneId
 
 object Utils {
 
@@ -22,6 +26,16 @@ object Utils {
             "SYRUP" -> "mL"
             "INHALER" -> "Puffs"
             else -> "None"
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun greetingText() : String {
+        return when (LocalTime.now(ZoneId.systemDefault()).hour) {
+            in 5..11 -> "Good morning,"
+            in 12..16 -> "Good afternoon,"
+            in 17..20 -> "Good evening,"
+            else -> "Good night,"
         }
     }
 }

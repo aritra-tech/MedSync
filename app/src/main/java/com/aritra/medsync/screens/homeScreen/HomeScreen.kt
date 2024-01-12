@@ -33,12 +33,10 @@ import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.state.HomeState
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
-import com.aritra.medsync.ui.theme.Primary
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold20
 import com.aritra.medsync.ui.theme.bold24
-import java.time.LocalTime
-import java.time.ZoneId
+import com.aritra.medsync.utils.Utils
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -51,12 +49,7 @@ fun HomeScreen(
 
     val state = homeViewModel.homeState
 
-    val greetingText = when (LocalTime.now(ZoneId.systemDefault()).hour) {
-        in 5..11 -> "Good morning,"
-        in 12..16 -> "Good afternoon,"
-        in 17..20 -> "Good evening,"
-        else -> "Good night,"
-    }
+    val greetingText = Utils.greetingText()
 
     LaunchedEffect(Unit) {
         homeViewModel.getMedications()
@@ -120,12 +113,6 @@ fun Medications(state: HomeState) {
             style = bold20,
             color = OnPrimaryContainer
         )
-
-        Text(
-            text = "Edit",
-            style = bold20,
-            color = Primary
-        )
     }
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -140,7 +127,7 @@ fun Medications(state: HomeState) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(medicationList.size) { index ->
                 val medication = medicationList[index]
