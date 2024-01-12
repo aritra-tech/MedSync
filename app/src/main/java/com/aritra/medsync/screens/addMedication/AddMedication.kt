@@ -47,9 +47,9 @@ import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicineType
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
+import com.aritra.medsync.ui.theme.bold14
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
-import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.CalendarInformation
 import java.util.Calendar
 import java.util.Date
@@ -72,10 +72,10 @@ fun AddMedication(
     ) {
         mutableStateListOf(CalendarInformation(Calendar.getInstance()))
     }
-
     var selectedMedicineType by rememberSaveable {
         mutableStateOf(MedicineType.TABLET)
     }
+    var suffixText by rememberSaveable { mutableStateOf("Tablet") }
 
     fun addTime(time: CalendarInformation) {
         selectedTimes.add(time)
@@ -120,6 +120,7 @@ fun AddMedication(
                     medicineType = MedicineType.TABLET,
                     onClick = {
                         selectedMedicineType = it
+                        suffixText = "Tablet"
                     }
                 )
                 MedicineTypeCard(
@@ -128,6 +129,7 @@ fun AddMedication(
                     medicineType = MedicineType.CAPSULE,
                     onClick = {
                         selectedMedicineType = it
+                        suffixText = "Capsule"
                     }
                 )
                 MedicineTypeCard(
@@ -136,6 +138,7 @@ fun AddMedication(
                     medicineType = MedicineType.SYRUP,
                     onClick = {
                         selectedMedicineType = it
+                        suffixText = "mL"
                     }
                 )
                 MedicineTypeCard(
@@ -144,6 +147,7 @@ fun AddMedication(
                     medicineType = MedicineType.INHALER,
                     onClick = {
                         selectedMedicineType = it
+                        suffixText = "Puffs"
                     }
                 )
             }
@@ -184,11 +188,9 @@ fun AddMedication(
                         pillsAmount = it
                     },
                     trailingIcon = {
-                        // TODO: The name will change depending upon the type of medicine the user choose
-                        // TODO: For inhalers the text will be "puff"
                         Text(
-                            text = "pills",
-                            style = normal14,
+                            text = suffixText,
+                            style = bold14,
                             color = Color.Black
                         )
                     }
@@ -237,7 +239,7 @@ fun AddMedication(
             ) {
                 addAndValidateMedication(
                     medicationName = medicineName,
-                    pillsAmount = pillsAmount.toIntOrNull() ?: 0,
+                    pillsAmount = pillsAmount,
                     pillsFrequency = pillsFrequency,
                     endDate = pillsEndDate,
                     reminder = selectedTimes,
@@ -254,7 +256,7 @@ fun AddMedication(
 
 fun addAndValidateMedication(
     medicationName: String,
-    pillsAmount: Int,
+    pillsAmount: String,
     pillsFrequency: String,
     endDate: Long,
     medicineType: String,

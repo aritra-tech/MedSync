@@ -9,9 +9,19 @@ object Utils {
         val medicationItems = mutableListOf<Pair<String, String>>()
 
         medicationItems.add(Pair("Medication Name", medicineName))
-        medicationItems.add(Pair("Medication Dose", pillsAmount.toString()))
+        medicationItems.add(Pair("Medication Dose", pillsAmount))
         medicationItems.add(Pair("Medication Frequency", pillsFrequency))
 
         return medicationItems
+    }
+
+    fun getMedicineUnit(medicineType: String): String {
+        return when(medicineType) {
+            "TABLET" -> "Tablet"
+            "CAPSULE" -> "Capsule"
+            "SYRUP" -> "mL"
+            "INHALER" -> "Puffs"
+            else -> "None"
+        }
     }
 }

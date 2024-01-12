@@ -29,6 +29,7 @@ import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.bold22
 import com.aritra.medsync.ui.theme.medium14
+import com.aritra.medsync.utils.Utils.getMedicineUnit
 import com.aritra.medsync.utils.toFormattedTimeString
 
 @Composable
@@ -86,7 +87,7 @@ fun MedicationCard(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "${medication.pillsAmount} Tablet | ${medication.pillsFrequency}",
+                        text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
                         style = medium14.copy(color = OnPrimaryContainer)
                     )
                 }
@@ -94,6 +95,7 @@ fun MedicationCard(
         }
     }
 }
+
 @Composable
 fun getMedicineImage(medicineType: String): Painter {
     return when(medicineType) {
