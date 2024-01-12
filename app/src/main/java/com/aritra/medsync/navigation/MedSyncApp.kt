@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.StackedBarChart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -40,6 +41,7 @@ import com.aritra.medsync.screens.SplashScreen
 import com.aritra.medsync.screens.history.HistoryScreen
 import com.aritra.medsync.screens.homeScreen.HomeViewModel
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
+import com.aritra.medsync.screens.report.ReportScreen
 import com.aritra.medsync.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
@@ -131,6 +133,9 @@ fun MedSyncApp() {
                     medicationConfirmViewModel
                 )
             }
+            composable(MedSyncScreens.Report.name) {
+                ReportScreen()
+            }
             composable(MedSyncScreens.History.name) {
                 HistoryScreen()
             }
@@ -158,6 +163,11 @@ fun ShowBottomNavigation(
                     route = MedSyncScreens.Home.name,
                     icon = Icons.Outlined.Home
 
+                ),
+                BottomNavItem(
+                    name = "Report",
+                    route = MedSyncScreens.Report.name,
+                    icon = Icons.Outlined.StackedBarChart
                 ),
                 BottomNavItem(
                     name = "History",
