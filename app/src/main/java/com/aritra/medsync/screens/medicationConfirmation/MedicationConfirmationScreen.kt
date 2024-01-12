@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncButton
@@ -85,7 +86,7 @@ fun MedicationConfirmationScreen(
                     .padding(20.dp, 30.dp)
                     .size(180.dp),
                 composition = composition,
-                iterations = 1
+                iterations = LottieConstants.IterateForever
             )
 
             Spacer(modifier = Modifier.height(10.dp))
