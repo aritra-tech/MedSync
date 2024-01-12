@@ -1,16 +1,21 @@
 package com.aritra.medsync.components
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,21 +26,20 @@ import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.OnSurface60
-import com.aritra.medsync.ui.theme.SecondarySurface
 import com.aritra.medsync.ui.theme.normal16
 
-
 @Composable
-fun TextField(
+fun MedSyncTextField(
     modifier: Modifier = Modifier,
     headerText: String = "",
     hintText: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textColor: Color = OnSurface20,
-    backgroundColor: Color = SecondarySurface,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     value: String,
@@ -46,23 +50,23 @@ fun TextField(
         horizontalAlignment = Alignment.Start
     ) {
         if (headerText.isNotEmpty()) {
-            // Try renaming it to TextFieldHeader or Header
             TextHeader(text = headerText)
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Try Renaming this too as CustomTextField
         TextEditField(
             hintText = hintText,
             value = value,
+            keyboardType = keyboardType,
             keyboardActions = keyboardActions,
             textColor = textColor,
-            backgroundColor = backgroundColor,
             textStyle = textStyle,
             enabled = enabled,
+            readOnly = readOnly,
+            interactionSource = interactionSource,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon
-        ) { onValueChange(it) } // Use String instead of MutableState<String>
+        ) { onValueChange(it) }
     }
 }
 
@@ -86,23 +90,37 @@ fun TextEditField(
     value: String = "",
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textColor: Color = OnSurface20,
-    backgroundColor: Color = SecondarySurface,
+    keyboardType: KeyboardType = KeyboardType.Text,
     textStyle: TextStyle = normal16,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
     TextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(15.dp)),
         value = value,
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         onValueChange = {
             onValueChange(it)
         },
         keyboardActions = keyboardActions,
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = textColor,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+        ),
+        placeholder = {
+            Text(text = hintText, color = OnSurface60, fontFamily = DMSansFontFamily)
+        },
         textStyle = textStyle,
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
-        enabled = enabled
+        enabled = enabled,
+        readOnly = readOnly,
+        interactionSource = interactionSource
     )
 }

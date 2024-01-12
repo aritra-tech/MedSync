@@ -7,8 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.aritra.medsync.ui.theme.OnSurface60
-import com.aritra.medsync.ui.theme.medium16
-import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.ui.theme.bold16
 
 @Composable
 fun MedicationDetailsInvoice(
@@ -23,13 +22,13 @@ fun MedicationDetailsInvoice(
         Text(
             text = attribute,
             color = OnSurface60,
-            style = medium20
+            style = bold16
         )
 
         Text(
-            text = value.toString(),
+            text = value,
             color = OnSurface60,
-            style = medium16
+            style = bold16
         )
 
     }

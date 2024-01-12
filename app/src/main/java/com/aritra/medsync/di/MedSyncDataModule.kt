@@ -22,8 +22,10 @@ object MedSyncDataModule {
         return Room.databaseBuilder(
             app,
             MedicationDatabase::class.java,
-            "medication_database"
-        ).build()
+            "medication"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

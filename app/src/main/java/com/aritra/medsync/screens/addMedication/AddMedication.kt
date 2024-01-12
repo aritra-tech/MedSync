@@ -1,6 +1,8 @@
 package com.aritra.medsync.screens.addMedication
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,15 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -32,16 +37,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.aritra.medsync.R
-import com.aritra.medsync.components.CustomTopAppBar
 import com.aritra.medsync.components.MedSyncButton
+import com.aritra.medsync.components.MedSyncReminderTextField
+import com.aritra.medsync.components.MedSyncTextField
+import com.aritra.medsync.components.MedSyncTopAppBar
+import com.aritra.medsync.components.MedicineTypeCard
+import com.aritra.medsync.components.PillsEndDate
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.navigation.MedSyncScreens
+import com.aritra.medsync.domain.model.MedicineType
+import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
+import com.aritra.medsync.ui.theme.bold14
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
-import com.aritra.medsync.ui.theme.medium18
-import com.aritra.medsync.ui.theme.normal14
+import com.aritra.medsync.utils.CalendarInformation
+import java.util.Calendar
+import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedication(
@@ -52,15 +65,26 @@ fun AddMedication(
 
     var medicineName by rememberSaveable { mutableStateOf("") }
     var pillsAmount by rememberSaveable { mutableStateOf("") }
-    var pillsEndDate by rememberSaveable { mutableStateOf("") }
+    var pillsEndDate by rememberSaveable { mutableLongStateOf(Date().time) }
     var pillsFrequency by rememberSaveable { mutableStateOf("") }
-    var reminder by rememberSaveable { mutableStateOf("") }
+    val selectedTimes = rememberSaveable(
+        saver = CalendarInformation.getStateListSaver()
+    ) {
+        mutableStateListOf(CalendarInformation(Calendar.getInstance()))
+    }
+    var selectedMedicineType by rememberSaveable {
+        mutableStateOf(MedicineType.TABLET)
+    }
+    var suffixText by rememberSaveable { mutableStateOf("Tablet") }
 
+    fun addTime(time: CalendarInformation) {
+        selectedTimes.add(time)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CustomTopAppBar(
+            MedSyncTopAppBar(
                 title = "",
                 colors = TopAppBarDefaults.topAppBarColors(backgroundColor)
             ) {
@@ -83,26 +107,61 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
-            Text(
-                text = stringResource(R.string.pill_name),
-                style = medium16,
-                color = Color.Black
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            OutlinedTextField(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.pill),
+                    isSelected = MedicineType.TABLET == selectedMedicineType,
+                    medicineType = MedicineType.TABLET,
+                    onClick = {
+                        selectedMedicineType = it
+                        suffixText = "Tablet"
+                    }
+                )
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.capsule),
+                    isSelected = MedicineType.CAPSULE == selectedMedicineType,
+                    medicineType = MedicineType.CAPSULE,
+                    onClick = {
+                        selectedMedicineType = it
+                        suffixText = "Capsule"
+                    }
+                )
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.amp),
+                    isSelected = MedicineType.SYRUP == selectedMedicineType,
+                    medicineType = MedicineType.SYRUP,
+                    onClick = {
+                        selectedMedicineType = it
+                        suffixText = "mL"
+                    }
+                )
+                MedicineTypeCard(
+                    image = painterResource(id = R.drawable.inahler),
+                    isSelected = MedicineType.INHALER == selectedMedicineType,
+                    medicineType = MedicineType.INHALER,
+                    onClick = {
+                        selectedMedicineType = it
+                        suffixText = "Puffs"
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MedSyncTextField(
+                modifier = Modifier.fillMaxWidth(),
+                headerText = stringResource(R.string.pill_name),
+                hintText = stringResource(R.string.pills_name_hint),
                 value = medicineName,
-                onValueChange = { medicineName = it },
-                placeholder = { Text(text = "Oxycodone") },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.drugs_img),
-                        contentDescription = "pill_image"
-                    )
+                keyboardType = KeyboardType.Text,
+                onValueChange = {
+                    medicineName = it
                 }
             )
 
@@ -111,7 +170,7 @@ fun AddMedication(
             Text(
                 text = stringResource(R.string.amount_frequency),
                 style = medium16,
-                color = Color.Black
+                color = OnPrimaryContainer
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -120,86 +179,58 @@ fun AddMedication(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // TODO: Add drop-down to choose the frequency of the medicine taken
 
-                OutlinedTextField(
+                MedSyncTextField(
+                    hintText = stringResource(R.string.pills_amount_hint),
                     modifier = Modifier.width(152.dp),
                     value = pillsAmount,
-                    onValueChange = { pillsAmount = it },
-                    placeholder = { Text(text = "0", style = medium18) },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.pills_img),
-                            contentDescription = "pill_image"
-                        )
+                    onValueChange = {
+                        pillsAmount = it
                     },
                     trailingIcon = {
                         Text(
-                            text = "pills",
-                            style = normal14,
+                            modifier = Modifier.padding(end = 12.dp),
+                            text = suffixText,
+                            style = bold14,
                             color = Color.Black
                         )
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    }
                 )
-
                 // TODO: Need to do some research regarding the frequency
-
-                OutlinedTextField(
+                MedSyncTextField(
                     modifier = Modifier.width(152.dp),
+                    hintText = stringResource(R.string.pills_frequency_hint),
                     value = pillsFrequency,
-                    onValueChange = { pillsFrequency = it },
-                    placeholder = { Text(text = "Daily", style = medium18) },
+                    onValueChange = {
+                        pillsFrequency = it
+                    }
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = stringResource(R.string.how_long),
-                style = medium16,
-                color = Color.Black
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = pillsEndDate,
-                onValueChange = { pillsEndDate = it },
-                placeholder = { Text(text = "20 th Feb, 2023") },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.calendar_fill_img),
-                        contentDescription = "end_date"
-                    )
-                }
-            )
+            PillsEndDate { pillsEndDate = it }
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = stringResource(R.string.reminder),
+                text = stringResource(id = R.string.reminder),
                 style = medium16,
-                color = Color.Black
+                color = OnPrimaryContainer
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // TODO: Need to change the leading icon
+            for (time in selectedTimes.indices) {
+                MedSyncReminderTextField(
+                    time = {
+                        selectedTimes[time] = it
+                    }
+                )
+            }
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = reminder,
-                onValueChange = { reminder = it },
-                placeholder = { Text(text = "11:00 AM") },
-                leadingIcon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.calendar_fill_img),
-                        contentDescription = "end_date"
-                    )
-                }
-            )
+            Button(onClick = { addTime(CalendarInformation(Calendar.getInstance())) }) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -209,13 +240,16 @@ fun AddMedication(
             ) {
                 addAndValidateMedication(
                     medicationName = medicineName,
-                    pillsAmount = pillsAmount.toIntOrNull() ?: 0,
+                    pillsAmount = pillsAmount,
                     pillsFrequency = pillsFrequency,
-                    goToConfirmMedicationScreen = {
-                        goToMedicationConfirmScreen(it)
-                    },
+                    endDate = pillsEndDate,
+                    reminder = selectedTimes,
+                    medicineType = MedicineType.getMedicineTypeString(selectedMedicineType),
                     addMedicationViewModel = viewModel
-                )
+                ) {
+                    goToMedicationConfirmScreen(it)
+
+                }
             }
         }
     }
@@ -223,15 +257,24 @@ fun AddMedication(
 
 fun addAndValidateMedication(
     medicationName: String,
-    pillsAmount: Int,
+    pillsAmount: String,
     pillsFrequency: String,
+    endDate: Long,
+    medicineType: String,
+    reminder: List<CalendarInformation>,
+    addMedicationViewModel: AddMedicationViewModel,
     goToConfirmMedicationScreen: (List<Medication>) -> Unit,
-    addMedicationViewModel: AddMedicationViewModel
 ) {
-    // TODO : Validation required while saving
 
     val addMedication =
-        addMedicationViewModel.createMedication(medicationName, pillsAmount, pillsFrequency)
+        addMedicationViewModel.createMedication(
+            medicationName,
+            pillsAmount,
+            pillsFrequency,
+            Date(endDate),
+            reminder,
+            medicineType
+        )
 
     goToConfirmMedicationScreen(addMedication)
 }
