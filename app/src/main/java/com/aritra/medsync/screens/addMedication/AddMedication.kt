@@ -189,6 +189,7 @@ fun AddMedication(
                     },
                     trailingIcon = {
                         Text(
+                            modifier = Modifier.padding(end = 12.dp),
                             text = suffixText,
                             style = bold14,
                             color = Color.Black
@@ -264,7 +265,6 @@ fun addAndValidateMedication(
     addMedicationViewModel: AddMedicationViewModel,
     goToConfirmMedicationScreen: (List<Medication>) -> Unit,
 ) {
-    // TODO : Validation required while saving
 
     val addMedication =
         addMedicationViewModel.createMedication(

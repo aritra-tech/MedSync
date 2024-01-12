@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.bold22
@@ -69,8 +70,8 @@ fun MedicationCard(
                     modifier = Modifier
                         .size(50.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color.LightGray)
-                        .padding(6.dp),
+                        .background(MedicineCircleColor)
+                        .padding(10.dp),
                     painter = getMedicineImage(medication.medicineType),
                     contentDescription = null
                 )
