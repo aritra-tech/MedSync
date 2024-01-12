@@ -26,7 +26,7 @@ fun Long.toFormattedDateString(): String {
 }
 
 fun Date.toFormattedTimeString(): String {
-    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    val timeFormat = SimpleDateFormat("HH:mm a", Locale.getDefault())
     return timeFormat.format(this)
 }
 
