@@ -13,7 +13,7 @@ data class Medication(
     @PrimaryKey(autoGenerate = true)
     var id : Int = 0,
     var medicineName : String,
-    var pillsAmount : Int,
+    var pillsAmount : String,
     var pillsFrequency : String,
     var endDate : Date,
     var reminderTime : Date,

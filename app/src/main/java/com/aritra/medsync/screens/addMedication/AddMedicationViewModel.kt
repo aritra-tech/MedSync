@@ -10,7 +10,7 @@ class AddMedicationViewModel : ViewModel() {
 
     fun createMedication(
         medicineName: String,
-        pillsAmount: Int,
+        pillsAmount: String,
         pillsFrequency: String,
         endDate: Date,
         reminderTime: List<CalendarInformation>,
