@@ -75,10 +75,19 @@ fun AddMedication(
     var selectedMedicineType by rememberSaveable {
         mutableStateOf(MedicineType.TABLET)
     }
+    var isButtonEnabled by rememberSaveable { mutableStateOf(false) }
     var suffixText by rememberSaveable { mutableStateOf("Tablet") }
 
     fun addTime(time: CalendarInformation) {
         selectedTimes.add(time)
+    }
+
+    fun checkAllFieldsFilled() {
+        isButtonEnabled = (
+                medicineName.isNotBlank() &&
+                        pillsAmount.isNotBlank() &&
+                        pillsFrequency.isNotBlank()
+                )
     }
 
     Scaffold(
@@ -162,6 +171,7 @@ fun AddMedication(
                 keyboardType = KeyboardType.Text,
                 onValueChange = {
                     medicineName = it
+                    checkAllFieldsFilled()
                 }
             )
 
@@ -186,6 +196,7 @@ fun AddMedication(
                     value = pillsAmount,
                     onValueChange = {
                         pillsAmount = it
+                        checkAllFieldsFilled()
                     },
                     trailingIcon = {
                         Text(
@@ -203,6 +214,7 @@ fun AddMedication(
                     value = pillsFrequency,
                     onValueChange = {
                         pillsFrequency = it
+                        checkAllFieldsFilled()
                     }
                 )
             }
@@ -236,7 +248,8 @@ fun AddMedication(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Next"
+                text = "Next",
+                enabled = isButtonEnabled
             ) {
                 addAndValidateMedication(
                     medicationName = medicineName,
