@@ -1,4 +1,4 @@
-package com.aritra.medsync.utils
+package com.aritra.medsync.data.db
 
 import androidx.room.TypeConverter
 import java.util.Date
