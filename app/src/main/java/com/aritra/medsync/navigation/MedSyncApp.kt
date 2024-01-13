@@ -4,10 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
@@ -45,6 +41,8 @@ import com.aritra.medsync.screens.report.ReportScreen
 import com.aritra.medsync.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
+import com.aritra.medsync.ui.theme.FadeIn
+import com.aritra.medsync.ui.theme.FadeOut
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
@@ -81,23 +79,12 @@ fun MedSyncApp() {
         NavHost(
             navController = navController,
             startDestination = MedSyncScreens.Splash.name,
-            enterTransition = {
-                fadeIn(animationSpec = tween(220, 90)) +
-                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, 90))
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(90))
-            },
-            popEnterTransition = {
-                fadeIn(animationSpec = tween(220, 90)) + scaleIn(
-                    initialScale = 0.92f,
-                    animationSpec = tween(220, 90)
-                )
-            },
-            popExitTransition = {
-                fadeOut(animationSpec = tween(90))
-            }
+            enterTransition = { FadeIn },
+            exitTransition = { FadeOut },
+            popEnterTransition = { FadeIn },
+            popExitTransition = { FadeOut }
         ) {
+
             composable(MedSyncScreens.Splash.name) {
                 SplashScreen(navController = navController)
             }
@@ -230,5 +217,4 @@ fun ShowBottomNavigation(
             }
         }
     }
-
 }
