@@ -116,7 +116,7 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -240,9 +240,9 @@ fun AddMedication(
                 )
             }
 
-            Button(onClick = { addTime(CalendarInformation(Calendar.getInstance())) }) {
-                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
-            }
+//            Button(onClick = { addTime(CalendarInformation(Calendar.getInstance())) }) {
+//                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
+//            }
 
             Spacer(modifier = Modifier.weight(1f))
 
