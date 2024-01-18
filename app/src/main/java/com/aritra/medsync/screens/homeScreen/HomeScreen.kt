@@ -29,8 +29,9 @@ import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
-import com.aritra.medsync.ui.theme.bold20
-import com.aritra.medsync.ui.theme.bold24
+import com.aritra.medsync.ui.theme.extraBold28
+import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.ui.theme.medium24
 import com.aritra.medsync.utils.Utils
 
 
@@ -68,16 +69,16 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .background(PrimarySurface)
         ) {
-            Column {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            ) {
                 Text(
-                    modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                     text = greetingText,
-                    style = bold24
+                    style = extraBold28
                 )
                 Text(
-                    modifier = Modifier.padding(start = 12.dp),
                     text = "Aritra!",
-                    style = bold20
+                    style = medium24
                 )
             }
 
@@ -103,20 +104,19 @@ fun Medications(medication: List<Medication>) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "To take",
-            style = bold20,
+            text = "Medications",
+            style = medium20,
             color = OnPrimaryContainer
         )
     }
 
-    Spacer(modifier = Modifier.height(10.dp))
 
     if (medication.isEmpty().not()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(medication.size) { index ->
                 val med = medication[index]
