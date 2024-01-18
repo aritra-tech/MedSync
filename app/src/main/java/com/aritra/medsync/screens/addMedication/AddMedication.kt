@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -77,10 +73,6 @@ fun AddMedication(
     }
     var isButtonEnabled by rememberSaveable { mutableStateOf(false) }
     var suffixText by rememberSaveable { mutableStateOf("Tablet") }
-
-    fun addTime(time: CalendarInformation) {
-        selectedTimes.add(time)
-    }
 
     fun checkAllFieldsFilled() {
         isButtonEnabled = (
@@ -239,10 +231,6 @@ fun AddMedication(
                     }
                 )
             }
-
-//            Button(onClick = { addTime(CalendarInformation(Calendar.getInstance())) }) {
-//                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
-//            }
 
             Spacer(modifier = Modifier.weight(1f))
 

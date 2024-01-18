@@ -111,7 +111,7 @@ fun MedicationConfirmationScreen(
 
             TicketView {
                 LazyColumn(
-                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 30.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     if (medicationItems != null) {
@@ -130,7 +130,7 @@ fun MedicationConfirmationScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Done"
+                text = stringResource(R.string.done)
             ) {
                 medication?.let {
                     MedicationConfirmation(
