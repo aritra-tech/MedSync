@@ -27,8 +27,10 @@ import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.bold18
-import com.aritra.medsync.ui.theme.bold22
+import com.aritra.medsync.ui.theme.bold24
+import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.medium14
 import com.aritra.medsync.utils.Utils.getMedicineUnit
 import com.aritra.medsync.utils.toFormattedTimeString
@@ -54,11 +56,16 @@ fun MedicationCard(
         ) {
             Text(
                 text = medication.reminderTime.toFormattedTimeString(),
-                style = bold22.copy(color = OnPrimaryContainer)
+                style = bold24.copy(color = OnPrimaryContainer)
             )
 
             Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                color = dividerColor,
+                thickness = 2.dp
+            )
 
             Spacer(modifier = Modifier.height(15.dp))
 
@@ -89,7 +96,7 @@ fun MedicationCard(
 
                     Text(
                         text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
-                        style = medium14.copy(color = OnPrimaryContainer)
+                        style = medium14.copy(color = OnSurface60)
                     )
                 }
             }
