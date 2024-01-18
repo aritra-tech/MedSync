@@ -46,6 +46,7 @@ import com.aritra.medsync.ui.theme.FadeOut
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
+import com.aritra.medsync.utils.BackPressHandler
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -60,6 +61,8 @@ fun MedSyncApp() {
         MedSyncScreens.AddMedication.name,
         MedSyncScreens.MedicationConfirmScreen.name
     )
+
+    BackPressHandler()
 
     Scaffold (
         bottomBar = {
