@@ -20,10 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
@@ -31,11 +27,11 @@ import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.domain.state.HomeState
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
-import com.aritra.medsync.ui.theme.bold20
-import com.aritra.medsync.ui.theme.bold24
+import com.aritra.medsync.ui.theme.extraBold28
+import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.ui.theme.medium24
 import com.aritra.medsync.utils.Utils
 
 
@@ -47,8 +43,7 @@ fun HomeScreen(
     homeViewModel: HomeViewModel
 ) {
 
-    val state = homeViewModel.homeState
-
+    val medication = homeViewModel.medicationModel
     val greetingText = Utils.greetingText()
 
     LaunchedEffect(Unit) {
@@ -74,16 +69,16 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .background(PrimarySurface)
         ) {
-            Column {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            ) {
                 Text(
-                    modifier = Modifier.padding(top = 10.dp, start = 16.dp),
                     text = greetingText,
-                    style = bold24
+                    style = extraBold28
                 )
                 Text(
-                    modifier = Modifier.padding(start = 12.dp),
                     text = "Aritra!",
-                    style = bold20
+                    style = medium24
                 )
             }
 
@@ -93,14 +88,14 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Medications(state)
+            Medications(medication)
 
         }
 
     }
 }
 @Composable
-fun Medications(state: HomeState) {
+fun Medications(medication: List<Medication>) {
 
     Row (
         modifier = Modifier
@@ -109,29 +104,23 @@ fun Medications(state: HomeState) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "To take",
-            style = bold20,
+            text = "Medications",
+            style = medium20,
             color = OnPrimaryContainer
         )
     }
 
-    Spacer(modifier = Modifier.height(10.dp))
 
-    var medicationList: List<Medication> by remember {
-        mutableStateOf(emptyList())
-    }
-    medicationList = state.medication
-
-    if (medicationList.isEmpty().not()) {
+    if (medication.isEmpty().not()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+                .padding(horizontal = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(medicationList.size) { index ->
-                val medication = medicationList[index]
-                MedicationCard(medication = medication)
+            items(medication.size) { index ->
+                val med = medication[index]
+                MedicationCard(medication = med)
             }
         }
     } else {

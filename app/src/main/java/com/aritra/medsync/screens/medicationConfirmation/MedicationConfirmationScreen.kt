@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,11 +51,11 @@ fun MedicationConfirmationScreen(
     medicationConfirmViewModel: MedicationConfirmViewModel
 ) {
 
+    val context = LocalContext.current
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(R.raw.completed_lottie_animation)
     )
     val medicationResult = medication?.first()
-
     val medicationItems = medicationResult?.getMedicationItem()
 
     LaunchedEffect(Unit) {
@@ -110,7 +111,7 @@ fun MedicationConfirmationScreen(
 
             TicketView {
                 LazyColumn(
-                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 30.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     if (medicationItems != null) {
@@ -129,7 +130,7 @@ fun MedicationConfirmationScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Done"
+                text = stringResource(R.string.done)
             ) {
                 medication?.let {
                     MedicationConfirmation(
@@ -137,6 +138,7 @@ fun MedicationConfirmationScreen(
                     )
                 }?.let {
                     medicationConfirmViewModel.saveMedication(
+                        context,
                         MedicationConfirmation(
                             medication
                         )

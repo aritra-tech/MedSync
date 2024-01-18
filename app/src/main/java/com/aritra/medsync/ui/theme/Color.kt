@@ -37,3 +37,4 @@ val UNKNOWN_FOREGROUND = Color(0xFF545454)
 
 val progressBarTrackColor = Color(0xFFCFCFCF)
 val FaintedGreen = Color(0xFF405F65)
+val selectedBlue = Color(0xFA65A3FF)

@@ -13,11 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -75,10 +71,15 @@ fun AddMedication(
     var selectedMedicineType by rememberSaveable {
         mutableStateOf(MedicineType.TABLET)
     }
+    var isButtonEnabled by rememberSaveable { mutableStateOf(false) }
     var suffixText by rememberSaveable { mutableStateOf("Tablet") }
 
-    fun addTime(time: CalendarInformation) {
-        selectedTimes.add(time)
+    fun checkAllFieldsFilled() {
+        isButtonEnabled = (
+                medicineName.isNotBlank() &&
+                        pillsAmount.isNotBlank() &&
+                        pillsFrequency.isNotBlank()
+                )
     }
 
     Scaffold(
@@ -107,7 +108,7 @@ fun AddMedication(
                 color = Color.Black
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -162,6 +163,7 @@ fun AddMedication(
                 keyboardType = KeyboardType.Text,
                 onValueChange = {
                     medicineName = it
+                    checkAllFieldsFilled()
                 }
             )
 
@@ -186,6 +188,7 @@ fun AddMedication(
                     value = pillsAmount,
                     onValueChange = {
                         pillsAmount = it
+                        checkAllFieldsFilled()
                     },
                     trailingIcon = {
                         Text(
@@ -203,6 +206,7 @@ fun AddMedication(
                     value = pillsFrequency,
                     onValueChange = {
                         pillsFrequency = it
+                        checkAllFieldsFilled()
                     }
                 )
             }
@@ -228,15 +232,12 @@ fun AddMedication(
                 )
             }
 
-            Button(onClick = { addTime(CalendarInformation(Calendar.getInstance())) }) {
-                Icon(imageVector = Icons.Outlined.Add, contentDescription = null)
-            }
-
             Spacer(modifier = Modifier.weight(1f))
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Next"
+                text = "Next",
+                enabled = isButtonEnabled
             ) {
                 addAndValidateMedication(
                     medicationName = medicineName,

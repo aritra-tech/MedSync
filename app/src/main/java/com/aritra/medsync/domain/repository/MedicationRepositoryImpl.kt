@@ -1,28 +1,21 @@
 package com.aritra.medsync.domain.repository
 
 import com.aritra.medsync.data.dao.MedicationDao
-import com.aritra.medsync.data.mapper.toMedication
 import com.aritra.medsync.domain.model.Medication
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class MedicationRepositoryImpl(
     private val dao: MedicationDao
-): MedicationRepository {
+) : MedicationRepository {
     override suspend fun insertMedications(medication: List<Medication>) {
-        medication.map { it.toMedication() }.forEach {
-            dao.insertMedication(it)
-        }
+        medication.forEach { dao.insertMedication(it) }
     }
 
     override suspend fun updateMedication(medication: Medication) {
-        dao.updateMedication(medication.toMedication())
+        dao.updateMedication(medication)
     }
 
     override fun getAllMedications(): Flow<List<Medication>> {
-        return dao.getAllMedications().map { medication ->
-            medication.map { it.toMedication() }
-        }
+        return dao.getAllMedications()
     }
-
 }
