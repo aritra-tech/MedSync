@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +37,7 @@ import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.medium14
 import com.aritra.medsync.utils.Utils.getMedicineUnit
+import com.aritra.medsync.utils.hasPassed
 import com.aritra.medsync.utils.toFormattedTimeString
 
 @Composable
@@ -99,6 +104,29 @@ fun MedicationCard(
                         style = medium14.copy(color = OnSurface60)
                     )
                 }
+
+
+                if (medication.reminderTime.hasPassed()) {
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(MedicineCircleColor),
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Medication Taken",
+                        tint = Color.Green,
+                    )
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(MedicineCircleColor),
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = "Medication Skipped",
+                        tint = Color.Red,
+                    )
+                }
+
             }
         }
     }
@@ -106,7 +134,7 @@ fun MedicationCard(
 
 @Composable
 fun getMedicineImage(medicineType: String): Painter {
-    return when(medicineType) {
+    return when (medicineType) {
         "TABLET" -> painterResource(id = R.drawable.pill)
         "CAPSULE" -> painterResource(id = R.drawable.capsule)
         "SYRUP" -> painterResource(id = R.drawable.amp)
