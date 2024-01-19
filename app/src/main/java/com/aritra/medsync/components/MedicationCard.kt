@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.ui.theme.Green
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface60
@@ -36,6 +37,7 @@ import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.medium14
+import com.aritra.medsync.ui.theme.red
 import com.aritra.medsync.utils.Utils.getMedicineUnit
 import com.aritra.medsync.utils.hasPassed
 import com.aritra.medsync.utils.toFormattedTimeString
@@ -105,32 +107,47 @@ fun MedicationCard(
                     )
                 }
 
-
+                // TODO: Use animatevisibility
                 if (medication.reminderTime.hasPassed()) {
-                    Icon(
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier
-                            .size(24.dp)
                             .clip(RoundedCornerShape(100.dp))
-                            .background(MedicineCircleColor),
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Medication Taken",
-                        tint = Color.Green,
-                    )
-                    Icon(
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clip(RoundedCornerShape(100.dp))
-                            .background(MedicineCircleColor),
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = "Medication Skipped",
-                        tint = Color.Red,
-                    )
-                }
+                            .background(Color.White)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Medication Taken",
+                            tint = Green,
+                        )
+                    }
 
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(Color.White)
+                            .padding(8.dp)
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(30.dp),
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Medication Skipped",
+                            tint = red,
+                        )
+                    }
+
+
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun getMedicineImage(medicineType: String): Painter {
