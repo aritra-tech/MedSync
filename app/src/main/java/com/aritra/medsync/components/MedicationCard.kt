@@ -40,6 +40,9 @@ import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.lightGreen
 import com.aritra.medsync.ui.theme.lightRed
 import com.aritra.medsync.ui.theme.medium14
+import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.medium18
+import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.ui.theme.red
 import com.aritra.medsync.utils.Utils.getMedicineUnit
 import com.aritra.medsync.utils.hasPassed
@@ -99,14 +102,14 @@ fun MedicationCard(
                 ) {
                     Text(
                         text = medication.medicineName,
-                        style = bold18.copy(color = OnPrimaryContainer)
+                        style = medium16.copy(color = OnPrimaryContainer)
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
-                        style = medium14.copy(color = OnSurface60)
+                        style = normal14.copy(color = OnSurface60)
                     )
                 }
                 
