@@ -15,4 +15,5 @@
     <string name="notification_for_medication_reminder">"Notification for medication reminder"</string>
     <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to log it."</string>
     <string name="done">Done</string>
+    <string name="your_plan_for_today">Your plan for today</string>
 </resources>

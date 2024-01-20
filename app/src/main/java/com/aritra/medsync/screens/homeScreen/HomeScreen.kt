@@ -85,7 +85,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            MedSyncProgressCard()
+            MedSyncProgressCard(medication)
 
             Spacer(modifier = Modifier.height(20.dp))
 
