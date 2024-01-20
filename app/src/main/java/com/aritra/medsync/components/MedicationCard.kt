@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.screens.homeScreen.MedicationDetailsViewModel
+import com.aritra.medsync.screens.homeScreen.viewmodel.MedicationDetailsViewModel
 import com.aritra.medsync.ui.theme.Green
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer

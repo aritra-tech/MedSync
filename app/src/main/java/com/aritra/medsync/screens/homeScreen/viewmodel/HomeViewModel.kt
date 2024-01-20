@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens.homeScreen
+package com.aritra.medsync.screens.homeScreen.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
