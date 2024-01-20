@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -36,6 +37,8 @@ import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.dividerColor
+import com.aritra.medsync.ui.theme.lightGreen
+import com.aritra.medsync.ui.theme.lightRed
 import com.aritra.medsync.ui.theme.medium14
 import com.aritra.medsync.ui.theme.red
 import com.aritra.medsync.utils.Utils.getMedicineUnit
@@ -106,19 +109,19 @@ fun MedicationCard(
                         style = medium14.copy(color = OnSurface60)
                     )
                 }
+                
+                Spacer(modifier = Modifier.width(20.dp))
 
-                // TODO: Use animatevisibility
                 if (medication.reminderTime.hasPassed()) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier
                             .clip(RoundedCornerShape(100.dp))
-                            .background(Color.White)
+                            .background(lightGreen)
                             .padding(8.dp)
                     ) {
                         Icon(
-                            modifier = Modifier.size(30.dp),
+                            modifier = Modifier.size(25.dp),
                             imageVector = Icons.Default.Check,
                             contentDescription = "Medication Taken",
                             tint = Green,
@@ -127,14 +130,13 @@ fun MedicationCard(
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier
                             .clip(RoundedCornerShape(100.dp))
-                            .background(Color.White)
+                            .background(lightRed)
                             .padding(8.dp)
                     ) {
                         Icon(
-                            modifier = Modifier.size(30.dp),
+                            modifier = Modifier.size(25.dp),
                             imageVector = Icons.Default.Clear,
                             contentDescription = "Medication Skipped",
                             tint = red,

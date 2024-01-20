@@ -23,6 +23,8 @@ val InUseMarkerColor = Color(0xFFFF9900)
 val deductedAmountColor = Color(0xFFF01E3C)
 val backgroundColor = Color(0xFFF5F8FA)
 val dividerColor = Color(0xFFF6F5FA)
+val lightGreen = Color(0xFFD3F8D3)
+val lightRed = Color(0xFFFFCCCC)
 
 
 val AVAILABLE_BACKGROUND = Color(0xFFAEFFC0)
