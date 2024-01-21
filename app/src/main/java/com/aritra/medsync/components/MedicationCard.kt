@@ -2,6 +2,8 @@ package com.aritra.medsync.components
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +23,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -92,7 +95,10 @@ fun MedicationCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                AnimatedVisibility(visible = medication.reminderTime.hasPassed()) {
+                AnimatedVisibility(
+                    visible = medication.reminderTime.hasPassed(),
+                    enter = fadeIn(animationSpec = tween(200))
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
