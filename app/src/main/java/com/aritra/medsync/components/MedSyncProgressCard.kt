@@ -18,6 +18,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,10 +39,18 @@ import com.aritra.medsync.ui.theme.normal14
 @Composable
 fun MedSyncProgressCard(medication: List<Medication>) {
 
-    val medicationTaken = medication.filter { it.isTaken }.size
-    val totalNumberOfMedication = medication.size
-    val medicationRemaining = totalNumberOfMedication - medicationTaken
-    val medicationPercentage = (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+    var medicationTaken by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    var totalNumberOfMedication by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    var medicationRemaining by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    var medicationPercentage by rememberSaveable {
+        mutableFloatStateOf(0f)
+    }
 
     Card(
         modifier = Modifier
@@ -57,6 +70,11 @@ fun MedSyncProgressCard(medication: List<Medication>) {
                 modifier = Modifier
                     .padding(24.dp, 24.dp, 0.dp, 16.dp),
             ) {
+
+                medicationTaken = medication.filter { it.isTaken }.size
+                totalNumberOfMedication = medication.size
+                medicationRemaining = totalNumberOfMedication - medicationTaken
+                medicationPercentage = (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
 
                 Text(
                     text = stringResource(R.string.your_plan_for_today),
