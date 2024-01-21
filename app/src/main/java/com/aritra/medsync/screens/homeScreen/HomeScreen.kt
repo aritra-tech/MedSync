@@ -1,5 +1,6 @@
 package com.aritra.medsync.screens.homeScreen
 
+import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -34,8 +35,11 @@ import com.aritra.medsync.ui.theme.extraBold28
 import com.aritra.medsync.ui.theme.medium20
 import com.aritra.medsync.ui.theme.medium24
 import com.aritra.medsync.utils.Utils
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
@@ -46,9 +50,14 @@ fun HomeScreen(
 
     val medication = homeViewModel.medicationModel
     val greetingText = Utils.greetingText()
+    val postNotificationPermission = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect(Unit) {
         homeViewModel.getMedications()
+    }
+
+    LaunchedEffect(Unit) {
+        postNotificationPermission.launchPermissionRequest()
     }
 
     Scaffold(
