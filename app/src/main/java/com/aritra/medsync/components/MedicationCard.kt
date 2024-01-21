@@ -23,7 +23,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aritra.medsync.R
@@ -158,10 +158,17 @@ fun MedicationCard(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    Text(
-                        text = medication.medicineName,
-                        style = medium16.copy(color = OnPrimaryContainer)
-                    )
+                    if (isTakenClicked) {
+                        Text(
+                            text = medication.medicineName,
+                            style = medium16.copy(color = OnPrimaryContainer, textDecoration = TextDecoration.LineThrough)
+                        )
+                    } else {
+                        Text(
+                            text = medication.medicineName,
+                            style = medium16.copy(color = OnPrimaryContainer)
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
