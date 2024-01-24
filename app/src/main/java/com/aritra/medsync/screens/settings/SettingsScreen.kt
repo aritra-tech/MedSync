@@ -25,7 +25,7 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.SettingsItem
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
-import com.aritra.medsync.ui.theme.medium14
+import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.medium32
 
 @Composable
@@ -78,7 +78,7 @@ fun SettingsScreen(
                 modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
                 text = "General",
                 color = OnPrimaryContainer,
-                style = medium14
+                style = medium16
             )
 
             SettingsItem(
@@ -97,7 +97,7 @@ fun SettingsScreen(
                 modifier = Modifier.padding(16.dp),
                 text = "Preference",
                 color = OnPrimaryContainer,
-                style = medium14
+                style = medium16
             )
 
             SettingsItem(
@@ -116,7 +116,7 @@ fun SettingsScreen(
                 modifier = Modifier.padding(16.dp),
                 text = "More",
                 color = OnPrimaryContainer,
-                style = medium14
+                style = medium16
             )
 
             SettingsItem(
