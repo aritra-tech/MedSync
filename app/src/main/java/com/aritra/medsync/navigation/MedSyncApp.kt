@@ -130,7 +130,9 @@ fun MedSyncApp() {
                 HistoryScreen()
             }
             composable(MedSyncScreens.Settings.name) {
-                SettingsScreen()
+                SettingsScreen(
+                    navController
+                )
             }
         }
     }
