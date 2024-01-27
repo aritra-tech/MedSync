@@ -1,5 +1,7 @@
 package com.aritra.medsync.navigation
 
+import com.aritra.medsync.utils.Constants
+
 sealed class MedSyncScreens(val name: String) {
 
     object Splash : MedSyncScreens("Splash")
@@ -12,4 +14,5 @@ sealed class MedSyncScreens(val name: String) {
     object UpdateMedication : MedSyncScreens("Update")
     object History : MedSyncScreens("History")
     object Settings : MedSyncScreens("Settings")
+    object ProfileScreen : MedSyncScreens(Constants.PROFILE_SCREEN)
 }
