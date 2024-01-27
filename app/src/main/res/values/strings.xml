@@ -16,4 +16,13 @@
     <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to mark it."</string>
     <string name="done">Done</string>
     <string name="your_plan_for_today">Your plan for today</string>
+    <string name="preference">Preference</string>
+    <string name="add_a_appointment">Add a appointment</string>
+    <string name="lock_my_screen">Lock my screen</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="share_medsync_to_friends">Share MedSync to friends</string>
+    <string name="rate_medsync">Rate MedSync</string>
+    <string name="about">About</string>
+    <string name="add_a_prescription">Add a prescription</string>
 </resources>

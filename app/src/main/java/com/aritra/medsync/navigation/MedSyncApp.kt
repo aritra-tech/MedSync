@@ -34,6 +34,7 @@ import com.aritra.medsync.screens.addMedication.AddMedicationViewModel
 import com.aritra.medsync.screens.homeScreen.HomeScreen
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationScreen
 import com.aritra.medsync.screens.SplashScreen
+import com.aritra.medsync.screens.appointment.AppointmentScreen
 import com.aritra.medsync.screens.history.HistoryScreen
 import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
@@ -62,12 +63,14 @@ fun MedSyncApp() {
         MedSyncScreens.Splash.name,
         MedSyncScreens.AddMedication.name,
         MedSyncScreens.MedicationConfirmScreen.name,
-        MedSyncScreens.ProfileScreen.name
+        MedSyncScreens.ProfileScreen.name,
+        MedSyncScreens.PrescriptionScreen.name,
+        MedSyncScreens.AppointmentScreen.name
     )
 
     BackPressHandler()
 
-    Scaffold (
+    Scaffold(
         bottomBar = {
             ShowBottomNavigation(
                 backStackEntry,
@@ -79,8 +82,8 @@ fun MedSyncApp() {
     ) {
 
         val viewModel: AddMedicationViewModel = hiltViewModel()
-        val medicationConfirmViewModel : MedicationConfirmViewModel = hiltViewModel()
-        val homeViewModel : HomeViewModel = hiltViewModel()
+        val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
+        val homeViewModel: HomeViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -110,7 +113,7 @@ fun MedSyncApp() {
                         val bundle = Bundle()
                         bundle.putParcelableArrayList("medication", ArrayList(it))
                         navController.currentBackStackEntry?.savedStateHandle.apply {
-                            this?.set("medication",bundle)
+                            this?.set("medication", bundle)
                         }
                         navController.navigate(MedSyncScreens.MedicationConfirmScreen.name)
                     },
@@ -118,7 +121,8 @@ fun MedSyncApp() {
                 )
             }
             composable(MedSyncScreens.MedicationConfirmScreen.name) {
-                val result = navController.previousBackStackEntry?.savedStateHandle?.get<Bundle>("medication")
+                val result =
+                    navController.previousBackStackEntry?.savedStateHandle?.get<Bundle>("medication")
                 val medication = result?.getParcelableArrayList<Medication>("medication")
                 MedicationConfirmationScreen(
                     medication,
@@ -144,6 +148,9 @@ fun MedSyncApp() {
             }
             composable(MedSyncScreens.PrescriptionScreen.name) {
                 PrescriptionScreen()
+            }
+            composable(MedSyncScreens.AppointmentScreen.name) {
+                AppointmentScreen()
             }
         }
     }
