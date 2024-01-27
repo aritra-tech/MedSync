@@ -37,6 +37,7 @@ import com.aritra.medsync.screens.SplashScreen
 import com.aritra.medsync.screens.history.HistoryScreen
 import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
+import com.aritra.medsync.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.screens.profile.ProfileScreen
 import com.aritra.medsync.screens.report.ReportScreen
 import com.aritra.medsync.screens.settings.SettingsScreen
@@ -140,6 +141,9 @@ fun MedSyncApp() {
                 ProfileScreen(
                     navController
                 )
+            }
+            composable(MedSyncScreens.PrescriptionScreen.name) {
+                PrescriptionScreen()
             }
         }
     }
