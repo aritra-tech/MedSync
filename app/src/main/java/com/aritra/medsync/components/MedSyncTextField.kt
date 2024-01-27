@@ -100,7 +100,7 @@ fun TextEditField(
     onValueChange: (String) -> Unit
 ) {
     TextField(
-        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(15.dp)),
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)),
         value = value,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         onValueChange = {
