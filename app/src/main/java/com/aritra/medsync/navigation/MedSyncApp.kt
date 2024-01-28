@@ -42,6 +42,7 @@ import com.aritra.medsync.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.screens.profile.ProfileScreen
 import com.aritra.medsync.screens.report.ReportScreen
 import com.aritra.medsync.screens.settings.SettingsScreen
+import com.aritra.medsync.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.FadeIn
@@ -84,6 +85,7 @@ fun MedSyncApp() {
         val viewModel: AddMedicationViewModel = hiltViewModel()
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
         val homeViewModel: HomeViewModel = hiltViewModel()
+        val settingsViewModel: SettingsViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -138,7 +140,8 @@ fun MedSyncApp() {
             }
             composable(MedSyncScreens.Settings.name) {
                 SettingsScreen(
-                    navController
+                    navController,
+                    settingsViewModel
                 )
             }
             composable(MedSyncScreens.ProfileScreen.name) {
