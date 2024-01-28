@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.ProfileContainer
 import com.aritra.medsync.components.SettingsItem
+import com.aritra.medsync.components.SettingsSwitch
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.medium16
@@ -98,10 +99,11 @@ fun SettingsScreen(
                 itemName = stringResource(R.string.lock_my_screen)
             )
 
-            SettingsItem(
-                onClick = { /*TODO*/ },
+            SettingsSwitch(
                 iconId = R.drawable.capsule,
-                itemName = stringResource(R.string.dark_theme)
+                itemName = stringResource(R.string.dark_theme),
+                isChecked = true,
+                onCheckedChange = {}
             )
 
             Text(
