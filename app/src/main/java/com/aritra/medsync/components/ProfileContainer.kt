@@ -33,7 +33,7 @@ fun ProfileContainer(onEditButtonClick: () -> Unit) {
         )
 
         Button(
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier.size(25.dp),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
             contentPadding = PaddingValues(0.dp),
