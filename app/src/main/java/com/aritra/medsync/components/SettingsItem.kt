@@ -25,7 +25,7 @@ fun SettingsItem(onClick: () -> Unit, iconId: Int, itemName: String) {
             .fillMaxWidth()
             .padding(16.dp)
             .onClick { onClick() },
-        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

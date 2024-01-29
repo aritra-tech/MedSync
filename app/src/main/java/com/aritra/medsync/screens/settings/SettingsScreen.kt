@@ -24,7 +24,7 @@ import com.aritra.medsync.components.SettingsItem
 import com.aritra.medsync.components.SettingsSwitch
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
-import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.medium32
 import com.aritra.medsync.utils.Constants.APPOINTMENT_SCREEN
 import com.aritra.medsync.utils.Constants.PRESCRIPTION_SCREEN
@@ -49,7 +49,7 @@ fun SettingsScreen(
         Row(
             Modifier
                 .fillMaxWidth()
-                .padding(52.dp),
+                .padding(42.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
@@ -76,18 +76,18 @@ fun SettingsScreen(
                 modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
                 text = "General",
                 color = OnPrimaryContainer,
-                style = medium16
+                style = bold18
             )
 
             SettingsItem(
                 onClick = { navController.navigate(PRESCRIPTION_SCREEN) },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.document,
                 itemName = stringResource(R.string.add_a_prescription)
             )
 
             SettingsItem(
                 onClick = { navController.navigate(APPOINTMENT_SCREEN) },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.appointment,
                 itemName = stringResource(R.string.add_a_appointment)
             )
 
@@ -95,17 +95,17 @@ fun SettingsScreen(
                 modifier = Modifier.padding(16.dp),
                 text = stringResource(R.string.preference),
                 color = OnPrimaryContainer,
-                style = medium16
+                style = bold18
             )
 
             SettingsItem(
                 onClick = { /*TODO*/ },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.lock,
                 itemName = stringResource(R.string.lock_my_screen)
             )
 
             SettingsSwitch(
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.dark_mode,
                 itemName = stringResource(R.string.dark_theme),
                 isChecked = themeStateObserver.isDarkMode,
                 onCheckedChange = {
@@ -117,31 +117,25 @@ fun SettingsScreen(
                 modifier = Modifier.padding(16.dp),
                 text = "More",
                 color = OnPrimaryContainer,
-                style = medium16
+                style = bold18
             )
 
             SettingsItem(
                 onClick = { /*TODO*/ },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.send,
                 itemName = stringResource(R.string.send_feedback)
             )
 
             SettingsItem(
                 onClick = { /*TODO*/ },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.smile,
                 itemName = stringResource(R.string.share_medsync_to_friends)
             )
 
             SettingsItem(
                 onClick = { /*TODO*/ },
-                iconId = R.drawable.capsule,
+                iconId = R.drawable.rate,
                 itemName = stringResource(R.string.rate_medsync)
-            )
-
-            SettingsItem(
-                onClick = { /*TODO*/ },
-                iconId = R.drawable.capsule,
-                itemName = stringResource(R.string.about)
             )
         }
     }
