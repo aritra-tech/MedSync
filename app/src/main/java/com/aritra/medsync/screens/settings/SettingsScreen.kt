@@ -15,6 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -26,9 +28,12 @@ import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.medium32
+import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Constants.APPOINTMENT_SCREEN
 import com.aritra.medsync.utils.Constants.PRESCRIPTION_SCREEN
 import com.aritra.medsync.utils.Constants.PROFILE_SCREEN
+import com.aritra.medsync.utils.Utils.inviteFriends
+import com.aritra.medsync.utils.Utils.mailTo
 
 @Composable
 fun SettingsScreen(
@@ -36,8 +41,8 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel
 ) {
 
+    val context = LocalContext.current
     val themeStateObserver by settingsViewModel.themeState.collectAsState()
-
 
     /***********************  UI Content  ***********************/
     Column(
@@ -70,6 +75,8 @@ fun SettingsScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Column {
             Text(
@@ -121,13 +128,13 @@ fun SettingsScreen(
             )
 
             SettingsItem(
-                onClick = { /*TODO*/ },
+                onClick = { mailTo(context) },
                 iconId = R.drawable.send,
                 itemName = stringResource(R.string.send_feedback)
             )
 
             SettingsItem(
-                onClick = { /*TODO*/ },
+                onClick = { inviteFriends(context) },
                 iconId = R.drawable.smile,
                 itemName = stringResource(R.string.share_medsync_to_friends)
             )
@@ -138,5 +145,14 @@ fun SettingsScreen(
                 itemName = stringResource(R.string.rate_medsync)
             )
         }
+
+        Text(
+            modifier = Modifier
+                .padding(top = 4.dp, bottom = 100.dp)
+                .alpha(0.25f),
+            text = "V1.0.0",
+            color = OnSurface20,
+            style = normal14
+        )
     }
 }

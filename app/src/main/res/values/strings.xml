@@ -25,4 +25,6 @@
     <string name="rate_medsync">Rate MedSync</string>
     <string name="about">About</string>
     <string name="add_a_prescription">Add a prescription</string>
+    <string name="referral_message">"I haven't forgotten a single medication thanks to MedSync app, and I hope you won't either. Download now "</string>
+    <string name="mailTo">mailto:aritrarick2002@gmail.com?Subject=Your%20feedback%20is%20important%20to%20us%21</string>
 </resources>
