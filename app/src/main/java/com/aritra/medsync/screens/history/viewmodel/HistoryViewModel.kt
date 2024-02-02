@@ -1,4 +1,4 @@
-package com.aritra.medsync.screens.homeScreen.viewmodel
+package com.aritra.medsync.screens.history.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,15 +11,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class HistoryViewModel @Inject constructor(
     private val fetchMedicationUseCase: FetchMedicationUseCase
-) : ViewModel() {
+): ViewModel() {
 
-    var medicationModel by mutableStateOf(emptyList<Medication>())
+    var historyModel by mutableStateOf(emptyList<Medication>())
 
-    fun getMedications() = runIO {
-        fetchMedicationUseCase.getAllMedications().collect { response ->
-            medicationModel = response
+    fun loadMedicines() = runIO {
+        fetchMedicationUseCase.getAllMedications().collect {response ->
+            historyModel = response
         }
     }
+
 }
