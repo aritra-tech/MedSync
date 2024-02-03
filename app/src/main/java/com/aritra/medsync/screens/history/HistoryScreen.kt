@@ -3,8 +3,9 @@ package com.aritra.medsync.screens.history
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -13,12 +14,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
+import com.aritra.medsync.components.DatesHeader
 import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.history.viewmodel.HistoryViewModel
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.utils.hasPassed
+import com.aritra.medsync.utils.toFormattedDateString
 
 @Composable
 fun HistoryScreen(
@@ -46,9 +49,21 @@ fun HistoryScreen(
 @Composable
 fun SortedMedicationList(medicationList: List<Medication>) {
 
-    val filteredList = medicationList.filter {
+    var filteredList = medicationList.filter {
         it.reminderTime.hasPassed()
     }
+
+    DatesHeader { selectedDate ->
+        val newMedicationList = medicationList
+            .filter { medication ->
+            medication.reminderTime.toFormattedDateString() == selectedDate.date.toFormattedDateString()
+        }
+            .sortedBy { it.reminderTime }
+
+        filteredList = newMedicationList
+    }
+
+    Spacer(modifier = Modifier.height(15.dp))
 
     if (filteredList.isEmpty().not()) {
         LazyColumn(
