@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncEmptyState
-import com.aritra.medsync.components.MedicationCard
+import com.aritra.medsync.components.MedicationHistoryCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.history.viewmodel.HistoryViewModel
 import com.aritra.medsync.ui.theme.PrimarySurface
@@ -73,7 +73,7 @@ fun SortedMedicationList(medicationList: List<Medication>) {
         ) {
             items(filteredList.size) { index ->
                 val med = filteredList[index]
-                MedicationCard(medication = med)
+                MedicationHistoryCard(medication = med)
             }
         }
     } else {
