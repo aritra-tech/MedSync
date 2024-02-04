@@ -49,6 +49,7 @@ import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.lightGreen
 import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.normal14
+import com.aritra.medsync.utils.Utils.getMedicineImage
 import com.aritra.medsync.utils.Utils.getMedicineUnit
 import com.aritra.medsync.utils.hasPassed
 import com.aritra.medsync.utils.onClick
@@ -182,14 +183,3 @@ fun MedicationCard(
     }
 }
 
-
-@Composable
-fun getMedicineImage(medicineType: String): Painter {
-    return when (medicineType) {
-        "TABLET" -> painterResource(id = R.drawable.pill)
-        "CAPSULE" -> painterResource(id = R.drawable.capsule)
-        "SYRUP" -> painterResource(id = R.drawable.amp)
-        "INHALER" -> painterResource(id = R.drawable.inahler)
-        else -> painterResource(id = R.drawable.ic_launcher_foreground) // TODO: Need to change the image
-    }
-}

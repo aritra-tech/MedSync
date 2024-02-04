@@ -36,6 +36,7 @@ import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationS
 import com.aritra.medsync.screens.SplashScreen
 import com.aritra.medsync.screens.appointment.AppointmentScreen
 import com.aritra.medsync.screens.history.HistoryScreen
+import com.aritra.medsync.screens.history.viewmodel.HistoryViewModel
 import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
 import com.aritra.medsync.screens.prescription.PrescriptionScreen
@@ -86,6 +87,7 @@ fun MedSyncApp() {
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
         val homeViewModel: HomeViewModel = hiltViewModel()
         val settingsViewModel: SettingsViewModel = hiltViewModel()
+        val historyViewModel: HistoryViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -136,7 +138,7 @@ fun MedSyncApp() {
                 ReportScreen()
             }
             composable(MedSyncScreens.History.name) {
-                HistoryScreen()
+                HistoryScreen(historyViewModel)
             }
             composable(MedSyncScreens.Settings.name) {
                 SettingsScreen(
