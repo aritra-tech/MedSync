@@ -135,7 +135,7 @@ fun MedSyncApp() {
                 )
             }
             composable(MedSyncScreens.Report.name) {
-                ReportScreen()
+                ReportScreen(navController)
             }
             composable(MedSyncScreens.History.name) {
                 HistoryScreen(historyViewModel)

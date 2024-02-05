@@ -31,4 +31,6 @@
     <string name="medication_taken_at">Taken at %s</string>
     <string name="medication_skipped_at">Skipped at %s</string>
     <string name="medication_scheduled_at">Scheduled at %s</string>
+    <string name="medication_s_taken">%1$s medication\'s taken</string>
+    <string name="medication_s_remaining">%1$s medication\'s remaining</string>
 </resources>

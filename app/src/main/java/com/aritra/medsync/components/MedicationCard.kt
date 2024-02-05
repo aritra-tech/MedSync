@@ -31,13 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.homeScreen.viewmodel.MedicationDetailsViewModel
 import com.aritra.medsync.ui.theme.Green

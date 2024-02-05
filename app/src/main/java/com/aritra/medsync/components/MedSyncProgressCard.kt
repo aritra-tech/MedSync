@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,13 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.Green
+import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.bold24
+import com.aritra.medsync.ui.theme.lightBlue
 import com.aritra.medsync.ui.theme.normal14
+import timber.log.Timber
 
 @Composable
 fun MedSyncProgressCard(medication: List<Medication>) {
@@ -58,7 +59,7 @@ fun MedSyncProgressCard(medication: List<Medication>) {
             .height(150.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary
+            lightBlue
         )
     ) {
 
@@ -75,25 +76,28 @@ fun MedSyncProgressCard(medication: List<Medication>) {
                 totalNumberOfMedication = medication.size
                 medicationRemaining = totalNumberOfMedication - medicationTaken
                 medicationPercentage = (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+                Timber.d("Percentage: $medicationPercentage")
 
                 Text(
                     text = stringResource(R.string.your_plan_for_today),
-                    fontWeight = FontWeight.Medium,
                     style = bold24,
+                    color = OnPrimaryContainer
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "$medicationTaken medication's taken",
+                    text = stringResource(R.string.medication_s_taken, medicationTaken),
                     style = normal14,
+                    color = OnPrimaryContainer
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
 
                 Text(
-                    text = "$medicationRemaining medication's remaining",
+                    text = stringResource(R.string.medication_s_remaining, medicationRemaining),
                     style = normal14,
+                    color = OnPrimaryContainer
                 )
             }
 
@@ -103,9 +107,9 @@ fun MedSyncProgressCard(medication: List<Medication>) {
                 CircularProgressIndicator(
                     modifier = Modifier.then(
                         Modifier
-                            .size(100.dp)
-                            .padding(end = 16.dp)
-                            .padding(vertical = 35.dp)
+                            .size(110.dp)
+                            .padding(end = 18.dp)
+                            .padding(vertical = 30.dp)
                     ),
                     progress = animateFloatAsState(
                         targetValue = medicationPercentage / 100,
@@ -117,13 +121,6 @@ fun MedSyncProgressCard(medication: List<Medication>) {
                     strokeCap = StrokeCap.Round,
                     trackColor = Color.White
                 )
-
-                // TODO : Need to fix the text
-//                Text(
-//                    text = medicationPercentage.toString(),
-//                    style = medium16,
-//                    color = Color.White
-//                )
             }
         }
     }
