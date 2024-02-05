@@ -77,6 +77,6 @@ fun SortedMedicationList(medicationList: List<Medication>) {
             }
         }
     } else {
-        MedSyncEmptyState(stateTitle = "", stateDescription = "", R.raw.empty_box_animation)
+        MedSyncEmptyState(stateTitle = "", R.raw.empty_box_animation)
     }
 }

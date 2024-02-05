@@ -20,14 +20,11 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.aritra.medsync.R
 import com.aritra.medsync.ui.theme.OnSurface20
-import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.medium22
-import com.aritra.medsync.ui.theme.normal16
 
 @Composable
 fun MedSyncEmptyState(
     stateTitle: String,
-    stateDescription: String?,
     @RawRes animationId: Int = R.raw.empty_box_animation
 ) {
 
@@ -54,14 +51,5 @@ fun MedSyncEmptyState(
             style = medium22,
             color = OnSurface20
         )
-
-        stateDescription?.let {
-            Text(
-                text = it,
-                textAlign = TextAlign.Center,
-                style = normal16,
-                color = OnSurface60
-            )
-        }
     }
 }
