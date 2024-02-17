@@ -27,7 +27,6 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
-import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
@@ -54,9 +53,6 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         homeViewModel.getMedications()
-    }
-
-    LaunchedEffect(Unit) {
         postNotificationPermission.launchPermissionRequest()
     }
 
@@ -98,43 +94,35 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Medications(medication)
-
-        }
-
-    }
-}
-@Composable
-fun Medications(medication: List<Medication>) {
-
-    Row (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = "Medications",
-            style = medium20,
-            color = OnPrimaryContainer
-        )
-    }
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Medications",
+                    style = medium20,
+                    color = OnPrimaryContainer
+                )
+            }
 
 
-    if (medication.isEmpty().not()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(medication.size) { index ->
-                val med = medication[index]
-                MedicationCard(medication = med)
+            if (medication.isEmpty().not()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(medication.size) { index ->
+                        val med = medication[index]
+                        MedicationCard(medication = med)
+                    }
+                }
+            } else {
+                MedSyncEmptyState(stateTitle = "", R.raw.empty_box_animation)
             }
         }
-    } else {
-        MedSyncEmptyState(stateTitle = "", R.raw.empty_box_animation)
     }
 }
-
