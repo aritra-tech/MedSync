@@ -58,7 +58,7 @@ android {
 
 dependencies {
 
-    val navVersion = "2.7.6"
+    val navVersion = "2.7.7"
     val lifecycleVersion = "2.6.2"
     val roomVersion = "2.5.2"
 
@@ -70,7 +70,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material3:material3-android:1.2.0-beta01")
+    implementation("androidx.compose.material3:material3-android:1.2.0")
 
 
     // Test
@@ -86,9 +86,9 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:$navVersion")
 
     // Material 3
-    implementation ("androidx.compose.material3:material3:1.1.2")
-    implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
-    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation ("androidx.compose.material3:material3:1.2.0")
+    implementation ("androidx.compose.material3:material3-window-size-class:1.2.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.1")
 
     // Room
     implementation ("androidx.room:room-runtime:$roomVersion")
@@ -117,7 +117,7 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     //Lottie
     implementation("com.airbnb.android:lottie-compose:6.0.1")
