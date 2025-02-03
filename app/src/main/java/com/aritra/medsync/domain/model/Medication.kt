@@ -18,4 +18,5 @@ data class Medication(
     var endDate : Date,
     var reminderTime : Date,
     var medicineType: String,
+    var isTaken: Boolean
 ) : Parcelable

@@ -1,5 +1,6 @@
 package com.aritra.medsync.screens.homeScreen
 
+import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -27,14 +28,18 @@ import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.extraBold28
 import com.aritra.medsync.ui.theme.medium20
 import com.aritra.medsync.ui.theme.medium24
 import com.aritra.medsync.utils.Utils
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
@@ -45,9 +50,14 @@ fun HomeScreen(
 
     val medication = homeViewModel.medicationModel
     val greetingText = Utils.greetingText()
+    val postNotificationPermission = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect(Unit) {
         homeViewModel.getMedications()
+    }
+
+    LaunchedEffect(Unit) {
+        postNotificationPermission.launchPermissionRequest()
     }
 
     Scaffold(
@@ -84,7 +94,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            MedSyncProgressCard()
+            MedSyncProgressCard(medication)
 
             Spacer(modifier = Modifier.height(20.dp))
 

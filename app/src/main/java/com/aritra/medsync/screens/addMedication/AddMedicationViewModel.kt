@@ -30,7 +30,8 @@ class AddMedicationViewModel : ViewModel() {
                 pillsFrequency = pillsFrequency,
                 endDate = endDate,
                 reminderTime = getMedicationTime(time, calendar),
-                medicineType = medicineType
+                medicineType = medicineType,
+                isTaken = false
             )
             medicationsList.add(medication)
         }

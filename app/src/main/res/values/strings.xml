@@ -13,6 +13,22 @@
     <string name="end_date_hint">eg. 20th Feb, 2023</string>
     <string name="medicine_reminder_title">"Time for Your Health Boost!"</string>
     <string name="notification_for_medication_reminder">"Notification for medication reminder"</string>
-    <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to log it."</string>
+    <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to mark it."</string>
     <string name="done">Done</string>
+    <string name="your_plan_for_today">Your plan for today</string>
+    <string name="preference">Preference</string>
+    <string name="add_a_appointment">Add a appointment</string>
+    <string name="lock_my_screen">Lock my screen</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="send_feedback">Send feedback</string>
+    <string name="share_medsync_to_friends">Share MedSync to friends</string>
+    <string name="rate_medsync">Rate MedSync</string>
+    <string name="about">About</string>
+    <string name="add_a_prescription">Add a prescription</string>
+    <string name="referral_message">"I haven't forgotten a single medication thanks to MedSync app, and I hope you won't either. Download now "</string>
+    <string name="mailTo">mailto:aritrarick2002@gmail.com?Subject=Your%20feedback%20is%20important%20to%20us%21</string>
+    <string name="today">Today</string>
+    <string name="medication_taken_at">Taken at %s</string>
+    <string name="medication_skipped_at">Skipped at %s</string>
+    <string name="medication_scheduled_at">Scheduled at %s</string>
 </resources>
