@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
@@ -22,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncEmptyState
@@ -31,8 +34,7 @@ import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
-import com.aritra.medsync.ui.theme.extraBold28
-import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.ui.theme.bold22
 import com.aritra.medsync.ui.theme.medium24
 import com.aritra.medsync.utils.Utils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -76,27 +78,32 @@ fun HomeScreen(
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .background(PrimarySurface)
+                .padding(paddingValues)
+                .padding(16.dp)
+                .statusBarsPadding()
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = greetingText,
-                    style = extraBold28
+                    style = bold22
                 )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
-                    text = "Aritra!",
+                    text = "Aritra",
                     style = medium24
                 )
             }
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             MedSyncProgressCard(medication)
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Medications(medication)
 
@@ -109,24 +116,23 @@ fun Medications(medication: List<Medication>) {
 
     Row (
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Medications",
-            style = medium20,
+            text = stringResource(R.string.medications),
+            style = medium24,
             color = OnPrimaryContainer
         )
     }
 
+    Spacer(modifier = Modifier.height(15.dp))
 
     if (medication.isEmpty().not()) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(medication.size) { index ->
                 val med = medication[index]
