@@ -5,6 +5,7 @@ object Constants {
     const val MEDICATION_INTENT = "medication_intent"
     const val MEDICATION_NOTIFICATION = "medication_notification"
     const val SPLASH_SCREEN = "SPLASH_SCREEN"
+    const val GET_STARTED_SCREEN = "GET_STARTED_SCREEN"
     const val HOME_SCREEN = "HOME_SCREEN"
     const val REPORT_SCREEN = "REPORT_SCREEN"
     const val ADD_MEDICATION_SCREEN = "ADD_MEDICATION_SCREEN"

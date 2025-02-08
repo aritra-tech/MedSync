@@ -1,8 +1,13 @@
 package com.aritra.medsync.navigation
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
@@ -17,10 +22,15 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -33,11 +43,14 @@ import com.aritra.medsync.ui.screens.addMedication.AddMedication
 import com.aritra.medsync.ui.screens.addMedication.AddMedicationViewModel
 import com.aritra.medsync.ui.screens.homeScreen.HomeScreen
 import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmationScreen
-import com.aritra.medsync.ui.screens.SplashScreen
+import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
 import com.aritra.medsync.ui.screens.history.HistoryScreen
 import com.aritra.medsync.ui.screens.history.viewmodel.HistoryViewModel
 import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
+import com.aritra.medsync.ui.screens.intro.GetStartedScreen
+import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
+import com.aritra.medsync.ui.screens.intro.SigninViewModel
 import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmViewModel
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.ui.screens.profile.ProfileScreen
@@ -52,11 +65,12 @@ import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.utils.BackPressHandler
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MedSyncApp() {
+fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
 
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -83,7 +97,10 @@ fun MedSyncApp() {
         contentWindowInsets = WindowInsets(0.dp)
     ) {
 
+        val context = LocalContext.current
+        val scope = rememberCoroutineScope()
         val viewModel: AddMedicationViewModel = hiltViewModel()
+        val signInViewModel: SigninViewModel = hiltViewModel()
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
         val homeViewModel: HomeViewModel = hiltViewModel()
         val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -99,7 +116,51 @@ fun MedSyncApp() {
         ) {
 
             composable(MedSyncScreens.Splash.name) {
-                SplashScreen(navController = navController)
+                SplashScreen(navController = navController, googleAuthUiClient)
+            }
+            composable(MedSyncScreens.GetStarted.name) {
+                val state by signInViewModel.state.collectAsStateWithLifecycle()
+
+                val launcher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.StartIntentSenderForResult(),
+                    onResult = { result ->
+                        if(result.resultCode == RESULT_OK) {
+                            scope.launch {
+                                val signInResult = googleAuthUiClient.signInWithIntent(
+                                    intent = result.data ?: return@launch
+                                )
+                                signInViewModel.onSignInResult(signInResult)
+                            }
+                        }
+                    }
+                )
+
+                LaunchedEffect(key1 = state.isSignInSuccessful) {
+                    if(state.isSignInSuccessful) {
+                        Toast.makeText(
+                            context,
+                            "Sign in successful",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        navController.navigate(MedSyncScreens.Home.name)
+                        signInViewModel.resetState()
+                    }
+                }
+
+                GetStartedScreen(
+                    state = state,
+                    onSignInClick = {
+                        scope.launch {
+                            val signInIntentSender = googleAuthUiClient.signIn()
+                            launcher.launch(
+                                IntentSenderRequest.Builder(
+                                    signInIntentSender ?: return@launch
+                                ).build()
+                            )
+                        }
+                    }
+                )
             }
             composable(MedSyncScreens.Home.name) {
                 HomeScreen(

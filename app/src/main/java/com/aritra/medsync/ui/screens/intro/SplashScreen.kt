@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens
+package com.aritra.medsync.ui.screens.intro
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -29,7 +29,7 @@ import com.aritra.medsync.ui.theme.bold30
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, googleAuthUiClient: GoogleAuthUiClient) {
     var startAnimation by remember {
         mutableStateOf(false)
     }
@@ -43,8 +43,16 @@ fun SplashScreen(navController: NavController) {
         startAnimation = true
         delay(1000L)
         navController.popBackStack()
-        navController.navigate(route = MedSyncScreens.Home.name)
     }
+
+    LaunchedEffect(key1 = Unit) {
+        if(googleAuthUiClient.getSignedInUser() != null) {
+            navController.navigate(MedSyncScreens.Home.name)
+        } else {
+            navController.navigate(route = MedSyncScreens.GetStarted.name)
+        }
+    }
+
     Surface {
         Column(
             modifier = Modifier
