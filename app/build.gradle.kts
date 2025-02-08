@@ -59,6 +59,7 @@ android {
 
 dependencies {
 
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     val navVersion = "2.7.6"
     val lifecycleVersion = "2.6.2"
     val roomVersion = "2.5.2"
