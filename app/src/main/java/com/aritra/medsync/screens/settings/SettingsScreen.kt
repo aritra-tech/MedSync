@@ -7,8 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -45,114 +44,118 @@ fun SettingsScreen(
     val themeStateObserver by settingsViewModel.themeState.collectAsState()
 
     /***********************  UI Content  ***********************/
-    Column(
+    LazyColumn(
         Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(42.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
+        item {
+            Row(
                 Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(42.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                ProfileContainer {
-                    navController.navigate(PROFILE_SCREEN)
-                }
+                Column(
+                    Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ProfileContainer {
+                        navController.navigate(PROFILE_SCREEN)
+                    }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Aritra",
+                        color = OnSurface20,
+                        style = medium32
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        item {
+            Column {
+                Text(
+                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+                    text = "General",
+                    color = OnPrimaryContainer,
+                    style = bold18
+                )
+
+                SettingsItem(
+                    onClick = { navController.navigate(PRESCRIPTION_SCREEN) },
+                    iconId = R.drawable.document,
+                    itemName = stringResource(R.string.add_a_prescription)
+                )
+
+                SettingsItem(
+                    onClick = { navController.navigate(APPOINTMENT_SCREEN) },
+                    iconId = R.drawable.appointment,
+                    itemName = stringResource(R.string.add_a_appointment)
+                )
 
                 Text(
-                    text = "Aritra",
-                    color = OnSurface20,
-                    style = medium32
+                    modifier = Modifier.padding(16.dp),
+                    text = stringResource(R.string.preference),
+                    color = OnPrimaryContainer,
+                    style = bold18
+                )
+
+                SettingsItem(
+                    onClick = { /*TODO*/ },
+                    iconId = R.drawable.lock,
+                    itemName = stringResource(R.string.lock_my_screen)
+                )
+
+                SettingsSwitch(
+                    iconId = R.drawable.dark_mode,
+                    itemName = stringResource(R.string.dark_theme),
+                    isChecked = themeStateObserver.isDarkMode,
+                    onCheckedChange = {
+                        settingsViewModel.toggleTheme()
+                    }
+                )
+
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = "More",
+                    color = OnPrimaryContainer,
+                    style = bold18
+                )
+
+                SettingsItem(
+                    onClick = { mailTo(context) },
+                    iconId = R.drawable.send,
+                    itemName = stringResource(R.string.send_feedback)
+                )
+
+                SettingsItem(
+                    onClick = { inviteFriends(context) },
+                    iconId = R.drawable.smile,
+                    itemName = stringResource(R.string.share_medsync_to_friends)
+                )
+
+                SettingsItem(
+                    onClick = { /*TODO*/ },
+                    iconId = R.drawable.rate,
+                    itemName = stringResource(R.string.rate_medsync)
                 )
             }
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Column {
-            Text(
-                modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
-                text = "General",
-                color = OnPrimaryContainer,
-                style = bold18
-            )
-
-            SettingsItem(
-                onClick = { navController.navigate(PRESCRIPTION_SCREEN) },
-                iconId = R.drawable.document,
-                itemName = stringResource(R.string.add_a_prescription)
-            )
-
-            SettingsItem(
-                onClick = { navController.navigate(APPOINTMENT_SCREEN) },
-                iconId = R.drawable.appointment,
-                itemName = stringResource(R.string.add_a_appointment)
-            )
 
             Text(
-                modifier = Modifier.padding(16.dp),
-                text = stringResource(R.string.preference),
-                color = OnPrimaryContainer,
-                style = bold18
-            )
-
-            SettingsItem(
-                onClick = { /*TODO*/ },
-                iconId = R.drawable.lock,
-                itemName = stringResource(R.string.lock_my_screen)
-            )
-
-            SettingsSwitch(
-                iconId = R.drawable.dark_mode,
-                itemName = stringResource(R.string.dark_theme),
-                isChecked = themeStateObserver.isDarkMode,
-                onCheckedChange = {
-                    settingsViewModel.toggleTheme()
-                }
-            )
-
-            Text(
-                modifier = Modifier.padding(16.dp),
-                text = "More",
-                color = OnPrimaryContainer,
-                style = bold18
-            )
-
-            SettingsItem(
-                onClick = { mailTo(context) },
-                iconId = R.drawable.send,
-                itemName = stringResource(R.string.send_feedback)
-            )
-
-            SettingsItem(
-                onClick = { inviteFriends(context) },
-                iconId = R.drawable.smile,
-                itemName = stringResource(R.string.share_medsync_to_friends)
-            )
-
-            SettingsItem(
-                onClick = { /*TODO*/ },
-                iconId = R.drawable.rate,
-                itemName = stringResource(R.string.rate_medsync)
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .alpha(0.25f),
+                text = "V1.0.0",
+                color = OnSurface20,
+                style = normal14
             )
         }
-
-        Text(
-            modifier = Modifier
-                .padding(top = 4.dp, bottom = 100.dp)
-                .alpha(0.25f),
-            text = "V1.0.0",
-            color = OnSurface20,
-            style = normal14
-        )
     }
 }

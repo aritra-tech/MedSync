@@ -48,6 +48,7 @@ import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.lightGreen
 import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Utils.getMedicineImage
 import com.aritra.medsync.utils.Utils.getMedicineUnit
@@ -96,39 +97,10 @@ fun MedicationCard(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                AnimatedVisibility(
-                    visible = medication.reminderTime.hasPassed(),
-                    enter = fadeIn(animationSpec = tween(200))
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(100.dp))
-                            .background(lightGreen)
-                            .padding(8.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(25.dp)
-                                .onClick {
-                                    isTakenClicked = isTakenClicked.not()
-                                    if (isTakenClicked) {
-                                        isSkippedClicked = false
-                                    }
-                                    updateMedicationViewModel.isMedicationTaken(
-                                        medication,
-                                        isTakenClicked
-                                    )
-                                    Toast
-                                        .makeText(context, "Medication taken", Toast.LENGTH_SHORT)
-                                        .show()
-                                },
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Medication Taken",
-                            tint = Green,
-                        )
-                    }
-                }
+                Text(
+                    text = medication.pillsFrequency,
+                    style = normal14.copy(color = OnSurface60)
+                )
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -167,16 +139,59 @@ fun MedicationCard(
                     } else {
                         Text(
                             text = medication.medicineName,
-                            style = medium16.copy(color = OnPrimaryContainer)
+                            style = medium18.copy(color = OnPrimaryContainer)
                         )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Text(
-                        text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
-                        style = normal14.copy(color = OnSurface60)
-                    )
+
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)}",
+                            style = normal14.copy(color = OnSurface60)
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        AnimatedVisibility(
+                            visible = medication.reminderTime.hasPassed(),
+                            enter = fadeIn(animationSpec = tween(200))
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(100.dp))
+                                    .background(lightGreen)
+                                    .padding(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                        .onClick {
+                                            isTakenClicked = isTakenClicked.not()
+                                            if (isTakenClicked) {
+                                                isSkippedClicked = false
+                                            }
+                                            updateMedicationViewModel.isMedicationTaken(
+                                                medication,
+                                                isTakenClicked
+                                            )
+                                            Toast
+                                                .makeText(context, "Medication taken", Toast.LENGTH_SHORT)
+                                                .show()
+                                        },
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Medication Taken",
+                                    tint = Green,
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
