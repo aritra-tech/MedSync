@@ -77,6 +77,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
 
     val screensWithoutNavigationBar = listOf(
         MedSyncScreens.Splash.name,
+        MedSyncScreens.GetStarted.name,
         MedSyncScreens.AddMedication.name,
         MedSyncScreens.MedicationConfirmScreen.name,
         MedSyncScreens.ProfileScreen.name,
