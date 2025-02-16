@@ -1,8 +1,6 @@
 package com.aritra.medsync.ui.screens.homeScreen
 
 import android.Manifest
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -32,6 +29,7 @@ import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
+import com.aritra.medsync.ui.screens.intro.UserData
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold22
@@ -44,6 +42,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
+    userData: UserData?,
     onFabClicked: () -> Unit,
     navigateToUpdateScreen: (medicineID: Int) -> Unit,
     homeViewModel: HomeViewModel
@@ -91,10 +90,12 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.width(4.dp))
 
-                Text(
-                    text = "Aritra",
-                    style = medium24
-                )
+                if (userData?.username !== null) {
+                    Text(
+                        text = userData.username,
+                        style = medium24
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(30.dp))

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.ProfileContainer
 import com.aritra.medsync.components.SettingsItem
 import com.aritra.medsync.components.SettingsSwitch
+import com.aritra.medsync.ui.screens.intro.UserData
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.bold18
@@ -30,12 +32,12 @@ import com.aritra.medsync.ui.theme.medium32
 import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Constants.APPOINTMENT_SCREEN
 import com.aritra.medsync.utils.Constants.PRESCRIPTION_SCREEN
-import com.aritra.medsync.utils.Constants.PROFILE_SCREEN
 import com.aritra.medsync.utils.Utils.inviteFriends
 import com.aritra.medsync.utils.Utils.mailTo
 
 @Composable
 fun SettingsScreen(
+    userData: UserData?,
     navController: NavHostController,
     settingsViewModel: SettingsViewModel
 ) {
@@ -47,7 +49,8 @@ fun SettingsScreen(
     LazyColumn(
         Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
@@ -62,17 +65,17 @@ fun SettingsScreen(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ProfileContainer {
-                        navController.navigate(PROFILE_SCREEN)
-                    }
+                    ProfileContainer(userData)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(
-                        text = "Aritra",
-                        color = OnSurface20,
-                        style = medium32
-                    )
+                    if(userData?.username != null) {
+                        Text(
+                            text = userData.username,
+                            color = OnSurface20,
+                            style = medium32
+                        )
+                    }
                 }
             }
 

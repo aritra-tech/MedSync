@@ -1,9 +1,7 @@
 package com.aritra.medsync.navigation
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
@@ -33,26 +31,23 @@ import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.addMedication.AddMedication
 import com.aritra.medsync.ui.screens.addMedication.AddMedicationViewModel
-import com.aritra.medsync.ui.screens.homeScreen.HomeScreen
-import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmationScreen
-import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
 import com.aritra.medsync.ui.screens.history.HistoryScreen
 import com.aritra.medsync.ui.screens.history.viewmodel.HistoryViewModel
+import com.aritra.medsync.ui.screens.homeScreen.HomeScreen
 import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.ui.screens.intro.GetStartedScreen
 import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
 import com.aritra.medsync.ui.screens.intro.SigninViewModel
+import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmViewModel
+import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
-import com.aritra.medsync.ui.screens.profile.ProfileScreen
 import com.aritra.medsync.ui.screens.report.ReportScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
-import com.aritra.medsync.ui.theme.FadeIn
-import com.aritra.medsync.ui.theme.FadeOut
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
@@ -116,8 +111,10 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                     signInViewModel
                 )
             }
+
             composable(MedSyncScreens.Home.name) {
                 HomeScreen(
+                    userData = googleAuthUiClient.getSignedInUser(),
                     onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
                     navigateToUpdateScreen = { medicineID ->
                         navController.navigate("${MedSyncScreens.UpdateMedication.name}/$medicineID")
@@ -125,6 +122,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                     homeViewModel
                 )
             }
+
             composable(MedSyncScreens.AddMedication.name) {
                 AddMedication(
                     navController,
@@ -139,6 +137,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                     viewModel
                 )
             }
+
             composable(MedSyncScreens.MedicationConfirmScreen.name) {
                 val result =
                     navController.previousBackStackEntry?.savedStateHandle?.get<Bundle>("medication")
@@ -149,26 +148,27 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                     medicationConfirmViewModel
                 )
             }
+
             composable(MedSyncScreens.Report.name) {
                 ReportScreen()
             }
+
             composable(MedSyncScreens.History.name) {
                 HistoryScreen(historyViewModel)
             }
+
             composable(MedSyncScreens.Settings.name) {
                 SettingsScreen(
+                    userData = googleAuthUiClient.getSignedInUser(),
                     navController,
                     settingsViewModel
                 )
             }
-            composable(MedSyncScreens.ProfileScreen.name) {
-                ProfileScreen(
-                    navController
-                )
-            }
+
             composable(MedSyncScreens.PrescriptionScreen.name) {
                 PrescriptionScreen()
             }
+
             composable(MedSyncScreens.AppointmentScreen.name) {
                 AppointmentScreen()
             }
