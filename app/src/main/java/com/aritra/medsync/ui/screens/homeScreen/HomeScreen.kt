@@ -80,7 +80,6 @@ fun HomeScreen(
                 .background(PrimarySurface)
                 .padding(paddingValues)
                 .padding(16.dp)
-                .statusBarsPadding()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()

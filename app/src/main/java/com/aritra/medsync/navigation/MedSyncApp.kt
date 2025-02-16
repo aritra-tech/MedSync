@@ -99,11 +99,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
 
         NavHost(
             navController = navController,
-            startDestination = MedSyncScreens.Splash.name,
-            enterTransition = { FadeIn },
-            exitTransition = { FadeOut },
-            popEnterTransition = { FadeIn },
-            popExitTransition = { FadeOut }
+            startDestination = MedSyncScreens.Splash.name
         ) {
 
             composable(MedSyncScreens.Splash.name) {
