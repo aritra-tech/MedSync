@@ -28,31 +28,29 @@ import com.aritra.medsync.navigation.MedSyncScreens
 import com.aritra.medsync.ui.theme.bold30
 import kotlinx.coroutines.delay
 
+private const val ANIMATION_DURATION = 1000
+private const val SPLASH_DELAY = 1000L
+
 @Composable
 fun SplashScreen(navController: NavController, googleAuthUiClient: GoogleAuthUiClient) {
-    var startAnimation by remember {
-        mutableStateOf(false)
-    }
+    var startAnimation by remember { mutableStateOf(false) }
     val alphaAnimation = animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 1000
-        ), label = ""
+        animationSpec = tween(durationMillis = ANIMATION_DURATION),
+        label = "alphaAnimation"
     )
+
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(1000L)
-        navController.popBackStack()
+        delay(SPLASH_DELAY)
+        navigateToNextScreen(navController, googleAuthUiClient)
     }
 
-    LaunchedEffect(key1 = Unit) {
-        if(googleAuthUiClient.getSignedInUser() != null) {
-            navController.navigate(MedSyncScreens.Home.name)
-        } else {
-            navController.navigate(route = MedSyncScreens.GetStarted.name)
-        }
-    }
+    SplashContent(alphaAnimation.value)
+}
 
+@Composable
+private fun SplashContent(alpha: Float) {
     Surface {
         Column(
             modifier = Modifier
@@ -61,20 +59,39 @@ fun SplashScreen(navController: NavController, googleAuthUiClient: GoogleAuthUiC
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                modifier = Modifier
-                    .alpha(alphaAnimation.value)
-                    .size(240.dp),
-                painter = painterResource(id = R.drawable.medsync_logo),
-                contentDescription = "null",
-            )
-
-            Text(
-                modifier = Modifier.alpha(alphaAnimation.value),
-                text = "MedSync",
-                style = bold30,
-                color = Color.Black
-            )
+            AnimatedLogo(alpha)
+            AnimatedText(alpha)
         }
     }
+}
+
+@Composable
+private fun AnimatedLogo(alpha: Float) {
+    Image(
+        modifier = Modifier
+            .alpha(alpha)
+            .size(240.dp),
+        painter = painterResource(id = R.drawable.medsync_logo),
+        contentDescription = "MedSync Logo",
+    )
+}
+
+@Composable
+private fun AnimatedText(alpha: Float) {
+    Text(
+        modifier = Modifier.alpha(alpha),
+        text = "MedSync",
+        style = bold30,
+        color = Color.Black
+    )
+}
+
+private fun navigateToNextScreen(navController: NavController, googleAuthUiClient: GoogleAuthUiClient) {
+    navController.popBackStack()
+    val route = if (googleAuthUiClient.getSignedInUser() != null) {
+        MedSyncScreens.Home.name
+    } else {
+        MedSyncScreens.GetStarted.name
+    }
+    navController.navigate(route)
 }

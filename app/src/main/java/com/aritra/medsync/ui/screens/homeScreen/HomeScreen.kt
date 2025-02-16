@@ -42,7 +42,6 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 
 @OptIn(ExperimentalPermissionsApi::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     onFabClicked: () -> Unit,

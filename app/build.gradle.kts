@@ -130,4 +130,7 @@ dependencies {
 
     // Permission Utils
     implementation ("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    //Timber
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 }

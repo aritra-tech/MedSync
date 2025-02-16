@@ -1,13 +1,8 @@
 package com.aritra.medsync.navigation
 
 import android.annotation.SuppressLint
-import android.app.Activity.RESULT_OK
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
@@ -22,11 +17,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,12 +57,11 @@ import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.utils.BackPressHandler
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
+
 
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
@@ -98,8 +89,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         contentWindowInsets = WindowInsets(0.dp)
     ) {
 
-        val context = LocalContext.current
-        val scope = rememberCoroutineScope()
+
         val viewModel: AddMedicationViewModel = hiltViewModel()
         val signInViewModel: SigninViewModel = hiltViewModel()
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
@@ -119,48 +109,15 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
             composable(MedSyncScreens.Splash.name) {
                 SplashScreen(navController = navController, googleAuthUiClient)
             }
+
             composable(MedSyncScreens.GetStarted.name) {
                 val state by signInViewModel.state.collectAsStateWithLifecycle()
 
-                val launcher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.StartIntentSenderForResult(),
-                    onResult = { result ->
-                        if(result.resultCode == RESULT_OK) {
-                            scope.launch {
-                                val signInResult = googleAuthUiClient.signInWithIntent(
-                                    intent = result.data ?: return@launch
-                                )
-                                signInViewModel.onSignInResult(signInResult)
-                            }
-                        }
-                    }
-                )
-
-                LaunchedEffect(key1 = state.isSignInSuccessful) {
-                    if(state.isSignInSuccessful) {
-                        Toast.makeText(
-                            context,
-                            "Sign in successful",
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        navController.navigate(MedSyncScreens.Home.name)
-                        signInViewModel.resetState()
-                    }
-                }
-
                 GetStartedScreen(
+                    navController,
                     state = state,
-                    onSignInClick = {
-                        scope.launch {
-                            val signInIntentSender = googleAuthUiClient.signIn()
-                            launcher.launch(
-                                IntentSenderRequest.Builder(
-                                    signInIntentSender ?: return@launch
-                                ).build()
-                            )
-                        }
-                    }
+                    googleAuthUiClient,
+                    signInViewModel
                 )
             }
             composable(MedSyncScreens.Home.name) {
