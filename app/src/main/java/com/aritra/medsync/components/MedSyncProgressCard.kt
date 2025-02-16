@@ -1,6 +1,5 @@
 package com.aritra.medsync.components
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +32,6 @@ import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.Green
 import com.aritra.medsync.ui.theme.OnSurface40
-import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.normal14
 
@@ -76,7 +73,13 @@ fun MedSyncProgressCard(medication: List<Medication>) {
                 medicationTaken = medication.filter { it.isTaken }.size
                 totalNumberOfMedication = medication.size
                 medicationRemaining = totalNumberOfMedication - medicationTaken
-                medicationPercentage = (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+
+                // Handle division by zero
+                medicationPercentage = if (totalNumberOfMedication == 0) {
+                    0f // Set to 0% if there are no medications
+                } else {
+                    (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+                }
 
                 Text(
                     text = stringResource(R.string.your_plan_for_today),
@@ -106,11 +109,7 @@ fun MedSyncProgressCard(medication: List<Medication>) {
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(100.dp),
-                    progress = animateFloatAsState(
-                        targetValue = medicationPercentage / 100,
-                        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-                        label = "Medication progress"
-                    ).value,
+                    progress = { medicationPercentage / 100 },
                     color = Green,
                     strokeWidth = 12.dp,
                     strokeCap = StrokeCap.Round,
