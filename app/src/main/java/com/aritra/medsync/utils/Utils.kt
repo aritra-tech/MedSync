@@ -13,6 +13,7 @@ import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Calendar
 
 object Utils {
 
@@ -37,9 +38,11 @@ object Utils {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun greetingText(): String {
-        return when (LocalTime.now(ZoneId.systemDefault()).hour) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        return when (hour) {
             in 5..11 -> "Good morning,"
             in 12..16 -> "Good afternoon,"
             in 17..20 -> "Good evening,"

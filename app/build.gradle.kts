@@ -5,6 +5,8 @@ plugins {
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
     id ("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -42,9 +44,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
     }
     packaging {
         resources {
@@ -103,6 +102,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7")
 
     // Dagger Hilt
     implementation ("com.google.dagger:hilt-android:2.49")
@@ -112,6 +112,12 @@ dependencies {
     implementation("androidx.hilt:hilt-work:1.1.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth:23.2.0")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     // DataStore
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
@@ -124,4 +130,7 @@ dependencies {
 
     // Permission Utils
     implementation ("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    //Timber
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 }

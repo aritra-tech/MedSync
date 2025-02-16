@@ -1,9 +1,7 @@
 package com.aritra.medsync.navigation
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.History
@@ -18,9 +16,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -29,40 +29,41 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.screens.addMedication.AddMedication
-import com.aritra.medsync.screens.addMedication.AddMedicationViewModel
-import com.aritra.medsync.screens.homeScreen.HomeScreen
-import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmationScreen
-import com.aritra.medsync.screens.SplashScreen
-import com.aritra.medsync.screens.appointment.AppointmentScreen
-import com.aritra.medsync.screens.history.HistoryScreen
-import com.aritra.medsync.screens.history.viewmodel.HistoryViewModel
-import com.aritra.medsync.screens.homeScreen.viewmodel.HomeViewModel
-import com.aritra.medsync.screens.medicationConfirmation.MedicationConfirmViewModel
-import com.aritra.medsync.screens.prescription.PrescriptionScreen
-import com.aritra.medsync.screens.profile.ProfileScreen
-import com.aritra.medsync.screens.report.ReportScreen
-import com.aritra.medsync.screens.settings.SettingsScreen
-import com.aritra.medsync.screens.settings.SettingsViewModel
+import com.aritra.medsync.ui.screens.addMedication.AddMedication
+import com.aritra.medsync.ui.screens.addMedication.AddMedicationViewModel
+import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
+import com.aritra.medsync.ui.screens.history.HistoryScreen
+import com.aritra.medsync.ui.screens.history.viewmodel.HistoryViewModel
+import com.aritra.medsync.ui.screens.homeScreen.HomeScreen
+import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
+import com.aritra.medsync.ui.screens.intro.GetStartedScreen
+import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
+import com.aritra.medsync.ui.screens.intro.SigninViewModel
+import com.aritra.medsync.ui.screens.intro.SplashScreen
+import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmViewModel
+import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmationScreen
+import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
+import com.aritra.medsync.ui.screens.report.ReportScreen
+import com.aritra.medsync.ui.screens.settings.SettingsScreen
+import com.aritra.medsync.ui.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
-import com.aritra.medsync.ui.theme.FadeIn
-import com.aritra.medsync.ui.theme.FadeOut
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.utils.BackPressHandler
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MedSyncApp() {
+fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
+
 
     val navController = rememberNavController()
     val backStackEntry = navController.currentBackStackEntryAsState()
 
     val screensWithoutNavigationBar = listOf(
         MedSyncScreens.Splash.name,
+        MedSyncScreens.GetStarted.name,
         MedSyncScreens.AddMedication.name,
         MedSyncScreens.MedicationConfirmScreen.name,
         MedSyncScreens.ProfileScreen.name,
@@ -83,7 +84,9 @@ fun MedSyncApp() {
         contentWindowInsets = WindowInsets(0.dp)
     ) {
 
+
         val viewModel: AddMedicationViewModel = hiltViewModel()
+        val signInViewModel: SigninViewModel = hiltViewModel()
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
         val homeViewModel: HomeViewModel = hiltViewModel()
         val settingsViewModel: SettingsViewModel = hiltViewModel()
@@ -91,18 +94,27 @@ fun MedSyncApp() {
 
         NavHost(
             navController = navController,
-            startDestination = MedSyncScreens.Splash.name,
-            enterTransition = { FadeIn },
-            exitTransition = { FadeOut },
-            popEnterTransition = { FadeIn },
-            popExitTransition = { FadeOut }
+            startDestination = MedSyncScreens.Splash.name
         ) {
 
             composable(MedSyncScreens.Splash.name) {
-                SplashScreen(navController = navController)
+                SplashScreen(navController = navController, googleAuthUiClient)
             }
+
+            composable(MedSyncScreens.GetStarted.name) {
+                val state by signInViewModel.state.collectAsStateWithLifecycle()
+
+                GetStartedScreen(
+                    navController,
+                    state = state,
+                    googleAuthUiClient,
+                    signInViewModel
+                )
+            }
+
             composable(MedSyncScreens.Home.name) {
                 HomeScreen(
+                    userData = googleAuthUiClient.getSignedInUser(),
                     onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
                     navigateToUpdateScreen = { medicineID ->
                         navController.navigate("${MedSyncScreens.UpdateMedication.name}/$medicineID")
@@ -110,6 +122,7 @@ fun MedSyncApp() {
                     homeViewModel
                 )
             }
+
             composable(MedSyncScreens.AddMedication.name) {
                 AddMedication(
                     navController,
@@ -124,6 +137,7 @@ fun MedSyncApp() {
                     viewModel
                 )
             }
+
             composable(MedSyncScreens.MedicationConfirmScreen.name) {
                 val result =
                     navController.previousBackStackEntry?.savedStateHandle?.get<Bundle>("medication")
@@ -134,26 +148,27 @@ fun MedSyncApp() {
                     medicationConfirmViewModel
                 )
             }
+
             composable(MedSyncScreens.Report.name) {
                 ReportScreen()
             }
+
             composable(MedSyncScreens.History.name) {
                 HistoryScreen(historyViewModel)
             }
+
             composable(MedSyncScreens.Settings.name) {
                 SettingsScreen(
+                    userData = googleAuthUiClient.getSignedInUser(),
                     navController,
                     settingsViewModel
                 )
             }
-            composable(MedSyncScreens.ProfileScreen.name) {
-                ProfileScreen(
-                    navController
-                )
-            }
+
             composable(MedSyncScreens.PrescriptionScreen.name) {
                 PrescriptionScreen()
             }
+
             composable(MedSyncScreens.AppointmentScreen.name) {
                 AppointmentScreen()
             }

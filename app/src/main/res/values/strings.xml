@@ -32,4 +32,5 @@
     <string name="medication_skipped_at">Skipped at %s</string>
     <string name="medication_scheduled_at">Scheduled at %s</string>
     <string name="medications">Medications</string>
+    <string name="web_client_id">318380885884-cto01b1l7bc73dv77u5bbfcbsht0o2jg.apps.googleusercontent.com</string>
 </resources>

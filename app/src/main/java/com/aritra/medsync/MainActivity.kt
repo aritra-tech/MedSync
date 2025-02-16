@@ -10,12 +10,21 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.aritra.medsync.navigation.MedSyncApp
+import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
 import com.aritra.medsync.ui.theme.MedSyncTheme
+import com.google.android.gms.auth.api.identity.Identity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+
+    private val googleAuthUiClient by lazy {
+        GoogleAuthUiClient(
+            content = applicationContext,
+            oneTapClient = Identity.getSignInClient(applicationContext)
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         enableEdgeToEdge(
@@ -30,7 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MedSyncTheme {
-                MedSyncApp()
+                MedSyncApp(googleAuthUiClient)
             }
         }
     }

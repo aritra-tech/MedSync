@@ -5,6 +5,7 @@ import com.aritra.medsync.utils.Constants
 sealed class MedSyncScreens(val name: String) {
 
     object Splash : MedSyncScreens(Constants.SPLASH_SCREEN)
+    object GetStarted: MedSyncScreens(Constants.GET_STARTED_SCREEN)
     object Home : MedSyncScreens(Constants.HOME_SCREEN)
     object Report: MedSyncScreens(Constants.REPORT_SCREEN)
     object AddMedication : MedSyncScreens(Constants.ADD_MEDICATION_SCREEN)
