@@ -11,7 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.FloatingActionButton
@@ -27,7 +28,6 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
-import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
 import com.aritra.medsync.ui.screens.intro.UserData
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
@@ -47,7 +47,6 @@ fun HomeScreen(
     navigateToUpdateScreen: (medicineID: Int) -> Unit,
     homeViewModel: HomeViewModel
 ) {
-
     val medication = homeViewModel.medicationModel
     val greetingText = Utils.greetingText()
     val postNotificationPermission = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
@@ -73,11 +72,12 @@ fun HomeScreen(
             }
         },
     ) { paddingValues ->
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(PrimarySurface)
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
             Row(
@@ -90,7 +90,7 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.width(4.dp))
 
-                if (userData?.username !== null) {
+                if (userData?.username != null) {
                     Text(
                         text = userData.username,
                         style = medium24
@@ -104,42 +104,31 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Medications(medication)
+            Text(
+                text = stringResource(R.string.medications),
+                style = medium24,
+                color = OnPrimaryContainer
+            )
 
-        }
+            Spacer(modifier = Modifier.height(15.dp))
 
-    }
-}
-@Composable
-fun Medications(medication: List<Medication>) {
-
-    Row (
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = stringResource(R.string.medications),
-            style = medium24,
-            color = OnPrimaryContainer
-        )
-    }
-
-    Spacer(modifier = Modifier.height(15.dp))
-
-    if (medication.isEmpty().not()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(medication.size) { index ->
-                val med = medication[index]
-                MedicationCard(medication = med)
+            if (medication.isEmpty().not()) {
+                Column(
+                    modifier = Modifier.padding(bottom = 90.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    medication.forEach { med ->
+                        MedicationCard(medication = med)
+                    }
+                }
+            } else {
+                MedSyncEmptyState(
+                    stateTitle = "",
+                    stateDescription = "",
+                    R.raw.empty_box_animation
+                )
             }
         }
-    } else {
-        MedSyncEmptyState(stateTitle = "", stateDescription = "", R.raw.empty_box_animation)
     }
 }
 
