@@ -92,13 +92,6 @@ fun MedicationCard(
                     text = medication.reminderTime.toFormattedTimeString(),
                     style = bold24.copy(color = OnPrimaryContainer)
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = medication.pillsFrequency,
-                    style = normal14.copy(color = OnSurface60)
-                )
             }
 
             Spacer(modifier = Modifier.height(10.dp))

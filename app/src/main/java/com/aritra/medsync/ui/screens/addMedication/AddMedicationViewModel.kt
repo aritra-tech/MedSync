@@ -7,7 +7,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Calendar
 import java.util.Date
 
-@HiltViewModel
 class AddMedicationViewModel : ViewModel() {
 
     fun createMedication(
