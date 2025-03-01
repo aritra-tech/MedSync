@@ -3,15 +3,16 @@ package com.aritra.medsync.ui.screens.addMedication
 import androidx.lifecycle.ViewModel
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.utils.CalendarInformation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Calendar
 import java.util.Date
 
+@HiltViewModel
 class AddMedicationViewModel : ViewModel() {
 
     fun createMedication(
         medicineName: String,
         pillsAmount: String,
-        pillsFrequency: String,
         endDate: Date,
         reminderTime: List<CalendarInformation>,
         medicineType: String,
@@ -27,7 +28,6 @@ class AddMedicationViewModel : ViewModel() {
                 id = 0,
                 medicineName = medicineName,
                 pillsAmount = pillsAmount,
-                pillsFrequency = pillsFrequency,
                 endDate = endDate,
                 reminderTime = getMedicationTime(time, calendar),
                 medicineType = medicineType,

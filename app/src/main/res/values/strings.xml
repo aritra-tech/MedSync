@@ -3,6 +3,7 @@
     <string name="add_plan">Add Plan</string>
     <string name="pill_name">Pill Name</string>
     <string name="amount_frequency"><![CDATA[Amount & Frequency]]></string>
+    <string name="dosage">Dosage</string>
     <string name="how_long">How Long?</string>
     <string name="reminder">Reminder</string>
     <string name="no_need_to_worry_we_are_here_to_remind_you_about_your_medicines">No need to worry we are here to remind you about your medicines</string>
