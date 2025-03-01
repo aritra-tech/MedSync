@@ -13,22 +13,98 @@ import com.aritra.medsync.utils.Constants
 import com.aritra.medsync.utils.toFormattedTimeString
 
 class MedSyncNotificationReceiver : BroadcastReceiver() {
+
+    companion object {
+        const val ACTION_TAKE = "com.aritra.medsync.ACTION_TAKE"
+        const val ACTION_SKIP = "com.aritra.medsync.ACTION_SKIP"
+    }
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let {
-            intent?.getParcelableExtra<Medication>(Constants.MEDICATION_INTENT)?.let { medication ->
-                showNotification(it, medication)
+            when (intent?.action) {
+                ACTION_TAKE -> {
+                    // Handle "Take" action
+                    val medicationId = intent.getIntExtra(Constants.MEDICATION_ID, -1)
+                    if (medicationId != -1) {
+                        handleMedicationTaken(context, medicationId)
+                    } else {
+
+                    }
+                }
+                ACTION_SKIP -> {
+                    // Handle "Skip" action
+                    val medicationId = intent.getIntExtra(Constants.MEDICATION_ID, -1)
+                    if (medicationId != -1) {
+                        handleMedicationSkipped(context, medicationId)
+                    } else {
+
+                    }
+                }
+                else -> {
+                    // Show notification
+                    intent?.getParcelableExtra<Medication>(Constants.MEDICATION_INTENT)?.let { medication ->
+                        showNotification(it, medication)
+                    }
+                }
             }
         }
     }
 
-    private fun showNotification(context: Context, medication: Medication) {
+    private fun handleMedicationTaken(context: Context, medicationId: Int) {
+        // Create an Intent to send a broadcast to update medication in the database
+        val updateIntent = Intent("com.aritra.medsync.UPDATE_MEDICATION_STATUS")
+        updateIntent.putExtra(Constants.MEDICATION_ID, medicationId)
+        updateIntent.putExtra(Constants.MEDICATION_TAKEN, true)
+        context.sendBroadcast(updateIntent)
 
+        // Cancel the notification
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(medicationId)
+    }
+
+    private fun handleMedicationSkipped(context: Context, medicationId: Int) {
+        // Create an Intent to send a broadcast to update medication in the database
+        val updateIntent = Intent("com.aritra.medsync.UPDATE_MEDICATION_STATUS")
+        updateIntent.putExtra(Constants.MEDICATION_ID, medicationId)
+        updateIntent.putExtra(Constants.MEDICATION_TAKEN, false)
+        updateIntent.putExtra(Constants.MEDICATION_SKIPPED, true)
+        context.sendBroadcast(updateIntent)
+
+        // Cancel the notification
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(medicationId)
+    }
+
+    private fun showNotification(context: Context, medication: Medication) {
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra(Constants.MEDICATION_NOTIFICATION, true)
         val pendingIntent = PendingIntent.getActivity(
             context,
-            1,
+            medication.id,
             intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Create Take action
+        val takeIntent = Intent(context, MedSyncNotificationReceiver::class.java).apply {
+            action = ACTION_TAKE
+            putExtra(Constants.MEDICATION_ID, medication.id)
+        }
+        val takePendingIntent = PendingIntent.getBroadcast(
+            context,
+            medication.id * 10 + 1, // Ensure unique request code
+            takeIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Create Skip action
+        val skipIntent = Intent(context, MedSyncNotificationReceiver::class.java).apply {
+            action = ACTION_SKIP
+            putExtra(Constants.MEDICATION_ID, medication.id)
+        }
+        val skipPendingIntent = PendingIntent.getBroadcast(
+            context,
+            medication.id * 10 + 2, // Ensure unique request code
+            skipIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
 
@@ -39,10 +115,11 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
             .setSmallIcon(R.drawable.medsync_logo)
             .setContentTitle(context.getString(R.string.medicine_reminder_title, medication.reminderTime.toFormattedTimeString()))
             .setContentText(context.getString(R.string.medicine_reminder_text, medication.medicineName))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
+            .addAction(R.drawable.take_icon,"Take", takePendingIntent)
+            .addAction(R.drawable.skip_icon, "Skip", skipPendingIntent)
+            .setAutoCancel(true)
             .build()
-
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(medication.id, notification)
