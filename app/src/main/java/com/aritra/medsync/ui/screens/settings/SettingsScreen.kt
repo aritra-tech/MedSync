@@ -41,13 +41,12 @@ fun SettingsScreen(
     navController: NavHostController,
     settingsViewModel: SettingsViewModel
 ) {
-
     val context = LocalContext.current
     val themeStateObserver by settingsViewModel.themeState.collectAsState()
 
     /***********************  UI Content  ***********************/
     LazyColumn(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
             .navigationBarsPadding(),
@@ -55,13 +54,13 @@ fun SettingsScreen(
     ) {
         item {
             Row(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(42.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -69,7 +68,7 @@ fun SettingsScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    if(userData?.username != null) {
+                    if (userData?.username != null) {
                         Text(
                             text = userData.username,
                             color = OnSurface20,
@@ -85,7 +84,7 @@ fun SettingsScreen(
         item {
             Column {
                 Text(
-                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     text = "General",
                     color = OnPrimaryContainer,
                     style = bold18
@@ -104,16 +103,10 @@ fun SettingsScreen(
                 )
 
                 Text(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.preference),
                     color = OnPrimaryContainer,
                     style = bold18
-                )
-
-                SettingsItem(
-                    onClick = { /*TODO*/ },
-                    iconId = R.drawable.lock,
-                    itemName = stringResource(R.string.lock_my_screen)
                 )
 
                 SettingsSwitch(
@@ -126,7 +119,7 @@ fun SettingsScreen(
                 )
 
                 Text(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     text = "More",
                     color = OnPrimaryContainer,
                     style = bold18

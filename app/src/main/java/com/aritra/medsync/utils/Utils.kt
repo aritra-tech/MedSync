@@ -23,7 +23,6 @@ object Utils {
 
         medicationItems.add(Pair("Medication Name", medicineName))
         medicationItems.add(Pair("Medication Dose", pillsAmount + " " + getMedicineUnit(medicineType)))
-        medicationItems.add(Pair("Medication Frequency", pillsFrequency))
 
         return medicationItems
     }

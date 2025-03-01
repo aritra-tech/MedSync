@@ -59,7 +59,6 @@ fun AddMedication(
     var medicineName by rememberSaveable { mutableStateOf("") }
     var pillsAmount by rememberSaveable { mutableStateOf("") }
     var pillsEndDate by rememberSaveable { mutableLongStateOf(Date().time) }
-    var pillsFrequency by rememberSaveable { mutableStateOf("") }
     val selectedTimes = rememberSaveable(
         saver = CalendarInformation.getStateListSaver()
     ) {
@@ -74,8 +73,7 @@ fun AddMedication(
     fun checkAllFieldsFilled() {
         isButtonEnabled = (
                 medicineName.isNotBlank() &&
-                        pillsAmount.isNotBlank() &&
-                        pillsFrequency.isNotBlank()
+                        pillsAmount.isNotBlank()
                 )
     }
 
@@ -118,7 +116,7 @@ fun AddMedication(
                     medicineType = MedicineType.TABLET,
                     onClick = {
                         selectedMedicineType = it
-                        suffixText = "Tablet"
+                        suffixText = "tablets"
                     }
                 )
                 MedicineTypeCard(
@@ -127,7 +125,7 @@ fun AddMedication(
                     medicineType = MedicineType.CAPSULE,
                     onClick = {
                         selectedMedicineType = it
-                        suffixText = "Capsule"
+                        suffixText = "mg"
                     }
                 )
                 MedicineTypeCard(
@@ -145,7 +143,7 @@ fun AddMedication(
                     medicineType = MedicineType.INHALER,
                     onClick = {
                         selectedMedicineType = it
-                        suffixText = "Puffs"
+                        suffixText = "puffs"
                     }
                 )
             }
@@ -167,7 +165,7 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = stringResource(R.string.amount_frequency),
+                text = stringResource(R.string.dosage),
                 style = medium16,
                 color = OnPrimaryContainer
             )
@@ -194,16 +192,6 @@ fun AddMedication(
                             style = bold14,
                             color = Color.Black
                         )
-                    }
-                )
-                // TODO: Need to do some research regarding the frequency
-                MedSyncTextField(
-                    modifier = Modifier.width(152.dp),
-                    hintText = stringResource(R.string.pills_frequency_hint),
-                    value = pillsFrequency,
-                    onValueChange = {
-                        pillsFrequency = it
-                        checkAllFieldsFilled()
                     }
                 )
             }
@@ -239,7 +227,6 @@ fun AddMedication(
                 addAndValidateMedication(
                     medicationName = medicineName,
                     pillsAmount = pillsAmount,
-                    pillsFrequency = pillsFrequency,
                     endDate = pillsEndDate,
                     reminder = selectedTimes,
                     medicineType = MedicineType.getMedicineTypeString(selectedMedicineType),
@@ -256,7 +243,6 @@ fun AddMedication(
 fun addAndValidateMedication(
     medicationName: String,
     pillsAmount: String,
-    pillsFrequency: String,
     endDate: Long,
     medicineType: String,
     reminder: List<CalendarInformation>,
@@ -268,7 +254,6 @@ fun addAndValidateMedication(
         addMedicationViewModel.createMedication(
             medicationName,
             pillsAmount,
-            pillsFrequency,
             Date(endDate),
             reminder,
             medicineType

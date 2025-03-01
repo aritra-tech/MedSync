@@ -123,13 +123,10 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     //Lottie
-    implementation("com.airbnb.android:lottie-compose:6.0.1")
-
-    // Permission Utils
-    implementation ("com.google.accompanist:accompanist-permissions:0.32.0")
+    implementation("com.airbnb.android:lottie-compose:6.6.2")
 
     //Timber
     implementation ("com.jakewharton.timber:timber:5.0.1")
