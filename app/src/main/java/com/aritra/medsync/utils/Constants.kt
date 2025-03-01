@@ -16,4 +16,7 @@ object Constants {
     const val PROFILE_SCREEN = "PROFILE_SCREEN"
     const val PRESCRIPTION_SCREEN = "PRESCRIPTION_SCREEN"
     const val APPOINTMENT_SCREEN = "APPOINTMENT_SCREEN"
+    const val MEDICATION_ID = "medication_id"
+    const val MEDICATION_TAKEN = "medication_taken"
+    const val MEDICATION_SKIPPED = "medication_skipped"
 }

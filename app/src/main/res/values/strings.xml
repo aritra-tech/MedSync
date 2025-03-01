@@ -12,9 +12,9 @@
     <string name="pills_amount_hint">eg. 1</string>
     <string name="pills_frequency_hint">eg. Daily</string>
     <string name="end_date_hint">eg. 20th Feb, 2023</string>
-    <string name="medicine_reminder_title">"Time for Your Health Boost!"</string>
+    <string name="medicine_reminder_title">"Pill reminder %s"</string>
     <string name="notification_for_medication_reminder">"Notification for medication reminder"</string>
-    <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to mark it."</string>
+    <string name="medicine_reminder_text">"Take, %s."</string>
     <string name="done">Done</string>
     <string name="your_plan_for_today">Your plan for today</string>
     <string name="preference">Preference</string>

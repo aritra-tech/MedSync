@@ -18,4 +18,8 @@ class MedicationRepositoryImpl(
     override fun getAllMedications(): Flow<List<Medication>> {
         return dao.getAllMedications()
     }
+
+    override suspend fun getMedicationById(medicationId: Int): Medication? {
+        return dao.getMedicationById(medicationId)
+    }
 }
