@@ -31,15 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
-import com.aritra.medsync.screens.homeScreen.viewmodel.MedicationDetailsViewModel
+import com.aritra.medsync.ui.screens.homeScreen.viewmodel.MedicationDetailsViewModel
 import com.aritra.medsync.ui.theme.Green
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
@@ -48,6 +45,7 @@ import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.dividerColor
 import com.aritra.medsync.ui.theme.lightGreen
 import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Utils.getMedicineImage
 import com.aritra.medsync.utils.Utils.getMedicineUnit
@@ -67,6 +65,7 @@ fun MedicationCard(
     var isSkippedClicked by remember {
         mutableStateOf(medication.isTaken.not())
     }
+    var isTakenConfirmed by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Card(
@@ -93,42 +92,6 @@ fun MedicationCard(
                     text = medication.reminderTime.toFormattedTimeString(),
                     style = bold24.copy(color = OnPrimaryContainer)
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                AnimatedVisibility(
-                    visible = medication.reminderTime.hasPassed(),
-                    enter = fadeIn(animationSpec = tween(200))
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(100.dp))
-                            .background(lightGreen)
-                            .padding(8.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .size(25.dp)
-                                .onClick {
-                                    isTakenClicked = isTakenClicked.not()
-                                    if (isTakenClicked) {
-                                        isSkippedClicked = false
-                                    }
-                                    updateMedicationViewModel.isMedicationTaken(
-                                        medication,
-                                        isTakenClicked
-                                    )
-                                    Toast
-                                        .makeText(context, "Medication taken", Toast.LENGTH_SHORT)
-                                        .show()
-                                },
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Medication Taken",
-                            tint = Green,
-                        )
-                    }
-                }
             }
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -167,16 +130,60 @@ fun MedicationCard(
                     } else {
                         Text(
                             text = medication.medicineName,
-                            style = medium16.copy(color = OnPrimaryContainer)
+                            style = medium18.copy(color = OnPrimaryContainer)
                         )
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Text(
-                        text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
-                        style = normal14.copy(color = OnSurface60)
-                    )
+
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "${medication.pillsAmount} ${getMedicineUnit(medication.medicineType)}",
+                            style = normal14.copy(color = OnSurface60)
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        AnimatedVisibility(
+                            visible = medication.reminderTime.hasPassed() && !isTakenConfirmed,
+                            enter = fadeIn(animationSpec = tween(200))
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(100.dp))
+                                    .background(lightGreen)
+                                    .padding(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                        .onClick {
+                                            isTakenClicked = isTakenClicked.not()
+                                            if (isTakenClicked) {
+                                                isSkippedClicked = false
+                                                isTakenConfirmed = true
+                                            }
+                                            updateMedicationViewModel.isMedicationTaken(
+                                                medication,
+                                                isTakenClicked
+                                            )
+                                            Toast
+                                                .makeText(context, "Medication taken", Toast.LENGTH_SHORT)
+                                                .show()
+                                        },
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Medication Taken",
+                                    tint = Green,
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

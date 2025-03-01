@@ -3,6 +3,7 @@
     <string name="add_plan">Add Plan</string>
     <string name="pill_name">Pill Name</string>
     <string name="amount_frequency"><![CDATA[Amount & Frequency]]></string>
+    <string name="dosage">Dosage</string>
     <string name="how_long">How Long?</string>
     <string name="reminder">Reminder</string>
     <string name="no_need_to_worry_we_are_here_to_remind_you_about_your_medicines">No need to worry we are here to remind you about your medicines</string>
@@ -31,4 +32,6 @@
     <string name="medication_taken_at">Taken at %s</string>
     <string name="medication_skipped_at">Skipped at %s</string>
     <string name="medication_scheduled_at">Scheduled at %s</string>
+    <string name="medications">Medications</string>
+    <string name="web_client_id">318380885884-cto01b1l7bc73dv77u5bbfcbsht0o2jg.apps.googleusercontent.com</string>
 </resources>

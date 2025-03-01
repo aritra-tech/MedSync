@@ -1,46 +1,30 @@
 package com.aritra.medsync.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.aritra.medsync.R
+import coil.compose.AsyncImage
+import com.aritra.medsync.ui.screens.intro.UserData
 
 @Composable
-fun ProfileContainer(onEditButtonClick: () -> Unit) {
-    Box(contentAlignment = Alignment.BottomEnd) {
-        Image(
-            painter = painterResource(id = R.drawable.no_user_profile_picture),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape)
-        )
+fun ProfileContainer(userData: UserData?) {
 
-        Button(
-            modifier = Modifier.size(25.dp),
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-            contentPadding = PaddingValues(0.dp),
-            onClick = { onEditButtonClick() }
-        ) {
-            Icon(imageVector = Icons.Outlined.Add, contentDescription = null, tint = Color.White)
+    Box(contentAlignment = Alignment.BottomEnd) {
+        if(userData?.profilePictureUrl != null) {
+            AsyncImage(
+                model = userData.profilePictureUrl,
+                contentDescription = "Profile picture",
+                modifier = Modifier
+                    .size(110.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
         }
     }
-
 }
