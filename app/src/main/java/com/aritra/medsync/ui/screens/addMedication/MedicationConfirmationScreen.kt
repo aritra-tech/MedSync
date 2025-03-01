@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens.medicationConfirmation
+package com.aritra.medsync.ui.screens.addMedication
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +36,7 @@ import com.aritra.medsync.components.TicketView
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicationConfirmation
 import com.aritra.medsync.navigation.MedSyncScreens
+import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.backgroundColor
