@@ -9,7 +9,7 @@ import com.aritra.medsync.domain.model.Medication
 
 @Database(
     entities = [Medication::class],
-    version = 3,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
