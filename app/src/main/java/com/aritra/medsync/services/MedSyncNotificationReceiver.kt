@@ -10,6 +10,7 @@ import com.aritra.medsync.MainActivity
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.utils.Constants
+import com.aritra.medsync.utils.toFormattedTimeString
 
 class MedSyncNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -35,9 +36,10 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
             context,
             MedSyncNotificationService.MEDICATION_CHANNEL_ID
         )
-            .setSmallIcon(R.drawable.capsule)
-            .setContentTitle(context.getString(R.string.medicine_reminder_title))
+            .setSmallIcon(R.drawable.medsync_logo)
+            .setContentTitle(context.getString(R.string.medicine_reminder_title, medication.reminderTime.toFormattedTimeString()))
             .setContentText(context.getString(R.string.medicine_reminder_text, medication.medicineName))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
             .build()
 
