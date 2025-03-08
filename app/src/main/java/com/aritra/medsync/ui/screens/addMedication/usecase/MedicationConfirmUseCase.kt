@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens.medicationConfirmation.usecase
+package com.aritra.medsync.ui.screens.addMedication.usecase
 
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.repository.MedicationRepository

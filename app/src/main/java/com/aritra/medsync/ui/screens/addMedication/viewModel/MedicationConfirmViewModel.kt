@@ -1,16 +1,14 @@
-package com.aritra.medsync.ui.screens.medicationConfirmation
+package com.aritra.medsync.ui.screens.addMedication.viewModel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.aritra.medsync.domain.extensions.runIO
 import com.aritra.medsync.domain.model.MedicationConfirmation
-import com.aritra.medsync.ui.screens.medicationConfirmation.usecase.MedicationConfirmUseCase
+import com.aritra.medsync.ui.screens.addMedication.usecase.MedicationConfirmUseCase
 import com.aritra.medsync.services.MedSyncNotificationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
