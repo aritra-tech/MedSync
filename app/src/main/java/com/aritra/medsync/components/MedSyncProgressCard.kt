@@ -1,6 +1,7 @@
 package com.aritra.medsync.components
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,11 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.theme.Green
+import com.aritra.medsync.ui.theme.OnSurface40
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.normal14
 
@@ -52,29 +51,35 @@ fun MedSyncProgressCard(medication: List<Medication>) {
         mutableFloatStateOf(0f)
     }
 
-    Card(
+    Box(
         modifier = Modifier
-            .padding(8.dp)
-            .height(150.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        )
+            .height(150.dp)
+            .border(
+                border = BorderStroke(1.dp, OnSurface40.copy(alpha = 0.2f)),
+                shape = RoundedCornerShape(10.dp)
+            )
+            .padding(16.dp)
     ) {
-
         Row(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(
                 modifier = Modifier
-                    .padding(24.dp, 24.dp, 0.dp, 16.dp),
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center
             ) {
 
                 medicationTaken = medication.filter { it.isTaken }.size
                 totalNumberOfMedication = medication.size
                 medicationRemaining = totalNumberOfMedication - medicationTaken
-                medicationPercentage = (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+
+                // Handle division by zero
+                medicationPercentage = if (totalNumberOfMedication == 0) {
+                    0f // Set to 0% if there are no medications
+                } else {
+                    (medicationTaken.toFloat() / totalNumberOfMedication.toFloat()) * 100
+                }
 
                 Text(
                     text = stringResource(R.string.your_plan_for_today),
@@ -90,7 +95,6 @@ fun MedSyncProgressCard(medication: List<Medication>) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-
                 Text(
                     text = "$medicationRemaining medication's remaining",
                     style = normal14,
@@ -98,32 +102,25 @@ fun MedSyncProgressCard(medication: List<Medication>) {
             }
 
             Box(
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(100.dp)
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.then(
-                        Modifier
-                            .size(100.dp)
-                            .padding(end = 16.dp)
-                            .padding(vertical = 35.dp)
-                    ),
-                    progress = animateFloatAsState(
-                        targetValue = medicationPercentage / 100,
-                        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
-                        label = "SOC progress"
-                    ).value,
+                    modifier = Modifier.size(100.dp),
+                    progress = { medicationPercentage / 100 },
                     color = Green,
                     strokeWidth = 12.dp,
                     strokeCap = StrokeCap.Round,
                     trackColor = Color.White
                 )
 
-                // TODO : Need to fix the text
-//                Text(
-//                    text = medicationPercentage.toString(),
-//                    style = medium16,
-//                    color = Color.White
-//                )
+                Text(
+                    text = "${medicationPercentage.toInt()}%",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Black
+                )
             }
         }
     }

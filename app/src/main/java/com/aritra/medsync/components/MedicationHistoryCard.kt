@@ -82,7 +82,7 @@ fun MedicationHistoryCard(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "${medication.pillsAmount} ${Utils.getMedicineUnit(medication.medicineType)} | ${medication.pillsFrequency}",
+                        text = "${medication.pillsAmount} ${Utils.getMedicineUnit(medication.medicineType)}",
                         style = normal14.copy(color = OnSurface60)
                     )
 
