@@ -39,6 +39,7 @@ import com.aritra.medsync.components.MedicineTypeCard
 import com.aritra.medsync.components.PillsEndDate
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicineType
+import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold14

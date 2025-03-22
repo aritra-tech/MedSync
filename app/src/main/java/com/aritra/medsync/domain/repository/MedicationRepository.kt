@@ -10,4 +10,6 @@ interface MedicationRepository {
     suspend fun updateMedication(medication: Medication)
 
     fun getAllMedications(): Flow<List<Medication>>
+
+    suspend fun getMedicationById(medicationId: Int): Medication?
 }

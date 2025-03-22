@@ -30,7 +30,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.addMedication.AddMedication
-import com.aritra.medsync.ui.screens.addMedication.AddMedicationViewModel
+import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
 import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
 import com.aritra.medsync.ui.screens.history.HistoryScreen
 import com.aritra.medsync.ui.screens.history.viewmodel.HistoryViewModel
@@ -40,8 +40,8 @@ import com.aritra.medsync.ui.screens.intro.GetStartedScreen
 import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
 import com.aritra.medsync.ui.screens.intro.SigninViewModel
 import com.aritra.medsync.ui.screens.intro.SplashScreen
-import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmViewModel
-import com.aritra.medsync.ui.screens.medicationConfirmation.MedicationConfirmationScreen
+import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
+import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.ui.screens.report.ReportScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen

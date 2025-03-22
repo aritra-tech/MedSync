@@ -1,9 +1,8 @@
-package com.aritra.medsync.ui.screens.addMedication
+package com.aritra.medsync.ui.screens.addMedication.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.utils.CalendarInformation
-import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Calendar
 import java.util.Date
 
