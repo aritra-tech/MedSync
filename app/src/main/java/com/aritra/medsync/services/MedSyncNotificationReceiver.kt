@@ -6,15 +6,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.aritra.medsync.MainActivity
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.utils.Constants
 import com.aritra.medsync.utils.toFormattedTimeString
-import com.aritra.medsync.workers.MedicationUpdateWorker
 
 class MedSyncNotificationReceiver : BroadcastReceiver() {
 
@@ -45,16 +41,11 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
     }
 
     private fun handleMedicationTaken(context: Context, medicationId: Int) {
-        val workRequest = OneTimeWorkRequestBuilder<MedicationUpdateWorker>()
-            .setInputData(
-                workDataOf(
-                    Constants.MEDICATION_ID to medicationId,
-                    Constants.MEDICATION_TAKEN to true
-                )
-            )
-            .build()
-
-        WorkManager.getInstance(context).enqueue(workRequest)
+        // Create an Intent to send a broadcast to update medication in the database
+        val updateIntent = Intent("com.aritra.medsync.UPDATE_MEDICATION_STATUS")
+        updateIntent.putExtra(Constants.MEDICATION_ID, medicationId)
+        updateIntent.putExtra(Constants.MEDICATION_TAKEN, true)
+        context.sendBroadcast(updateIntent)
 
         // Cancel the notification
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
