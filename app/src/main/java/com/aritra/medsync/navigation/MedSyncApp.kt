@@ -43,6 +43,7 @@ import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
 import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
+import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.ui.screens.report.ReportScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen
@@ -92,6 +93,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         val homeViewModel: HomeViewModel = hiltViewModel()
         val settingsViewModel: SettingsViewModel = hiltViewModel()
         val historyViewModel: HistoryViewModel = hiltViewModel()
+        val appointmentViewModel: AppointmentViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -168,12 +170,12 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
 
             composable(MedSyncScreens.AppointmentScreen.name) {
                 AppointmentScreen(
-                    onFabClicked = { navController.navigate(MedSyncScreens.AddMedication.name) },
+                    onFabClicked = { navController.navigate(MedSyncScreens.AddAppointmentScreen.name) },
                 )
             }
 
             composable(MedSyncScreens.AddAppointmentScreen.name) {
-                AddAppointmentScreen()
+                AddAppointmentScreen(navController, appointmentViewModel)
             }
         }
     }
