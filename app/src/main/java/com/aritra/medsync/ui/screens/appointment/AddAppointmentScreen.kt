@@ -11,7 +11,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +26,7 @@ import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncButton
 import com.aritra.medsync.components.MedSyncTextField
 import com.aritra.medsync.components.MedSyncTopAppBar
+import com.aritra.medsync.ui.screens.appointment.state.AppointmentUiState
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.theme.PrimarySurface
 
@@ -37,6 +40,21 @@ fun AddAppointmentScreen(
 
     var doctorName by remember { mutableStateOf("") }
     var doctorSpecialization by remember { mutableStateOf("") }
+    val uiState by appointmentViewModel.uiState.observeAsState(AppointmentUiState.Idle)
+
+    LaunchedEffect(uiState) {
+        when(uiState) {
+            is AppointmentUiState.Success -> {
+                doctorName = ""
+                doctorSpecialization = ""
+                navController.popBackStack()
+            }
+            is AppointmentUiState.Error -> {
+                val errorMessage = (uiState as AppointmentUiState.Error).message
+            }
+            else -> {}
+        }
+    }
 
     Scaffold(
         modifier = modifier.fillMaxWidth(),

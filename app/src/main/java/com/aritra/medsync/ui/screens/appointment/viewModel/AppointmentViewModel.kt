@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.aritra.medsync.domain.extensions.runIO
 import com.aritra.medsync.domain.model.Appointment
+import com.aritra.medsync.ui.screens.appointment.state.AppointmentUiState
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AppointmentViewModel: ViewModel() {
-    val userDB = FirebaseFirestore.getInstance()
-    private val errorLiveData = MutableLiveData<String>()
-    private val saveAppointmentStatus = MutableLiveData<Boolean>()
+
+    private val userDB = FirebaseFirestore.getInstance()
+
+    private val _uiState = MutableLiveData<AppointmentUiState>(AppointmentUiState.Idle)
+    val uiState: LiveData<AppointmentUiState> = _uiState
 
     private val _appointments = MutableLiveData<List<Appointment>>()
     val appointments: LiveData<List<Appointment>> = _appointments
@@ -23,6 +26,14 @@ class AppointmentViewModel: ViewModel() {
         doctorName: String,
         doctorSpecialization: String
     ) = runIO {
+
+        if (doctorName.isBlank() || doctorSpecialization.isBlank()) {
+            _uiState.postValue(AppointmentUiState.Error("Field are required"))
+            return@runIO
+        }
+
+        _uiState.postValue(AppointmentUiState.Loading)
+
         val appointment = hashMapOf(
             "name" to doctorName,
             "specialization" to doctorSpecialization
@@ -30,16 +41,19 @@ class AppointmentViewModel: ViewModel() {
 
         userDB.collection("Appointments")
             .add(appointment)
-            .addOnSuccessListener {
-                saveAppointmentStatus.postValue(true)
+            .addOnSuccessListener { documentRef ->
+                _uiState.postValue(AppointmentUiState.Success(documentRef.id))
                 fetchAppointments()
             }
             .addOnFailureListener { e ->
-                errorLiveData.postValue("Failed to create user profile: ${e.message}")
+                _uiState.postValue(AppointmentUiState.Error("Failed to save appointment: ${e.message}"))
             }
     }
 
     fun fetchAppointments() = runIO {
+
+        _uiState.postValue(AppointmentUiState.Loading)
+
         userDB.collection("Appointments")
             .get()
             .addOnSuccessListener { result ->
@@ -51,9 +65,10 @@ class AppointmentViewModel: ViewModel() {
                     )
                 }
                 _appointments.postValue(appointments)
+                _uiState.postValue(AppointmentUiState.Idle)
             }
             .addOnFailureListener { e ->
-                errorLiveData.postValue("Failed to fetch appointments: ${e.message}")
+                _uiState.postValue(AppointmentUiState.Error("Failed to fetch appointments: ${e.message}"))
             }
     }
 }
