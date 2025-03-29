@@ -17,8 +17,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aritra.medsync.R
 import com.aritra.medsync.components.MedSyncButton
 import com.aritra.medsync.components.MedSyncTextField
 import com.aritra.medsync.components.MedSyncTopAppBar
@@ -41,14 +43,15 @@ fun AddAppointmentScreen(
         topBar = {
             MedSyncTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = "Add Appointment",
+                title = stringResource(R.string.add_appointment),
                 colors = TopAppBarDefaults.topAppBarColors(PrimarySurface),
                 onBackPress = { navController.popBackStack() }
             )
         }
     ) { paddingValues ->
         Column(
-            Modifier.fillMaxSize()
+            Modifier
+                .fillMaxSize()
                 .background(PrimarySurface)
                 .padding(paddingValues)
                 .padding(16.dp),
@@ -56,7 +59,7 @@ fun AddAppointmentScreen(
         ) {
             MedSyncTextField(
              modifier = Modifier.fillMaxWidth(),
-                headerText = "Doctor Name",
+                headerText = stringResource(R.string.doctor_name),
                 value = doctorName,
                 onValueChange = {
                     doctorName = it
@@ -67,7 +70,7 @@ fun AddAppointmentScreen(
 
             MedSyncTextField(
                 modifier = Modifier.fillMaxWidth(),
-                headerText = "Doctor specialization",
+                headerText = stringResource(R.string.doctor_specialization),
                 value = doctorSpecialization,
                 onValueChange = { doctorSpecialization = it }
             )
@@ -76,7 +79,7 @@ fun AddAppointmentScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Save",
+                text = stringResource(R.string.save),
                 onClick = {
                     appointmentViewModel.saveAppointments(doctorName, doctorSpecialization)
                     navController.popBackStack()

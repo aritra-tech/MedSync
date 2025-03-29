@@ -45,7 +45,6 @@ import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
-import com.aritra.medsync.ui.screens.report.ReportScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
@@ -171,6 +170,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
             composable(MedSyncScreens.AppointmentScreen.name) {
                 AppointmentScreen(
                     onFabClicked = { navController.navigate(MedSyncScreens.AddAppointmentScreen.name) },
+                    appointmentViewModel
                 )
             }
 
