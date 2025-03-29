@@ -38,4 +38,6 @@
     <string name="doctor_name">Doctor Name</string>
     <string name="doctor_specialization">Doctor specialization</string>
     <string name="save">Save</string>
+    <string name="appointment_date">Appointment Date</string>
+    <string name="appointment_time">Appointment Time</string>
 </resources>
