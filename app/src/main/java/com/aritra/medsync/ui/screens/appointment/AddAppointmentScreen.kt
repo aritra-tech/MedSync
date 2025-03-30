@@ -54,6 +54,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,9 +70,10 @@ fun AddAppointmentScreen(
     var appointmentDate by remember { mutableLongStateOf(0L) }
     var appointmentTime by remember { mutableLongStateOf(0L) }
 
-    // Format for displaying date and time
-    val dateFormatter = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()) }
-    val timeFormatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
+    // Set IST timezone for formatting
+    val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
+    val dateFormatter = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).apply { timeZone = istTimeZone } }
+    val timeFormatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()).apply { timeZone = istTimeZone } }
 
     // Date Picker State
     var showDatePicker by remember { mutableStateOf(false) }
@@ -81,7 +83,7 @@ fun AddAppointmentScreen(
     var showTimePicker by remember { mutableStateOf(false) }
     val timePickerState = rememberTimePickerState()
 
-    // Formatted date and time text for display
+    // Formatted date and time text for display in IST
     val formattedDate = remember(appointmentDate) {
         if (appointmentDate > 0) dateFormatter.format(Date(appointmentDate))
         else ""
@@ -99,8 +101,15 @@ fun AddAppointmentScreen(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    datePickerState.selectedDateMillis?.let {
-                        appointmentDate = it
+                    datePickerState.selectedDateMillis?.let { millis ->
+                        val calendar = Calendar.getInstance(istTimeZone).apply {
+                            timeInMillis = millis
+                            set(Calendar.HOUR_OF_DAY, 0)
+                            set(Calendar.MINUTE, 0)
+                            set(Calendar.SECOND, 0)
+                            set(Calendar.MILLISECOND, 0)
+                        }
+                        appointmentDate = calendar.timeInMillis
                     }
                     showDatePicker = false
                 }) {
@@ -123,12 +132,12 @@ fun AddAppointmentScreen(
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    // Convert hours and minutes to milliseconds
-                    val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
-                    calendar.set(Calendar.MINUTE, timePickerState.minute)
-                    calendar.set(Calendar.SECOND, 0)
-                    calendar.set(Calendar.MILLISECOND, 0)
+                    val calendar = Calendar.getInstance(istTimeZone).apply {
+                        set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+                        set(Calendar.MINUTE, timePickerState.minute)
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
+                    }
                     appointmentTime = calendar.timeInMillis
                     showTimePicker = false
                 }) {
@@ -210,6 +219,7 @@ fun AddAppointmentScreen(
                     value = doctorName,
                     onValueChange = { doctorName = it },
                     modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1
                 )
             }
 
@@ -230,7 +240,8 @@ fun AddAppointmentScreen(
                 OutlinedTextField(
                     value = doctorSpecialization,
                     onValueChange = { doctorSpecialization = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1
                 )
             }
 
@@ -298,8 +309,14 @@ fun AddAppointmentScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(R.string.save),
                 onClick = {
-                    appointmentViewModel.saveAppointments(doctorName, doctorSpecialization)
-                    navController.popBackStack()
+                    val date = if (appointmentDate > 0L) Date(appointmentDate) else null
+                    val time = if (appointmentTime > 0L) Date(appointmentTime) else null
+                    appointmentViewModel.saveAppointments(
+                        doctorName = doctorName,
+                        doctorSpecialization = doctorSpecialization,
+                        appointmentDate = date,
+                        appointmentTime = time
+                    )
                 }
             )
         }
