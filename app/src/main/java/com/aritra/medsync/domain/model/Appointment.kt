@@ -6,6 +6,6 @@ data class Appointment(
     val id: String = "",
     val doctorName: String = "",
     val doctorSpecialization: String = "",
-    val appointmentDate: Date? = null,
-    val appointmentTime: Date? = null
+    val appointmentDate: String = "",
+    val appointmentTime: String = ""
 )

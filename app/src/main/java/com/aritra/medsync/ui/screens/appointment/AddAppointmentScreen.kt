@@ -317,6 +317,7 @@ fun AddAppointmentScreen(
                         appointmentDate = date,
                         appointmentTime = time
                     )
+                    navController.popBackStack()
                 }
             )
         }

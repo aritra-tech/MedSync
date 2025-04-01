@@ -47,22 +47,21 @@ class AppointmentViewModel : ViewModel() {
         }
 
         _uiState.postValue(AppointmentUiState.Loading)
-
-        // Convert Date to IST before saving
         val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
-        val calendar = Calendar.getInstance(istTimeZone).apply {
-            time = appointmentDate
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+            timeZone = istTimeZone
         }
-        val istAppointmentDate = calendar.time
-
-        calendar.time = appointmentTime
-        val istAppointmentTime = calendar.time
+        val formattedDate = if (true) dateFormat.format(appointmentDate) else ""
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault()).apply {
+            timeZone = istTimeZone
+        }
+        val formattedTime = if (true) timeFormat.format(appointmentTime) else ""
 
         val appointment = hashMapOf(
             "name" to doctorName,
             "specialization" to doctorSpecialization,
-            "appointmentDate" to Timestamp(istAppointmentDate),
-            "appointmentTime" to Timestamp(istAppointmentTime)
+            "appointmentDate" to formattedDate,
+            "appointmentTime" to formattedTime
         )
 
         userDB.collection("Appointments")
@@ -83,21 +82,15 @@ class AppointmentViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { result ->
                 val appointments = result.documents.map { document ->
-                    val timestampDate = document.getTimestamp("appointmentDate")
-                    val timestampTime = document.getTimestamp("appointmentTime")
-
-                    // Optionally, format the fetched Date for display in IST
-                    val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
-                    val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).apply {
-                        timeZone = istTimeZone
-                    }
+                    val dateString = document.getString("appointmentDate") ?: ""
+                    val timeString = document.getString("appointmentTime") ?: ""
 
                     Appointment(
                         id = document.id,
                         doctorName = document.getString("name") ?: "",
                         doctorSpecialization = document.getString("specialization") ?: "",
-                        appointmentDate = timestampDate?.toDate(),
-                        appointmentTime = timestampTime?.toDate()
+                        appointmentDate = dateString,
+                        appointmentTime = timeString
                     )
                 }
                 _appointments.postValue(appointments)
