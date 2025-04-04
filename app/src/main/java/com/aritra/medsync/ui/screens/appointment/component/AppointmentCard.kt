@@ -1,5 +1,6 @@
 package com.aritra.medsync.ui.screens.appointment.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Appointment
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface60
@@ -49,16 +52,6 @@ fun AppointmentCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-//                Image(
-//                    modifier = Modifier
-//                        .size(50.dp)
-//                        .clip(RoundedCornerShape(16.dp))
-//                        .background(MedicineCircleColor)
-//                        .padding(10.dp),
-//                    painter = getMedicineImage(medication.medicineType),
-//                    contentDescription = null
-//                )
-
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start,
@@ -72,10 +65,26 @@ fun AppointmentCard(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Text(
-                        text = appointment.doctorSpecialization,
-                        style = normal14.copy(color = OnSurface60)
-                    )
+                    Row {
+                        Text(
+                            text = appointment.doctorSpecialization,
+                            style = normal14.copy(color = OnSurface60)
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Row {
+                            Image(
+                                painter = painterResource(R.drawable.reminder_icon),
+                                contentDescription = null
+                            )
+
+                            Text(
+                                text = appointment.appointmentTime,
+                                style = medium18.copy(color = OnPrimaryContainer)
+                            )
+                        }
+                    }
                 }
             }
         }
