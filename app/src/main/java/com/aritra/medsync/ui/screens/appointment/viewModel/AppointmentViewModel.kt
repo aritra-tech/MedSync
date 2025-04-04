@@ -1,19 +1,21 @@
 package com.aritra.medsync.ui.screens.appointment.viewModel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.aritra.medsync.domain.extensions.runIO
 import com.aritra.medsync.domain.model.Appointment
+import com.aritra.medsync.services.AppointmentNotificationScheduler
 import com.aritra.medsync.ui.screens.appointment.state.AppointmentUiState
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AppointmentViewModel : ViewModel() {
+class AppointmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val userDB = FirebaseFirestore.getInstance()
+    private val notificationScheduler = AppointmentNotificationScheduler(application.applicationContext)
 
     private val _uiState = MutableLiveData<AppointmentUiState>(AppointmentUiState.Idle)
     val uiState: LiveData<AppointmentUiState> = _uiState
@@ -51,11 +53,12 @@ class AppointmentViewModel : ViewModel() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
             timeZone = istTimeZone
         }
-        val formattedDate = if (true) dateFormat.format(appointmentDate) else ""
+        val formattedDate = dateFormat.format(appointmentDate)
+
         val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault()).apply {
             timeZone = istTimeZone
         }
-        val formattedTime = if (true) timeFormat.format(appointmentTime) else ""
+        val formattedTime = timeFormat.format(appointmentTime)
 
         val appointment = hashMapOf(
             "name" to doctorName,
@@ -67,6 +70,15 @@ class AppointmentViewModel : ViewModel() {
         userDB.collection("Appointments")
             .add(appointment)
             .addOnSuccessListener { documentRef ->
+                // Schedule notification for the appointment
+                notificationScheduler.scheduleAppointmentReminder(
+                    appointmentId = documentRef.id,
+                    doctorName = doctorName,
+                    appointmentDate = formattedDate,
+                    appointmentTime = formattedTime,
+                    reminderMinutes = 5
+                )
+
                 _uiState.postValue(AppointmentUiState.Success(documentRef.id))
                 fetchAppointments()
             }
