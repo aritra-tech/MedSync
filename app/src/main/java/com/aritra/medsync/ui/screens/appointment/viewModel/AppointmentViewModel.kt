@@ -20,8 +20,8 @@ class AppointmentViewModel(application: Application) : AndroidViewModel(applicat
     private val _uiState = MutableLiveData<AppointmentUiState>(AppointmentUiState.Idle)
     val uiState: LiveData<AppointmentUiState> = _uiState
 
-    private val _appointments = MutableLiveData<List<Appointment>>()
-    val appointments: LiveData<List<Appointment>> = _appointments
+    private val _appointments = MutableLiveData<Map<String,List<Appointment>>>()
+    val appointments: LiveData<Map<String,List<Appointment>>> = _appointments
 
     init {
         fetchAppointments()
@@ -93,7 +93,7 @@ class AppointmentViewModel(application: Application) : AndroidViewModel(applicat
         userDB.collection("Appointments")
             .get()
             .addOnSuccessListener { result ->
-                val appointments = result.documents.map { document ->
+                val appointmentList = result.documents.map { document ->
                     val dateString = document.getString("appointmentDate") ?: ""
                     val timeString = document.getString("appointmentTime") ?: ""
 
@@ -105,7 +105,8 @@ class AppointmentViewModel(application: Application) : AndroidViewModel(applicat
                         appointmentTime = timeString
                     )
                 }
-                _appointments.postValue(appointments)
+                val groupedAppointmentWithDate = appointmentList.groupBy { it.appointmentDate }
+                _appointments.postValue(groupedAppointmentWithDate)
                 _uiState.postValue(AppointmentUiState.Idle)
             }
             .addOnFailureListener { e ->

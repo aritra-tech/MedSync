@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -22,7 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.ui.screens.appointment.component.AppointmentCard
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
+import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
+import com.aritra.medsync.ui.theme.bold20
+import com.aritra.medsync.ui.theme.medium20
+import com.aritra.medsync.utils.Utils.formatDateHeader
 
 @Composable
 fun AppointmentScreen(
@@ -30,7 +32,7 @@ fun AppointmentScreen(
     appointmentViewModel: AppointmentViewModel
 ) {
 
-    val appointments by appointmentViewModel.appointments.observeAsState(emptyList())
+    val appointments by appointmentViewModel.appointments.observeAsState(emptyMap())
 
     Scaffold(
         floatingActionButton = {
@@ -52,8 +54,18 @@ fun AppointmentScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(appointments) { appointment ->
-                    AppointmentCard(appointment)
+                appointments.forEach { (date, appointmentList) ->
+                    item {
+                        Text(
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            text = formatDateHeader(date),
+                            style = bold20.copy(OnPrimaryContainer),
+                        )
+                    }
+
+                    items(appointmentList) { appointment ->
+                        AppointmentCard(appointment)
+                    }
                 }
             }
         }
