@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -75,13 +77,16 @@ fun AppointmentCard(
 
                         Row {
                             Image(
+                                modifier = Modifier.size(16.dp),
                                 painter = painterResource(R.drawable.reminder_icon),
                                 contentDescription = null
                             )
 
+                            Spacer(modifier = Modifier.width(4.dp))
+
                             Text(
                                 text = appointment.appointmentTime,
-                                style = medium18.copy(color = OnPrimaryContainer)
+                                style = normal14.copy(color = OnPrimaryContainer)
                             )
                         }
                     }
