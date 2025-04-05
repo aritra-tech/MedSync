@@ -3,17 +3,15 @@ package com.aritra.medsync.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
-import java.time.LocalTime
-import java.time.ZoneId
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 object Utils {
 
@@ -75,6 +73,39 @@ object Utils {
             "SYRUP" -> painterResource(id = R.drawable.amp)
             "INHALER" -> painterResource(id = R.drawable.inahler)
             else -> painterResource(id = R.drawable.ic_launcher_foreground) // TODO: Need to change the image
+        }
+    }
+
+    @Composable
+    fun formatDateHeader(date: String): String {
+        return try {
+            // Parse the input date string "yyyy-MM-dd"
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val parsedDate = inputFormat.parse(date) ?: return date
+
+            // Format the day with ordinal suffix (e.g., "4th")
+            val dayFormat = SimpleDateFormat("d", Locale.getDefault())
+            val day = dayFormat.format(parsedDate).toInt()
+            val dayWithSuffix = day.toString() + getOrdinalSuffix(day)
+
+            // Format the month and year
+            val monthYearFormat = SimpleDateFormat("MMMM, yyyy", Locale.getDefault())
+            val monthYear = monthYearFormat.format(parsedDate)
+
+            // Combine to get "4th April, 2025"
+            "$dayWithSuffix $monthYear"
+        } catch (e: Exception) {
+            date // Fallback to raw date string if parsing fails
+        }
+    }
+
+    fun getOrdinalSuffix(day: Int): String {
+        return when {
+            day in 11..13 -> "th" // Special case for 11th, 12th, 13th
+            day % 10 == 1 -> "st"
+            day % 10 == 2 -> "nd"
+            day % 10 == 3 -> "rd"
+            else -> "th"
         }
     }
 }

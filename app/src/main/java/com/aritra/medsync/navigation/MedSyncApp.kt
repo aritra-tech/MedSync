@@ -42,8 +42,9 @@ import com.aritra.medsync.ui.screens.intro.SigninViewModel
 import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
 import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
+import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
+import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
-import com.aritra.medsync.ui.screens.report.ReportScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
@@ -68,7 +69,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         MedSyncScreens.MedicationConfirmScreen.name,
         MedSyncScreens.ProfileScreen.name,
         MedSyncScreens.PrescriptionScreen.name,
-        MedSyncScreens.AppointmentScreen.name
+        MedSyncScreens.AddAppointmentScreen.name
     )
 
     BackPressHandler()
@@ -91,6 +92,7 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         val homeViewModel: HomeViewModel = hiltViewModel()
         val settingsViewModel: SettingsViewModel = hiltViewModel()
         val historyViewModel: HistoryViewModel = hiltViewModel()
+        val appointmentViewModel: AppointmentViewModel = hiltViewModel()
 
         NavHost(
             navController = navController,
@@ -149,10 +151,6 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                 )
             }
 
-            composable(MedSyncScreens.Report.name) {
-                ReportScreen()
-            }
-
             composable(MedSyncScreens.History.name) {
                 HistoryScreen(historyViewModel)
             }
@@ -170,7 +168,14 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
             }
 
             composable(MedSyncScreens.AppointmentScreen.name) {
-                AppointmentScreen()
+                AppointmentScreen(
+                    onFabClicked = { navController.navigate(MedSyncScreens.AddAppointmentScreen.name) },
+                    appointmentViewModel
+                )
+            }
+
+            composable(MedSyncScreens.AddAppointmentScreen.name) {
+                AddAppointmentScreen(navController, appointmentViewModel)
             }
         }
     }
@@ -195,8 +200,8 @@ fun ShowBottomNavigation(
 
                 ),
                 BottomNavItem(
-                    name = "Report",
-                    route = MedSyncScreens.Report.name,
+                    name = "Appointment",
+                    route = MedSyncScreens.AppointmentScreen.name,
                     icon = Icons.Outlined.StackedBarChart
                 ),
                 BottomNavItem(
