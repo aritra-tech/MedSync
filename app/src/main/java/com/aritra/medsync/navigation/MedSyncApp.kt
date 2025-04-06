@@ -3,11 +3,6 @@ package com.aritra.medsync.navigation
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.StackedBarChart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,10 +24,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.addMedication.AddMedication
+import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
+import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
+import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
 import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
+import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.history.HistoryScreen
 import com.aritra.medsync.ui.screens.history.viewmodel.HistoryViewModel
 import com.aritra.medsync.ui.screens.homeScreen.HomeScreen
@@ -40,10 +41,6 @@ import com.aritra.medsync.ui.screens.intro.GetStartedScreen
 import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
 import com.aritra.medsync.ui.screens.intro.SigninViewModel
 import com.aritra.medsync.ui.screens.intro.SplashScreen
-import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
-import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
-import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
-import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
 import com.aritra.medsync.ui.screens.settings.SettingsScreen
 import com.aritra.medsync.ui.screens.settings.SettingsViewModel
@@ -194,25 +191,25 @@ fun ShowBottomNavigation(
         ) {
             val bottomNavItems = listOf(
                 BottomNavItem(
-                    name = "Home",
+                    name = "Medication",
                     route = MedSyncScreens.Home.name,
-                    icon = Icons.Outlined.Home
+                    icon = painterResource(R.drawable.medication_icon)
 
                 ),
                 BottomNavItem(
                     name = "Appointment",
                     route = MedSyncScreens.AppointmentScreen.name,
-                    icon = Icons.Outlined.StackedBarChart
+                    icon = painterResource(R.drawable.appointment_icon)
                 ),
                 BottomNavItem(
                     name = "History",
                     route = MedSyncScreens.History.name,
-                    icon = Icons.Outlined.History
+                    icon = painterResource(R.drawable.history_icon)
                 ),
                 BottomNavItem(
-                    name = "Setting",
+                    name = "Account",
                     route = MedSyncScreens.Settings.name,
-                    icon = Icons.Outlined.Settings
+                    icon = painterResource(R.drawable.account_icon)
                 )
             )
             bottomNavItems.forEach { item ->
@@ -220,7 +217,7 @@ fun ShowBottomNavigation(
                     alwaysShowLabel = true,
                     icon = {
                         Icon(
-                            imageVector = item.icon,
+                            painter = item.icon,
                             contentDescription = item.name,
                             tint = if (backStackEntry.value?.destination?.route == item.route)
                                 OnPrimaryContainer
