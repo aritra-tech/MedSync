@@ -1,5 +1,6 @@
 package com.aritra.medsync.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,12 +56,17 @@ fun DateItem(
                 .padding(vertical = 4.dp, horizontal = 4.dp)
                 .clickable { onClicked(date) },
             colors = CardDefaults.cardColors(
-                containerColor = if (date.isSelected) {
-                    MaterialTheme.colorScheme.tertiary
-                } else {
-                    MaterialTheme.colorScheme.surface
+                containerColor = when {
+                    date.isSelected -> MaterialTheme.colorScheme.tertiary
+                    date.isToday -> MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.5f)
+                    else -> MaterialTheme.colorScheme.surface
                 }
             ),
+            border = if (date.isToday && !date.isSelected) {
+                BorderStroke(1.dp, MaterialTheme.colorScheme.tertiary)
+            } else {
+                null
+            }
         ) {
             Column(
                 modifier = Modifier
@@ -74,14 +80,18 @@ fun DateItem(
                 Text(
                     text = date.date.toFormattedDateShortString(),
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = if (date.isSelected) {
+                    fontWeight = if (date.isSelected || date.isToday) {
                         FontWeight.Medium
                     } else {
                         FontWeight.Normal
+                    },
+                    color = when {
+                        date.isSelected -> MaterialTheme.colorScheme.onTertiary
+                        date.isToday -> MaterialTheme.colorScheme.onTertiaryContainer
+                        else -> MaterialTheme.colorScheme.onSurface
                     }
                 )
             }
         }
     }
-
 }
