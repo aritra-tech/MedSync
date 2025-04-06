@@ -5,60 +5,57 @@ import java.util.Calendar
 import java.util.Date
 
 class CalendarDataSource {
+    val today: Date = Calendar.getInstance().time
 
-    val today: Date
-        get() {
-            return Date()
+    // Number of days to display at once
+    private val totalDays = 7
+
+    fun getData(startDate: Date? = null, lastSelectedDate: Date? = null): CalendarModel {
+        val calendar = Calendar.getInstance()
+
+        // If no start date specified, center around today
+        if (startDate == null) {
+            // Position calendar to show today in the middle
+            calendar.time = today
+            calendar.add(Calendar.DAY_OF_YEAR, -(totalDays / 2))
+        } else {
+            calendar.time = startDate
         }
 
-    fun getData(startDate: Date = today, lastSelectedDate: Date): CalendarModel {
-        val calendar = Calendar.getInstance()
-        calendar.time = startDate
+        val dateList = mutableListOf<CalendarModel.DateModel>()
+        val todayCalendar = Calendar.getInstance()
+        val selectedCalendar = Calendar.getInstance().apply {
+            time = lastSelectedDate ?: today
+        }
 
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-        val firstDayOfWeek = calendar.time
+        repeat(totalDays) {
+            val date = calendar.time
+            val isSelected = calendar.get(Calendar.YEAR) == selectedCalendar.get(Calendar.YEAR) &&
+                    calendar.get(Calendar.MONTH) == selectedCalendar.get(Calendar.MONTH) &&
+                    calendar.get(Calendar.DAY_OF_MONTH) == selectedCalendar.get(Calendar.DAY_OF_MONTH)
 
-        calendar.add(Calendar.DAY_OF_YEAR, 6)
-        val endDayOfWeek = calendar.time
+            val isToday = calendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) &&
+                    calendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) &&
+                    calendar.get(Calendar.DAY_OF_MONTH) == todayCalendar.get(Calendar.DAY_OF_MONTH)
 
-        val visibleDates = getDatesBetween(firstDayOfWeek, endDayOfWeek)
-        return toCalendarModel(visibleDates, lastSelectedDate)
-    }
-
-    private fun getDatesBetween(startDate: Date, endDate: Date): List<Date> {
-        val dateList = mutableListOf<Date>()
-        val calendar = Calendar.getInstance()
-        calendar.time = startDate
-
-        while (calendar.time <= endDate) {
-            dateList.add(calendar.time)
+            dateList.add(
+                CalendarModel.DateModel(
+                    date = date,
+                    isSelected = isSelected,
+                    isToday = isToday
+                )
+            )
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }
-        return dateList
-    }
 
-    private fun toCalendarModel(
-        dateList: List<Date>,
-        lastSelectedDate: Date
-    ): CalendarModel {
+        // Find the selected date, defaulting to today if none was selected
+        val selectedDate = dateList.find { it.isSelected }
+            ?: dateList.find { it.isToday }
+            ?: dateList.first()
+
         return CalendarModel(
-            selectedDate = toItemModel(lastSelectedDate, true),
-            visibleDates = dateList.map {
-                toItemModel(it, it == lastSelectedDate)
-            }
+            selectedDate = selectedDate,
+            visibleDates = dateList
         )
-    }
-
-    private fun toItemModel(date: Date, isSelectedDate: Boolean): CalendarModel.DateModel {
-        return CalendarModel.DateModel(
-            isSelected = isSelectedDate,
-            isToday = isToday(date),
-            date = date
-        )
-    }
-
-    private fun isToday(date: Date): Boolean {
-        val todayDate = today
-        return date.toFormattedDateString() == todayDate.toFormattedDateString()
     }
 }
