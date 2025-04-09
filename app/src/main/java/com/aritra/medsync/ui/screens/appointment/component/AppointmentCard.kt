@@ -1,6 +1,7 @@
 package com.aritra.medsync.ui.screens.appointment.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Appointment
+import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface60
 import com.aritra.medsync.ui.theme.medium18
@@ -54,6 +57,17 @@ fun AppointmentCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+
+                Image(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .background(MedicineCircleColor)
+                        .padding(10.dp),
+                    painter = painterResource(R.drawable.appointment_image),
+                    contentDescription = null
+                )
+
                 Column(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start,
@@ -64,8 +78,7 @@ fun AppointmentCard(
                         style = medium18.copy(color = OnPrimaryContainer)
                     )
 
-
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(4.dp))
 
                     Row {
                         Text(
