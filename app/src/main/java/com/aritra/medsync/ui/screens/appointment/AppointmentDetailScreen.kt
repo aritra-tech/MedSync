@@ -53,6 +53,7 @@ import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold22
 import com.aritra.medsync.ui.theme.normal18
+import com.aritra.medsync.ui.theme.red
 import com.aritra.medsync.ui.theme.selectedBlue
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -63,9 +64,10 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddAppointmentScreen(
+fun AppointmentDetailScreen(
     navController: NavController,
     appointmentViewModel: AppointmentViewModel,
+    appointmentId: String,
     modifier: Modifier = Modifier
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -74,6 +76,7 @@ fun AddAppointmentScreen(
     var doctorSpecialization by remember { mutableStateOf("") }
     var appointmentDate by remember { mutableLongStateOf(0L) }
     var appointmentTime by remember { mutableLongStateOf(0L) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     // Bottom sheet state for doctor specialization
     val sheetState = rememberModalBottomSheetState()
@@ -100,8 +103,18 @@ fun AddAppointmentScreen(
 
     // Set IST timezone for formatting
     val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
-    val dateFormatter = remember { SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).apply { timeZone = istTimeZone } }
-    val timeFormatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()).apply { timeZone = istTimeZone } }
+    val dateFormatter = remember {
+        SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).apply { timeZone = istTimeZone }
+    }
+    val timeFormatter = remember {
+        SimpleDateFormat("hh:mm a", Locale.getDefault()).apply { timeZone = istTimeZone }
+    }
+    val dbDateFormatter = remember {
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply { timeZone = istTimeZone }
+    }
+    val dbTimeFormatter = remember {
+        SimpleDateFormat("hh:mm a", Locale.getDefault()).apply { timeZone = istTimeZone }
+    }
 
     // Date Picker State
     var showDatePicker by remember { mutableStateOf(false) }
@@ -109,7 +122,31 @@ fun AddAppointmentScreen(
 
     // Time Picker State
     var showTimePicker by remember { mutableStateOf(false) }
-    val timePickerState = rememberTimePickerState()
+    val timePickerState = rememberTimePickerState(
+        initialHour = try {
+            val appointments = appointmentViewModel.appointments.value
+            appointments?.values?.flatten()?.find { it.id == appointmentId }?.let { appointment ->
+                var time = dbTimeFormatter.parse(appointment.appointmentTime)
+                time?.let {
+                    Calendar.getInstance().apply { time = it }.get(Calendar.HOUR_OF_DAY)
+                } ?: Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            } ?: Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        } catch (e: Exception) {
+            Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        },
+        initialMinute = try {
+            val appointments = appointmentViewModel.appointments.value
+            appointments?.values?.flatten()?.find { it.id == appointmentId }?.let { appointment ->
+                var time = dbTimeFormatter.parse(appointment.appointmentTime)
+                time?.let {
+                    Calendar.getInstance().apply { time = it }.get(Calendar.MINUTE)
+                } ?: Calendar.getInstance().get(Calendar.MINUTE)
+            } ?: Calendar.getInstance().get(Calendar.MINUTE)
+        } catch (e: Exception) {
+            Calendar.getInstance().get(Calendar.MINUTE)
+        },
+        is24Hour = false
+    )
 
     // Formatted date and time text for display in IST
     val formattedDate = remember(appointmentDate) {
@@ -121,7 +158,35 @@ fun AddAppointmentScreen(
         if (appointmentTime > 0) timeFormatter.format(Date(appointmentTime))
         else ""
     }
+
     val uiState by appointmentViewModel.uiState.observeAsState(AppointmentUiState.Idle)
+
+    // Load appointment data when screen is first displayed
+    LaunchedEffect(appointmentId) {
+        appointmentViewModel.fetchAppointments()
+        val appointments = appointmentViewModel.appointments.value
+        appointments?.values?.flatten()?.find { it.id == appointmentId }?.let { appointment ->
+            doctorName = appointment.doctorName
+            doctorSpecialization = appointment.doctorSpecialization
+
+            try {
+                // Set date
+                val date = dbDateFormatter.parse(appointment.appointmentDate)
+                date?.let {
+                    appointmentDate = it.time
+                    datePickerState.selectedDateMillis = it.time
+                }
+
+                // Set time - Add this block
+                val time = dbTimeFormatter.parse(appointment.appointmentTime)
+                time?.let {
+                    appointmentTime = it.time
+                }
+            } catch (_: Exception) {
+                // Handle parse error
+            }
+        }
+    }
 
     // Date Picker Dialog
     if (showDatePicker) {
@@ -182,6 +247,33 @@ fun AddAppointmentScreen(
         )
     }
 
+    // Delete Confirmation Dialog
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Delete Appointment") },
+            text = { Text("Are you sure you want to delete this appointment?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        appointmentViewModel.deleteAppointment(appointmentId)
+                        navController.popBackStack()
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteDialog = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     if (showSpecializationBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { showSpecializationBottomSheet = false },
@@ -221,10 +313,6 @@ fun AddAppointmentScreen(
     LaunchedEffect(uiState) {
         when (uiState) {
             is AppointmentUiState.Success -> {
-                doctorName = ""
-                doctorSpecialization = ""
-                appointmentDate = 0L
-                appointmentTime = 0L
                 navController.popBackStack()
             }
 
@@ -244,9 +332,9 @@ fun AddAppointmentScreen(
         topBar = {
             MedSyncTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.add_appointment),
+                title = stringResource(R.string.appointment_details),
                 colors = TopAppBarDefaults.topAppBarColors(PrimarySurface),
-                onBackPress = { navController.popBackStack() }
+                onBackPress = { navController.popBackStack() },
             )
         },
         snackbarHost = {
@@ -380,12 +468,32 @@ fun AddAppointmentScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.save),
+                text = "Delete",
+                buttonColor = red.copy(alpha = 0.5f),
+                onClick = {
+                    showDeleteDialog = true
+                }
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            MedSyncButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(R.string.update),
                 buttonColor = selectedBlue,
                 onClick = {
                     val date = if (appointmentDate > 0L) Date(appointmentDate) else null
                     val time = if (appointmentTime > 0L) Date(appointmentTime) else null
-                    appointmentViewModel.saveAppointments(
+
+                    if (doctorName.isBlank() || doctorSpecialization.isBlank() || date == null || time == null) {
+                        scope.launch {
+                            snackBarHostState.showSnackbar("Please fill all fields")
+                        }
+                        return@MedSyncButton
+                    }
+
+                    appointmentViewModel.updateAppointment(
+                        appointmentId = appointmentId,
                         doctorName = doctorName,
                         doctorSpecialization = doctorSpecialization,
                         appointmentDate = date,

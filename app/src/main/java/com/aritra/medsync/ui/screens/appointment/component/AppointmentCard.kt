@@ -2,6 +2,7 @@ package com.aritra.medsync.ui.screens.appointment.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,12 +34,14 @@ import com.aritra.medsync.ui.theme.normal14
 @Composable
 fun AppointmentCard(
     appointment: Appointment,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .then(modifier),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(

@@ -17,6 +17,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.ui.screens.appointment.component.AppointmentCard
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold20
 import com.aritra.medsync.utils.Utils.formatDateHeader
@@ -39,7 +41,8 @@ import com.aritra.medsync.utils.Utils.formatDateHeader
 @Composable
 fun AppointmentScreen(
     onFabClicked: () -> Unit,
-    appointmentViewModel: AppointmentViewModel
+    appointmentViewModel: AppointmentViewModel,
+    onAppointmentClicked: (String) -> Unit,
 ) {
     val appointments by appointmentViewModel.filteredAppointments.observeAsState(emptyMap())
     var searchQuery by remember { mutableStateOf("") }
@@ -73,6 +76,7 @@ fun AppointmentScreen(
                     .fillMaxWidth(),
                 placeholder = { Text("Search doctors or specializations") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                colors = SearchBarDefaults.colors(containerColor = PrimaryContainer)
             ) {}
         }
     ) { paddingValues ->
@@ -93,7 +97,13 @@ fun AppointmentScreen(
                     )
 
                     appointmentList.forEach { appointment ->
-                        AppointmentCard(appointment)
+                        AppointmentCard(
+                            appointment = appointment,
+                            onClick = {
+                                onAppointmentClicked(appointment.id)
+                            }
+                        )
+
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }

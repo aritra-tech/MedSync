@@ -42,4 +42,6 @@
     <string name="appointment_time">Appointment Time</string>
     <string name="made_with_in_india">Made with ❤️ in India</string>
     <string name="select_doctor_specialization">Select Doctor Specialization</string>
+    <string name="appointment_details">Appointment Details</string>
+    <string name="update">Update</string>
 </resources>

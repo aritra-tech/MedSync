@@ -143,4 +143,67 @@ class AppointmentViewModel(application: Application) : AndroidViewModel(applicat
             }
         }.filterValues { it.isNotEmpty() }
     }
+
+    fun updateAppointment(
+        appointmentId: String,
+        doctorName: String,
+        doctorSpecialization: String,
+        appointmentDate: Date,
+        appointmentTime: Date
+    ) = runIO {
+        _uiState.postValue(AppointmentUiState.Loading)
+
+        val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+            timeZone = istTimeZone
+        }
+        val formattedDate = dateFormat.format(appointmentDate)
+
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault()).apply {
+            timeZone = istTimeZone
+        }
+        val formattedTime = timeFormat.format(appointmentTime)
+
+        val updatedAppointment = hashMapOf(
+            "name" to doctorName,
+            "specialization" to doctorSpecialization,
+            "appointmentDate" to formattedDate,
+            "appointmentTime" to formattedTime
+        )
+
+        userDB.collection("Appointments")
+            .document(appointmentId)
+            .update(updatedAppointment as Map<String, Any>)
+            .addOnSuccessListener {
+                // Reschedule notification with updated time
+                notificationScheduler.scheduleAppointmentReminder(
+                    appointmentId = appointmentId,
+                    doctorName = doctorName,
+                    appointmentDate = formattedDate,
+                    appointmentTime = formattedTime,
+                    reminderMinutes = 5
+                )
+
+                _uiState.postValue(AppointmentUiState.Success("Appointment updated"))
+                fetchAppointments()
+            }
+            .addOnFailureListener { e ->
+                _uiState.postValue(AppointmentUiState.Error("Failed to update appointment: ${e.message}"))
+            }
+    }
+
+    fun deleteAppointment(appointmentId: String) = runIO {
+        _uiState.postValue(AppointmentUiState.Loading)
+
+        userDB.collection("Appointments")
+            .document(appointmentId)
+            .delete()
+            .addOnSuccessListener {
+                _uiState.postValue(AppointmentUiState.Success("Appointment deleted"))
+                fetchAppointments()
+            }
+            .addOnFailureListener { e ->
+                _uiState.postValue(AppointmentUiState.Error("Failed to delete appointment: ${e.message}"))
+            }
+    }
 }

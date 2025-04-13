@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.OnSurface60
-import com.aritra.medsync.ui.theme.selectedBlue
 
 @Composable
 fun MedSyncButton(
@@ -24,6 +23,7 @@ fun MedSyncButton(
     text: String,
     enabled: Boolean = true,
     trailingIcon : Painter ?= null,
+    buttonColor: Color,
     onClick: () -> Unit
 ) {
     Button(
@@ -36,7 +36,7 @@ fun MedSyncButton(
             .then(modifier),
         onClick = { onClick() },
         colors = ButtonDefaults.buttonColors(
-            containerColor = selectedBlue
+            containerColor = buttonColor
         ),
         enabled = enabled
     ) {

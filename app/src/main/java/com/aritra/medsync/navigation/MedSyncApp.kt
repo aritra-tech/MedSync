@@ -20,10 +20,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.ui.screens.addMedication.AddMedication
@@ -31,6 +33,7 @@ import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
 import com.aritra.medsync.ui.screens.addMedication.viewModel.MedicationConfirmViewModel
 import com.aritra.medsync.ui.screens.appointment.AddAppointmentScreen
+import com.aritra.medsync.ui.screens.appointment.AppointmentDetailScreen
 import com.aritra.medsync.ui.screens.appointment.AppointmentScreen
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.screens.history.HistoryScreen
@@ -66,7 +69,8 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         MedSyncScreens.MedicationConfirmScreen.name,
         MedSyncScreens.ProfileScreen.name,
         MedSyncScreens.PrescriptionScreen.name,
-        MedSyncScreens.AddAppointmentScreen.name
+        MedSyncScreens.AddAppointmentScreen.name,
+        "${MedSyncScreens.AppointmentDetailsScreen.name}/{appointmentId}"
     )
 
     BackPressHandler()
@@ -166,12 +170,27 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
             composable(MedSyncScreens.AppointmentScreen.name) {
                 AppointmentScreen(
                     onFabClicked = { navController.navigate(MedSyncScreens.AddAppointmentScreen.name) },
-                    appointmentViewModel
+                    onAppointmentClicked = { appointmentId ->
+                        navController.navigate("${MedSyncScreens.AppointmentDetailsScreen.name}/$appointmentId")
+                    },
+                    appointmentViewModel = appointmentViewModel
                 )
             }
 
             composable(MedSyncScreens.AddAppointmentScreen.name) {
                 AddAppointmentScreen(navController, appointmentViewModel)
+            }
+
+            composable(
+                route = "${MedSyncScreens.AppointmentDetailsScreen.name}/{appointmentId}",
+                arguments = listOf(navArgument("appointmentId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val appointmentId = backStackEntry.arguments?.getString("appointmentId") ?: ""
+                AppointmentDetailScreen(
+                    navController = navController,
+                    appointmentViewModel = appointmentViewModel,
+                    appointmentId = appointmentId
+                )
             }
         }
     }
