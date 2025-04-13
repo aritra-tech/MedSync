@@ -85,7 +85,7 @@ fun AppointmentScreen(
                 .fillMaxSize()
                 .background(PrimarySurface)
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             if (appointments.isEmpty().not()) {
