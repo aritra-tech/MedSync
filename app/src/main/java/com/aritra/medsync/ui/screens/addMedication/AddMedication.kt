@@ -45,6 +45,7 @@ import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold14
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.selectedBlue
 import com.aritra.medsync.utils.CalendarInformation
 import java.util.Calendar
 import java.util.Date
@@ -223,6 +224,7 @@ fun AddMedication(
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = "Next",
+                buttonColor = selectedBlue,
                 enabled = isButtonEnabled
             ) {
                 addAndValidateMedication(

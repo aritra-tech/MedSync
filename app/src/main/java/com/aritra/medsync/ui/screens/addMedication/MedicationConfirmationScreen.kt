@@ -42,6 +42,7 @@ import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold24
 import com.aritra.medsync.ui.theme.medium16
+import com.aritra.medsync.ui.theme.selectedBlue
 import com.aritra.medsync.utils.Utils.getMedicationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,6 +132,7 @@ fun MedicationConfirmationScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
+                buttonColor = selectedBlue,
                 text = stringResource(R.string.done)
             ) {
                 medication?.let {
