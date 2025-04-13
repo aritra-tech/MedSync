@@ -13,6 +13,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -23,6 +24,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,6 +51,8 @@ import com.aritra.medsync.ui.screens.appointment.state.AppointmentUiState
 import com.aritra.medsync.ui.screens.appointment.viewModel.AppointmentViewModel
 import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.PrimarySurface
+import com.aritra.medsync.ui.theme.bold22
+import com.aritra.medsync.ui.theme.normal18
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -69,6 +73,29 @@ fun AddAppointmentScreen(
     var doctorSpecialization by remember { mutableStateOf("") }
     var appointmentDate by remember { mutableLongStateOf(0L) }
     var appointmentTime by remember { mutableLongStateOf(0L) }
+
+    // Bottom sheet state for doctor specialization
+    val sheetState = rememberModalBottomSheetState()
+    var showSpecializationBottomSheet by remember { mutableStateOf(false) }
+
+    val specializations = remember {
+        listOf(
+            "Cardiologist",
+            "Dermatologist",
+            "Endocrinologist",
+            "Gastroenterologist",
+            "Neurologist",
+            "Obstetrician/Gynecologist",
+            "Oncologist",
+            "Ophthalmologist",
+            "Orthopedist",
+            "Pediatrician",
+            "Psychiatrist",
+            "Pulmonologist",
+            "Rheumatologist",
+            "Urologist"
+        )
+    }
 
     // Set IST timezone for formatting
     val istTimeZone = TimeZone.getTimeZone("Asia/Kolkata")
@@ -154,6 +181,42 @@ fun AddAppointmentScreen(
         )
     }
 
+    if (showSpecializationBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showSpecializationBottomSheet = false },
+            sheetState = sheetState,
+            containerColor = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.select_doctor_specialization),
+                    style = bold22.copy(Color.Black),
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                specializations.forEach { specialization ->
+                    Text(
+                        text = specialization,
+                        style = normal18.copy(Color.Black),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                doctorSpecialization = specialization
+                                showSpecializationBottomSheet = false
+                            }
+                            .padding(vertical = 12.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+
     LaunchedEffect(uiState) {
         when (uiState) {
             is AppointmentUiState.Success -> {
@@ -237,12 +300,21 @@ fun AddAppointmentScreen(
                     )
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                OutlinedTextField(
-                    value = doctorSpecialization,
-                    onValueChange = { doctorSpecialization = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
-                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showSpecializationBottomSheet = true }
+                ) {
+                    OutlinedTextField(
+                        value = doctorSpecialization,
+                        onValueChange = { doctorSpecialization = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1,
+                        readOnly = true,
+                        enabled = false
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
