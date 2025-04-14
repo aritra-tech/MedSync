@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "cc15e9cb9e03a4fda6cc48a1e94afb94",
+    "identityHash": "4b6088d8fb18f1ddb2796d2c2c463b3f",
     "entities": [
       {
         "tableName": "medication",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT NOT NULL, `pillsAmount` TEXT NOT NULL, `endDate` INTEGER NOT NULL, `reminderTime` INTEGER NOT NULL, `medicineType` TEXT NOT NULL, `isTaken` INTEGER NOT NULL, `isSkipped` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `medicineName` TEXT NOT NULL, `pillsAmount` TEXT NOT NULL, `endDate` INTEGER NOT NULL, `reminderTime` INTEGER NOT NULL, `medicineType` TEXT NOT NULL, `isTaken` INTEGER NOT NULL, `isSkipped` INTEGER NOT NULL, `startDate` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -55,6 +55,12 @@
             "columnName": "isSkipped",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -70,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc15e9cb9e03a4fda6cc48a1e94afb94')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4b6088d8fb18f1ddb2796d2c2c463b3f')"
     ]
   }
 }

@@ -158,8 +158,9 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
 
             composable(MedSyncScreens.Settings.name) {
                 SettingsScreen(
+                    navController = navController,
                     userData = googleAuthUiClient.getSignedInUser(),
-                    settingsViewModel
+                    settingsViewModel = settingsViewModel
                 )
             }
 

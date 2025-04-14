@@ -18,5 +18,6 @@ data class Medication(
     var reminderTime : Date,
     var medicineType: String,
     var isTaken: Boolean,
-    var isSkipped: Boolean = false
+    var isSkipped: Boolean = false,
+    val startDate: Date = Date()
 ) : Parcelable
