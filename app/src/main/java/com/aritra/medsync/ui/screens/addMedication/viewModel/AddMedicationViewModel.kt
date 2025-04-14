@@ -16,12 +16,12 @@ class AddMedicationViewModel : ViewModel() {
         medicineType: String,
         startDate: Date = Date(),
     ): List<Medication> {
-
-
         val medicationsList = mutableListOf<Medication>()
-        val calendar = Calendar.getInstance()
-        calendar.time = startDate
+
         for (time in reminderTime) {
+            val calendar = Calendar.getInstance()
+            calendar.time = startDate
+
             val medication = Medication(
                 id = 0,
                 medicineName = medicineName,
@@ -29,7 +29,8 @@ class AddMedicationViewModel : ViewModel() {
                 endDate = endDate,
                 reminderTime = getMedicationTime(time, calendar),
                 medicineType = medicineType,
-                isTaken = false
+                isTaken = false,
+                startDate = startDate
             )
             medicationsList.add(medication)
         }
