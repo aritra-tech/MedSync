@@ -11,9 +11,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +49,7 @@ import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.model.MedicineType
 import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold14
 import com.aritra.medsync.ui.theme.bold32
@@ -84,19 +93,17 @@ fun AddMedication(
         topBar = {
             MedSyncTopAppBar(
                 title = "",
-                colors = TopAppBarDefaults.topAppBarColors(backgroundColor)
-            ) {
-                navController.popBackStack()
-            }
+                colors = TopAppBarDefaults.topAppBarColors(PrimarySurface),
+                onBackPress = { navController.popBackStack() }
+            )
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .background(PrimarySurface)
                 .padding(paddingValues)
-                .background(backgroundColor)
+                .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
         ) {
 
             Text(
@@ -212,11 +219,44 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(10.dp))
 
             for (time in selectedTimes.indices) {
-                MedSyncReminderTextField(
-                    time = {
-                        selectedTimes[time] = it
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    MedSyncReminderTextField(
+                        time = {
+                            selectedTimes[time] = it
+                        }
+                    )
+
+                    if (selectedTimes.size > 1) {
+                        IconButton(
+                            onClick = { selectedTimes.removeAt(time)}
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Remove reminder",
+                                tint = Color.Red
+                            )
+                        }
                     }
-                )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            if (selectedTimes.size < 3) {
+                TextButton(
+                    onClick = {
+                        selectedTimes.add(CalendarInformation(Calendar.getInstance()))
+                    },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add reminder"
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
