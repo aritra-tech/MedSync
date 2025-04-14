@@ -10,39 +10,94 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.aritra.medsync.R
 import com.aritra.medsync.components.ProfileContainer
 import com.aritra.medsync.components.SettingsItem
 import com.aritra.medsync.domain.model.UserData
+import com.aritra.medsync.navigation.MedSyncScreens
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.medium32
 import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Utils.inviteFriends
 import com.aritra.medsync.utils.Utils.mailTo
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @Composable
 fun SettingsScreen(
+    navController: NavController,
     userData: UserData?,
     settingsViewModel: SettingsViewModel
 ) {
     val context = LocalContext.current
-    val themeStateObserver by settingsViewModel.themeState.collectAsState()
+    var showLogoutDialog by remember { mutableStateOf(false) }
+
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .build()
+    val googleSignInClient = GoogleSignIn.getClient(context, gso)
+
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            title = { Text(text = "Logout Confirmation") },
+            text = { Text(text = "Are you sure you want to logout from MedSync?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showLogoutDialog = false
+                        googleSignInClient.signOut().addOnCompleteListener {
+                            navController.navigate(MedSyncScreens.GetStarted.name) {
+                                popUpTo(0) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Red.copy(alpha = 0.8f)
+                    )
+                ) {
+                    Text("Yes")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showLogoutDialog = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 
     /***********************  UI Content  ***********************/
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(PrimarySurface)
@@ -50,7 +105,11 @@ fun SettingsScreen(
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item {
+        // Top section with profile
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -59,8 +118,7 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     ProfileContainer(userData)
@@ -80,31 +138,14 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        item {
-            Column {
-//                Text(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    text = stringResource(R.string.preference),
-//                    color = OnPrimaryContainer,
-//                    style = bold18
-//                )
-//
-//                SettingsSwitch(
-//                    iconId = R.drawable.dark_mode,
-//                    itemName = stringResource(R.string.dark_theme),
-//                    isChecked = themeStateObserver.isDarkMode,
-//                    onCheckedChange = {
-//                        settingsViewModel.toggleTheme()
-//                    }
-//                )
-
-//                Text(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    text = "More",
-//                    color = OnPrimaryContainer,
-//                    style = bold18
-//                )
-
+        // Middle section with settings items
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 SettingsItem(
                     onClick = { mailTo(context) },
                     iconId = R.drawable.send,
@@ -125,27 +166,48 @@ fun SettingsScreen(
             }
         }
 
-        item {
+        Spacer(Modifier.weight(1f))
 
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(top = 80.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Logout Button
+            OutlinedButton(
+                onClick = { showLogoutDialog = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Red.copy(alpha = 0.6f)
+                )
             ) {
                 Text(
-                    modifier = Modifier
-                        .alpha(0.25f),
-                    text = "v.1.0.0",
-                    color = OnSurface20,
-                    style = normal14
-                )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(
-                    text = stringResource(R.string.made_with_in_india),
-                    style = normal14.copy(OnSurface20)
+                    text = "Logout",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White
                 )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Version Info
+            Text(
+                modifier = Modifier.alpha(0.25f),
+                text = "v.1.0.0",
+                color = OnSurface20,
+                style = normal14
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Text(
+                text = stringResource(R.string.made_with_in_india),
+                style = normal14.copy(OnSurface20)
+            )
+
         }
     }
 }
