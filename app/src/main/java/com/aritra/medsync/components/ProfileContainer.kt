@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.aritra.medsync.ui.screens.intro.UserData
+import com.aritra.medsync.domain.model.UserData
 
 @Composable
 fun ProfileContainer(userData: UserData?) {

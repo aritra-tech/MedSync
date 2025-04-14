@@ -1,6 +1,7 @@
 package com.aritra.medsync.ui.screens.intro
 
 import androidx.lifecycle.ViewModel
+import com.aritra.medsync.domain.model.SignInResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

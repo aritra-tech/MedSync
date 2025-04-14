@@ -24,11 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.aritra.medsync.R
 import com.aritra.medsync.components.ProfileContainer
 import com.aritra.medsync.components.SettingsItem
-import com.aritra.medsync.ui.screens.intro.UserData
-import com.aritra.medsync.ui.theme.OnPrimaryContainer
+import com.aritra.medsync.domain.model.UserData
 import com.aritra.medsync.ui.theme.OnSurface20
 import com.aritra.medsync.ui.theme.PrimarySurface
-import com.aritra.medsync.ui.theme.bold18
 import com.aritra.medsync.ui.theme.medium32
 import com.aritra.medsync.ui.theme.normal14
 import com.aritra.medsync.utils.Utils.inviteFriends

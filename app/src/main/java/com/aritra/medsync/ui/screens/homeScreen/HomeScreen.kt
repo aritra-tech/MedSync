@@ -39,7 +39,7 @@ import com.aritra.medsync.components.MedSyncEmptyState
 import com.aritra.medsync.components.MedSyncProgressCard
 import com.aritra.medsync.components.MedicationCard
 import com.aritra.medsync.ui.screens.homeScreen.viewmodel.HomeViewModel
-import com.aritra.medsync.ui.screens.intro.UserData
+import com.aritra.medsync.domain.model.UserData
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold22

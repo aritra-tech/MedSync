@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens.intro
+package com.aritra.medsync.domain.model
 
 data class SignInResult(
     val data: UserData?,
