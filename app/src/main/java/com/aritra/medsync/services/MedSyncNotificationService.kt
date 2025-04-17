@@ -77,12 +77,11 @@ class MedSyncNotificationService(
 
             // Schedule notifications for each day until the end date
             while (currentCalendar.timeInMillis <= endCalendar.timeInMillis) {
-                val intent = Intent(context, MedSyncNotificationReceiver::class.java).apply {
+                val intent = Intent().apply {
+                    setClassName(context.packageName, MedSyncNotificationReceiver::class.java.name)
                     putExtra(Constants.MEDICATION_INTENT, medication)
                     // Add action to make intent unique
                     action = "com.aritra.medsync.MEDICATION_REMINDER_${medication.id}_${requestCode}"
-                    // Explicitly set the package name to ensure the intent is fully explicit
-                    setPackage(context.packageName)
                 }
 
                 // Create a pending intent with FLAG_IMMUTABLE
