@@ -13,15 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,7 +44,6 @@ import com.aritra.medsync.domain.model.MedicineType
 import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
-import com.aritra.medsync.ui.theme.backgroundColor
 import com.aritra.medsync.ui.theme.bold14
 import com.aritra.medsync.ui.theme.bold32
 import com.aritra.medsync.ui.theme.medium16
@@ -79,7 +72,7 @@ fun AddMedication(
         mutableStateOf(MedicineType.TABLET)
     }
     var isButtonEnabled by rememberSaveable { mutableStateOf(false) }
-    var suffixText by rememberSaveable { mutableStateOf("Tablet") }
+    var suffixText by rememberSaveable { mutableStateOf("tablet") }
 
     fun checkAllFieldsFilled() {
         isButtonEnabled = (
@@ -96,16 +89,42 @@ fun AddMedication(
                 colors = TopAppBarDefaults.topAppBarColors(PrimarySurface),
                 onBackPress = { navController.popBackStack() }
             )
+        },
+        bottomBar = {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(PrimarySurface)
+                    .padding(horizontal = 16.dp, vertical = 24.dp)
+            ) {
+                MedSyncButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.next),
+                    buttonColor = selectedBlue,
+                    enabled = isButtonEnabled
+                ) {
+                    addAndValidateMedication(
+                        medicationName = medicineName,
+                        pillsAmount = pillsAmount,
+                        endDate = pillsEndDate,
+                        reminder = selectedTimes,
+                        medicineType = MedicineType.getMedicineTypeString(selectedMedicineType),
+                        addMedicationViewModel = viewModel
+                    ) {
+                        goToMedicationConfirmScreen(it)
+                    }
+                }
+            }
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .background(PrimarySurface)
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
         ) {
-
             Text(
                 text = stringResource(R.string.add_plan),
                 style = bold32,
@@ -191,7 +210,17 @@ fun AddMedication(
                     modifier = Modifier.width(152.dp),
                     value = pillsAmount,
                     onValueChange = {
-                        pillsAmount = it
+                        if (it.isEmpty()) {
+                            pillsAmount = it
+                        } else {
+                            try {
+                                val number = it.toInt()
+                                if (number in 0..10) {
+                                    pillsAmount = it
+                                }
+                            } catch (_: NumberFormatException) {
+                            }
+                        }
                         checkAllFieldsFilled()
                     },
                     trailingIcon = {
@@ -201,7 +230,8 @@ fun AddMedication(
                             style = bold14,
                             color = Color.Black
                         )
-                    }
+                    },
+                    keyboardType = KeyboardType.Number
                 )
             }
 
@@ -219,65 +249,11 @@ fun AddMedication(
             Spacer(modifier = Modifier.height(10.dp))
 
             for (time in selectedTimes.indices) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MedSyncReminderTextField(
-                        time = {
-                            selectedTimes[time] = it
-                        }
-                    )
-
-                    if (selectedTimes.size > 1) {
-                        IconButton(
-                            onClick = { selectedTimes.removeAt(time)}
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Remove reminder",
-                                tint = Color.Red
-                            )
-                        }
+                MedSyncReminderTextField(
+                    time = {
+                        selectedTimes[time] = it
                     }
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-
-            if (selectedTimes.size < 3) {
-                TextButton(
-                    onClick = {
-                        selectedTimes.add(CalendarInformation(Calendar.getInstance()))
-                    },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add reminder"
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            MedSyncButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Next",
-                buttonColor = selectedBlue,
-                enabled = isButtonEnabled
-            ) {
-                addAndValidateMedication(
-                    medicationName = medicineName,
-                    pillsAmount = pillsAmount,
-                    endDate = pillsEndDate,
-                    reminder = selectedTimes,
-                    medicineType = MedicineType.getMedicineTypeString(selectedMedicineType),
-                    addMedicationViewModel = viewModel
-                ) {
-                    goToMedicationConfirmScreen(it)
-
-                }
+                )
             }
         }
     }
