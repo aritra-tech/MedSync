@@ -131,7 +131,8 @@ class AppointmentNotificationScheduler(private val context: Context) {
         calendar.add(Calendar.MINUTE, -reminderMinutes)
 
         // Create intent for the alarm
-        val intent = Intent(context, AppointmentAlarmReceiver::class.java).apply {
+        val intent = Intent().apply {
+            setClassName(context, "com.aritra.medsync.services.AppointmentAlarmReceiver")
             putExtra("doctorName", doctorName)
             putExtra("appointmentTime", appointmentTime)
             putExtra("appointmentId", appointmentId)
