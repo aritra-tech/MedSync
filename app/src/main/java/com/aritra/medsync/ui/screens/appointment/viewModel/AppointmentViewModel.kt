@@ -91,7 +91,7 @@ class AppointmentViewModel(application: Application) : AndroidViewModel(applicat
                     doctorName = doctorName,
                     appointmentDate = formattedDate,
                     appointmentTime = formattedTime,
-                    reminderMinutes = 5
+                    reminderMinutes = 60
                 )
 
                 _uiState.postValue(AppointmentUiState.Success(documentRef.id))

@@ -57,15 +57,10 @@ import com.aritra.medsync.utils.toFormattedTimeString
 fun MedicationCard(
     medication: Medication
 ) {
-
     val updateMedicationViewModel: MedicationDetailsViewModel = hiltViewModel()
     var isTakenClicked by remember {
         mutableStateOf(medication.isTaken)
     }
-    var isSkippedClicked by remember {
-        mutableStateOf(medication.isTaken.not())
-    }
-    var isTakenConfirmed by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Card(
@@ -122,21 +117,16 @@ fun MedicationCard(
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    if (isTakenClicked) {
-                        Text(
-                            text = medication.medicineName,
-                            style = medium16.copy(color = OnPrimaryContainer, textDecoration = TextDecoration.LineThrough)
-                        )
-                    } else {
-                        Text(
-                            text = medication.medicineName,
-                            style = medium18.copy(color = OnPrimaryContainer)
-                        )
-                    }
+                    Text(
+                        text = medication.medicineName,
+                        style = if (medication.isTaken) {
+                            medium16.copy(color = OnPrimaryContainer, textDecoration = TextDecoration.LineThrough)
+                        } else {
+                            medium18.copy(color = OnPrimaryContainer)
+                        }
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
-
-
 
                     Row(
                         modifier = Modifier.fillMaxWidth()
@@ -149,7 +139,7 @@ fun MedicationCard(
                         Spacer(modifier = Modifier.weight(1f))
 
                         AnimatedVisibility(
-                            visible = medication.reminderTime.hasPassed() && !isTakenConfirmed,
+                            visible = medication.reminderTime.hasPassed() && !medication.isTaken,
                             enter = fadeIn(animationSpec = tween(200))
                         ) {
                             Row(
@@ -158,20 +148,15 @@ fun MedicationCard(
                                     .background(lightGreen)
                                     .padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically,
-
                             ) {
                                 Icon(
                                     modifier = Modifier
                                         .size(25.dp)
                                         .onClick {
-                                            isTakenClicked = isTakenClicked.not()
-                                            if (isTakenClicked) {
-                                                isSkippedClicked = false
-                                                isTakenConfirmed = true
-                                            }
+                                            isTakenClicked = true
                                             updateMedicationViewModel.isMedicationTaken(
                                                 medication,
-                                                isTakenClicked
+                                                true
                                             )
                                             Toast
                                                 .makeText(context, "Medication taken", Toast.LENGTH_SHORT)
@@ -189,4 +174,3 @@ fun MedicationCard(
         }
     }
 }
-
