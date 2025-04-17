@@ -81,6 +81,8 @@ class MedSyncNotificationService(
                     putExtra(Constants.MEDICATION_INTENT, medication)
                     // Add action to make intent unique
                     action = "com.aritra.medsync.MEDICATION_REMINDER_${medication.id}_${requestCode}"
+                    // Explicitly set the package name to ensure the intent is fully explicit
+                    setPackage(context.packageName)
                 }
 
                 // Create a pending intent with FLAG_IMMUTABLE
