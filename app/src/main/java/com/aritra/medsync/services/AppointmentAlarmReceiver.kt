@@ -60,7 +60,8 @@ class NotificationHelper(private val context: Context) {
     }
 
     fun createNotification(title: String, message: String, appointmentId: String) {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent().apply {
+            setClassName(context.packageName, MainActivity::class.java.name)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
