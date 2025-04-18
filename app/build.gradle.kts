@@ -1,10 +1,10 @@
 plugins {
     id("com.android.application")
-    kotlin ("android")
-    id ("kotlin-parcelize")
-    id ("kotlin-kapt")
-    id ("com.google.dagger.hilt.android")
-    id ("com.google.devtools.ksp")
+    kotlin("android")
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.compose")
 }
@@ -82,46 +82,48 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Navigation
-    implementation ("androidx.navigation:navigation-compose:$navVersion")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // Material 3
-    implementation ("androidx.compose.material3:material3:1.1.2")
-    implementation ("androidx.compose.material3:material3-window-size-class:1.1.2")
-    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.material3:material3-window-size-class:1.1.2")
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
     // Room
-    implementation ("androidx.room:room-runtime:$roomVersion")
-    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation ("androidx.room:room-ktx:$roomVersion")
-    implementation ("androidx.compose.runtime:runtime-livedata:1.5.1")
-    annotationProcessor ("androidx.room:room-compiler:$roomVersion")
-    ksp ("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     // Lifecycle
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7")
 
     // Dagger Hilt
-    implementation ("com.google.dagger:hilt-android:2.49")
-    kapt ("com.google.dagger:hilt-compiler:2.49")
-    kapt ("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-compiler:2.49")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-work:1.1.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth:23.2.0")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 
     // DataStore
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.7.0")
@@ -130,8 +132,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.6.2")
 
     //Timber
-    implementation ("com.jakewharton.timber:timber:5.0.1")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     //WorkManager
-    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }
