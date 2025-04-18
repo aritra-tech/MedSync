@@ -1,0 +1,297 @@
+Index: app/src/main/java/com/aritra/medsync/ui/screens/addMedication/viewModel/AddMedicationViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aritra.medsync.ui.screens.addMedication.viewModel\n\nimport androidx.lifecycle.ViewModel\nimport com.aritra.medsync.domain.model.Medication\nimport com.aritra.medsync.utils.CalendarInformation\nimport java.util.Calendar\nimport java.util.Date\n\nclass AddMedicationViewModel : ViewModel() {\n\n    fun createMedication(\n        medicineName: String,\n        pillsAmount: String,\n        endDate: Date,\n        reminderTime: List<CalendarInformation>,\n        medicineType: String,\n        startDate: Date = Date(),\n    ): List<Medication> {\n        val medicationsList = mutableListOf<Medication>()\n\n        for (time in reminderTime) {\n            val calendar = Calendar.getInstance()\n            calendar.time = startDate\n\n            val medication = Medication(\n                id = 0,\n                medicineName = medicineName,\n                pillsAmount = pillsAmount,\n                endDate = endDate,\n                reminderTime = getMedicationTime(time, calendar),\n                medicineType = medicineType,\n                isTaken = false,\n                startDate = startDate\n            )\n            medicationsList.add(medication)\n        }\n\n        return medicationsList\n    }\n\n    private fun getMedicationTime(time: CalendarInformation, calendar: Calendar): Date {\n        calendar.set(Calendar.HOUR_OF_DAY, time.dateInformation.hour)\n        calendar.set(Calendar.MINUTE, time.dateInformation.minute)\n        return calendar.time\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/aritra/medsync/ui/screens/addMedication/viewModel/AddMedicationViewModel.kt b/app/src/main/java/com/aritra/medsync/ui/screens/addMedication/viewModel/AddMedicationViewModel.kt
+--- a/app/src/main/java/com/aritra/medsync/ui/screens/addMedication/viewModel/AddMedicationViewModel.kt	(revision 015fa6ee53a32f49226ef21d36e2ee20aef36278)
++++ b/app/src/main/java/com/aritra/medsync/ui/screens/addMedication/viewModel/AddMedicationViewModel.kt	(date 1744859601124)
+@@ -12,30 +12,29 @@
+         medicineName: String,
+         pillsAmount: String,
+         endDate: Date,
+-        reminderTime: List<CalendarInformation>,
++        reminderTimes: List<CalendarInformation>,
+         medicineType: String,
+         startDate: Date = Date(),
+     ): List<Medication> {
+-        val medicationsList = mutableListOf<Medication>()
++        return reminderTimes.map { reminderTime ->
++            val calendar = Calendar.getInstance().apply {
++                time = startDate
++                set(Calendar.HOUR_OF_DAY, reminderTime.dateInformation.hour)
++                set(Calendar.MINUTE, reminderTime.dateInformation.minute)
++                set(Calendar.SECOND, 0)
++            }
+ 
+-        for (time in reminderTime) {
+-            val calendar = Calendar.getInstance()
+-            calendar.time = startDate
+-
+-            val medication = Medication(
+-                id = 0,
++            Medication(
++                id = System.currentTimeMillis().toInt(),
+                 medicineName = medicineName,
+                 pillsAmount = pillsAmount,
+                 endDate = endDate,
+-                reminderTime = getMedicationTime(time, calendar),
++                reminderTime = calendar.time,
+                 medicineType = medicineType,
+                 isTaken = false,
+                 startDate = startDate
+             )
+-            medicationsList.add(medication)
+         }
+-
+-        return medicationsList
+     }
+ 
+     private fun getMedicationTime(time: CalendarInformation, calendar: Calendar): Date {
+Index: app/src/main/java/com/aritra/medsync/services/MedSyncNotificationService.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aritra.medsync.services\n\nimport android.annotation.SuppressLint\nimport android.app.AlarmManager\nimport android.app.PendingIntent\nimport android.content.Context\nimport android.content.Intent\nimport com.aritra.medsync.domain.model.Medication\nimport com.aritra.medsync.utils.Constants\nimport java.util.Calendar\n\nclass MedSyncNotificationService(\n    private val context: Context\n) {\n\n    @SuppressLint(\"ScheduleExactAlarm\")\n    fun scheduleNotification(medication: Medication) {\n        // Get start and end dates\n        val startCalendar = Calendar.getInstance()\n        startCalendar.time = medication.reminderTime\n\n        val endCalendar = Calendar.getInstance()\n        endCalendar.time = medication.endDate\n\n        // Set end date to end of day\n        endCalendar.set(Calendar.HOUR_OF_DAY, 23)\n        endCalendar.set(Calendar.MINUTE, 59)\n        endCalendar.set(Calendar.SECOND, 59)\n\n        // Schedule repeating notification for every day from start to end date\n        val alarmService = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager\n\n        // Extract hour and minute from reminder time\n        val hour = startCalendar.get(Calendar.HOUR_OF_DAY)\n        val minute = startCalendar.get(Calendar.MINUTE)\n\n        // Create a unique request code for this medication\n        val baseRequestCode = medication.id * 1000\n        var requestCode = baseRequestCode\n\n        // Schedule a notification for each day in the range\n        val currentCalendar = Calendar.getInstance()\n        currentCalendar.time = medication.startDate\n        currentCalendar.set(Calendar.HOUR_OF_DAY, hour)\n        currentCalendar.set(Calendar.MINUTE, minute)\n        currentCalendar.set(Calendar.SECOND, 0)\n        currentCalendar.set(Calendar.MILLISECOND, 0)\n\n        while (currentCalendar.timeInMillis <= endCalendar.timeInMillis) {\n            val intent = Intent(context, MedSyncNotificationReceiver::class.java)\n            intent.putExtra(Constants.MEDICATION_INTENT, medication)\n\n            // Use a unique request code for each day's notification\n            val pendingIntent = PendingIntent.getBroadcast(\n                context,\n                requestCode++,\n                intent,\n                PendingIntent.FLAG_IMMUTABLE\n            )\n\n            // Schedule the notification\n            alarmService.setExactAndAllowWhileIdle(\n                AlarmManager.RTC_WAKEUP,\n                currentCalendar.timeInMillis,\n                pendingIntent\n            )\n\n            // Move to the next day\n            currentCalendar.add(Calendar.DAY_OF_MONTH, 1)\n        }\n    }\n\n    companion object {\n        const val MEDICATION_CHANNEL_ID = \"medication_channel\"\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationService.kt b/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationService.kt
+--- a/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationService.kt	(revision 015fa6ee53a32f49226ef21d36e2ee20aef36278)
++++ b/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationService.kt	(date 1744860428328)
+@@ -2,9 +2,13 @@
+ 
+ import android.annotation.SuppressLint
+ import android.app.AlarmManager
++import android.app.NotificationChannel
++import android.app.NotificationManager
+ import android.app.PendingIntent
+ import android.content.Context
+ import android.content.Intent
++import android.graphics.Color
++import android.os.Build
+ import com.aritra.medsync.domain.model.Medication
+ import com.aritra.medsync.utils.Constants
+ import java.util.Calendar
+@@ -15,58 +19,69 @@
+ 
+     @SuppressLint("ScheduleExactAlarm")
+     fun scheduleNotification(medication: Medication) {
+-        // Get start and end dates
+-        val startCalendar = Calendar.getInstance()
+-        startCalendar.time = medication.reminderTime
++        createNotificationChannel()
+ 
+-        val endCalendar = Calendar.getInstance()
+-        endCalendar.time = medication.endDate
++        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+ 
+-        // Set end date to end of day
+-        endCalendar.set(Calendar.HOUR_OF_DAY, 23)
+-        endCalendar.set(Calendar.MINUTE, 59)
+-        endCalendar.set(Calendar.SECOND, 59)
++        // For each reminder time in the medication
++        medication.reminderTime.let { reminderTime ->
++            val calendar = Calendar.getInstance().apply {
++                time = reminderTime
++            }
+ 
+-        // Schedule repeating notification for every day from start to end date
+-        val alarmService = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
++            val hour = calendar.get(Calendar.HOUR_OF_DAY)
++            val minute = calendar.get(Calendar.MINUTE)
+ 
+-        // Extract hour and minute from reminder time
+-        val hour = startCalendar.get(Calendar.HOUR_OF_DAY)
+-        val minute = startCalendar.get(Calendar.MINUTE)
++            // Create a more precise trigger time
++            val triggerTime = Calendar.getInstance().apply {
++                set(Calendar.HOUR_OF_DAY, hour)
++                set(Calendar.MINUTE, minute)
++                set(Calendar.SECOND, 0)
++                set(Calendar.MILLISECOND, 0)
+ 
+-        // Create a unique request code for this medication
+-        val baseRequestCode = medication.id * 1000
+-        var requestCode = baseRequestCode
++                // If time already passed today, schedule for tomorrow
++                if (timeInMillis <= System.currentTimeMillis()) {
++                    add(Calendar.DAY_OF_YEAR, 1)
++                }
++            }
+ 
+-        // Schedule a notification for each day in the range
+-        val currentCalendar = Calendar.getInstance()
+-        currentCalendar.time = medication.startDate
+-        currentCalendar.set(Calendar.HOUR_OF_DAY, hour)
+-        currentCalendar.set(Calendar.MINUTE, minute)
+-        currentCalendar.set(Calendar.SECOND, 0)
+-        currentCalendar.set(Calendar.MILLISECOND, 0)
++            val intent = Intent(context, MedSyncNotificationReceiver::class.java).apply {
++                putExtra(Constants.MEDICATION_INTENT, medication)
++                action = "REMINDER_${medication.id}_${hour}_${minute}"
++            }
+ 
+-        while (currentCalendar.timeInMillis <= endCalendar.timeInMillis) {
+-            val intent = Intent(context, MedSyncNotificationReceiver::class.java)
+-            intent.putExtra(Constants.MEDICATION_INTENT, medication)
++            val requestCode = medication.id * 100 + hour * 60 + minute
+ 
+-            // Use a unique request code for each day's notification
+             val pendingIntent = PendingIntent.getBroadcast(
+                 context,
+-                requestCode++,
++                requestCode,
+                 intent,
+-                PendingIntent.FLAG_IMMUTABLE
++                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+             )
+ 
+-            // Schedule the notification
+-            alarmService.setExactAndAllowWhileIdle(
+-                AlarmManager.RTC_WAKEUP,
+-                currentCalendar.timeInMillis,
++            // Use setAlarmClock() for highest priority - this will show in status bar
++            alarmManager.setAlarmClock(
++                AlarmManager.AlarmClockInfo(triggerTime.timeInMillis, pendingIntent),
+                 pendingIntent
+             )
++        }
++    }
+ 
+-            // Move to the next day
+-            currentCalendar.add(Calendar.DAY_OF_MONTH, 1)
++    private fun createNotificationChannel() {
++        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
++            val channel = NotificationChannel(
++                MEDICATION_CHANNEL_ID,
++                "Medication Reminders",
++                NotificationManager.IMPORTANCE_HIGH
++            ).apply {
++                description = "Channel for medication reminders"
++                enableLights(true)
++                lightColor = Color.BLUE
++            }
++
++            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
++                    as NotificationManager
++            notificationManager.createNotificationChannel(channel)
+         }
+     }
+ 
+Index: app/src/main/java/com/aritra/medsync/services/MedSyncNotificationReceiver.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.aritra.medsync.services\n\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.content.BroadcastReceiver\nimport android.content.Context\nimport android.content.Intent\nimport androidx.core.app.NotificationCompat\nimport com.aritra.medsync.MainActivity\nimport com.aritra.medsync.R\nimport com.aritra.medsync.domain.model.Medication\nimport com.aritra.medsync.utils.Constants\nimport com.aritra.medsync.utils.toFormattedTimeString\n\nclass MedSyncNotificationReceiver : BroadcastReceiver() {\n\n    companion object {\n        const val ACTION_TAKE = \"com.aritra.medsync.ACTION_TAKE\"\n    }\n\n    override fun onReceive(context: Context?, intent: Intent?) {\n        context?.let {\n            when (intent?.action) {\n                ACTION_TAKE -> {\n                    // Handle \"Take\" action\n                    val medicationId = intent.getIntExtra(Constants.MEDICATION_ID, -1)\n                    if (medicationId != -1) {\n                        handleMedicationTaken(context, medicationId)\n                    } else {\n\n                    }\n                }\n                else -> {\n                    // Show notification\n                    intent?.getParcelableExtra<Medication>(Constants.MEDICATION_INTENT)?.let { medication ->\n                        showNotification(it, medication)\n                    }\n                }\n            }\n        }\n    }\n\n    private fun handleMedicationTaken(context: Context, medicationId: Int) {\n        // Create an Intent to send a broadcast to update medication in the database\n        val updateIntent = Intent(\"com.aritra.medsync.UPDATE_MEDICATION_STATUS\")\n        updateIntent.putExtra(Constants.MEDICATION_ID, medicationId)\n        updateIntent.putExtra(Constants.MEDICATION_TAKEN, true)\n        context.sendBroadcast(updateIntent)\n\n        // Cancel the notification\n        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager\n        notificationManager.cancel(medicationId)\n    }\n\n    private fun showNotification(context: Context, medication: Medication) {\n        val intent = Intent(context, MainActivity::class.java)\n        intent.putExtra(Constants.MEDICATION_NOTIFICATION, true)\n        val pendingIntent = PendingIntent.getActivity(\n            context,\n            medication.id,\n            intent,\n            PendingIntent.FLAG_IMMUTABLE\n        )\n\n        // Create Take action\n        val takeIntent = Intent(context, MedSyncNotificationReceiver::class.java).apply {\n            action = ACTION_TAKE\n            putExtra(Constants.MEDICATION_ID, medication.id)\n        }\n        val takePendingIntent = PendingIntent.getBroadcast(\n            context,\n            medication.id * 10 + 1, // Ensure unique request code\n            takeIntent,\n            PendingIntent.FLAG_IMMUTABLE\n        )\n\n        val notification = NotificationCompat.Builder(\n            context,\n            MedSyncNotificationService.MEDICATION_CHANNEL_ID\n        )\n            .setSmallIcon(R.drawable.medsync_logo)\n            .setContentTitle(context.getString(R.string.medicine_reminder_title, medication.reminderTime.toFormattedTimeString()))\n            .setContentText(context.getString(R.string.medicine_reminder_text, medication.medicineName))\n            .setContentIntent(pendingIntent)\n            .addAction(R.drawable.take_icon, \"Take\", takePendingIntent)\n            .setAutoCancel(true)\n            .build()\n\n        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager\n        notificationManager.notify(medication.id, notification)\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationReceiver.kt b/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationReceiver.kt
+--- a/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationReceiver.kt	(revision 015fa6ee53a32f49226ef21d36e2ee20aef36278)
++++ b/app/src/main/java/com/aritra/medsync/services/MedSyncNotificationReceiver.kt	(date 1744859944824)
+@@ -9,8 +9,8 @@
+ import com.aritra.medsync.MainActivity
+ import com.aritra.medsync.R
+ import com.aritra.medsync.domain.model.Medication
++import com.aritra.medsync.services.MedSyncNotificationService.Companion.MEDICATION_CHANNEL_ID
+ import com.aritra.medsync.utils.Constants
+-import com.aritra.medsync.utils.toFormattedTimeString
+ 
+ class MedSyncNotificationReceiver : BroadcastReceiver() {
+ 
+@@ -19,21 +19,18 @@
+     }
+ 
+     override fun onReceive(context: Context?, intent: Intent?) {
+-        context?.let {
++        context?.let { ctx ->
+             when (intent?.action) {
+                 ACTION_TAKE -> {
+-                    // Handle "Take" action
+                     val medicationId = intent.getIntExtra(Constants.MEDICATION_ID, -1)
+                     if (medicationId != -1) {
+-                        handleMedicationTaken(context, medicationId)
+-                    } else {
+-
++                        handleMedicationTaken(ctx, medicationId)
+                     }
+                 }
+                 else -> {
+-                    // Show notification
+-                    intent?.getParcelableExtra<Medication>(Constants.MEDICATION_INTENT)?.let { medication ->
+-                        showNotification(it, medication)
++                    // Handle regular notification
++                    intent?.getParcelableExtra<Medication>(Constants.MEDICATION_INTENT)?.let { med ->
++                        showNotification(ctx, med)
+                     }
+                 }
+             }
+@@ -53,40 +50,49 @@
+     }
+ 
+     private fun showNotification(context: Context, medication: Medication) {
+-        val intent = Intent(context, MainActivity::class.java)
+-        intent.putExtra(Constants.MEDICATION_NOTIFICATION, true)
+-        val pendingIntent = PendingIntent.getActivity(
++        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
++                as NotificationManager
++
++        // Create main intent
++        val contentIntent = Intent(context, MainActivity::class.java).apply {
++            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
++        }
++        val contentPendingIntent = PendingIntent.getActivity(
+             context,
+             medication.id,
+-            intent,
+-            PendingIntent.FLAG_IMMUTABLE
++            contentIntent,
++            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+         )
+ 
+-        // Create Take action
++        // Create take action
+         val takeIntent = Intent(context, MedSyncNotificationReceiver::class.java).apply {
+             action = ACTION_TAKE
+             putExtra(Constants.MEDICATION_ID, medication.id)
+         }
+         val takePendingIntent = PendingIntent.getBroadcast(
+             context,
+-            medication.id * 10 + 1, // Ensure unique request code
++            medication.id * 10 + 1,
+             takeIntent,
+-            PendingIntent.FLAG_IMMUTABLE
++            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+         )
+ 
+-        val notification = NotificationCompat.Builder(
+-            context,
+-            MedSyncNotificationService.MEDICATION_CHANNEL_ID
+-        )
++        // Build notification
++        val notification = NotificationCompat.Builder(context, MEDICATION_CHANNEL_ID)
+             .setSmallIcon(R.drawable.medsync_logo)
+-            .setContentTitle(context.getString(R.string.medicine_reminder_title, medication.reminderTime.toFormattedTimeString()))
+-            .setContentText(context.getString(R.string.medicine_reminder_text, medication.medicineName))
+-            .setContentIntent(pendingIntent)
+-            .addAction(R.drawable.take_icon, "Take", takePendingIntent)
++            .setContentTitle("Time to take your medication")
++            .setContentText("${medication.medicineName} - ${medication.pillsAmount}")
++            .setPriority(NotificationCompat.PRIORITY_HIGH)
++            .setContentIntent(contentPendingIntent)
++            .addAction(
++                NotificationCompat.Action.Builder(
++                    R.drawable.take_icon,
++                    "Taken",
++                    takePendingIntent
++                ).build()
++            )
+             .setAutoCancel(true)
+             .build()
+ 
+-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+         notificationManager.notify(medication.id, notification)
+     }
+ }
+\ No newline at end of file

@@ -1,0 +1,102 @@
+Index: .github/workflow/build.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>name: Build\n\non:\n  pull_request:\n    branches:\n      - develop\n\n  push:\n    branches:\n      - master\n      - develop\n\njobs:\n  build:\n    name: Build\n    runs-on: ubuntu-latest\n\n    steps:\n      -   name: Checkout the code\n          uses: actions/checkout@v4\n\n      -   name: Set up JDK 17\n          uses: actions/setup-java@v3\n          with:\n            distribution: 'temurin'\n            java-version: '17'\n\n      -   name: Grant execute permission for gradlew\n          run: chmod +x gradlew\n\n      -   name: Build with Gradle\n          run: ./gradlew build\n\n      -   name: Cache Gradle dependencies\n          uses: actions/cache@v3\n          with:\n            path: |\n              ~/.gradle/caches\n              ~/.gradle/wrapper\n            key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}\n            restore-keys: |\n              gradle-${{ runner.os }}-
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/workflow/build.yml b/.github/workflow/build.yml
+--- a/.github/workflow/build.yml	(revision 09a90f05934ee11734e9d3aac648bf108ec818d0)
++++ b/.github/workflow/build.yml	(date 1744986385318)
+@@ -1,14 +1,13 @@
+ name: Build
+ 
+ on:
+-  pull_request:
+-    branches:
+-      - develop
+-
+   push:
+     branches:
+-      - master
+-      - develop
++      - '**'
++
++  pull_request:
++    branches:
++      - '**'
+ 
+ jobs:
+   build:
+Index: .github/workflow/new_contributor.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/workflow/new_contributor.yml b/.github/workflow/new_contributor.yml
+new file mode 100644
+--- /dev/null	(date 1744997542703)
++++ b/.github/workflow/new_contributor.yml	(date 1744997542703)
+@@ -0,0 +1,22 @@
++name: Welcome First-Time Contributor
++
++on:
++  pull_request:
++    types: [opened]
++
++jobs:
++  greet:
++    runs-on: ubuntu-latest
++
++    steps:
++      - name: Greet first-time contributor
++        uses: actions/first-interaction@v1
++        with:
++          repo-token: ${{ secrets.GITHUB_TOKEN }}
++          pr-message: |
++            👋 Hello @${{ github.actor }}! Thanks for your first Pull Request 🎉
++
++            We really appreciate your contribution to this project.
++
++            A maintainer will review your PR soon 🚀
++
+Index: .github/workflow/bump_version.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.github/workflow/bump_version.yml b/.github/workflow/bump_version.yml
+new file mode 100644
+--- /dev/null	(date 1744997005717)
++++ b/.github/workflow/bump_version.yml	(date 1744997005717)
+@@ -0,0 +1,29 @@
++name: Bump Version
++
++on:
++  push:
++    branches:
++      - master
++
++jobs:
++  version-bump:
++    runs-on: ubuntu-latest
++
++    steps:
++      - name: Checkout Code
++        uses: actions/checkout@v4
++
++      - name: Bump Version
++        uses: chkfung/android-version-actions@v1.2.3
++        with:
++          gradlePath: app/build.gradle.kts
++          versionCode: ${{ github.run_number }}
++          versionName: "1.0.${{ github.run_number }}"
++
++      - name: Commit and Push
++        run: |
++          git config user.name "GitHub Actions"
++          git config user.email "actions@github.com"
++          git add app/build.gradle.kts
++          git commit -m "ci: bump version [skip ci]" || echo "No changes"
++          git push
+\ No newline at end of file
