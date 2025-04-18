@@ -14,9 +14,10 @@ data class Medication(
     var id : Int = 0,
     var medicineName : String,
     var pillsAmount : String,
-    var pillsFrequency : String,
     var endDate : Date,
     var reminderTime : Date,
     var medicineType: String,
-    var isTaken: Boolean
+    var isTaken: Boolean,
+    var isSkipped: Boolean = false,
+    val startDate: Date = Date()
 ) : Parcelable

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "318380885884",
+    "project_id": "medsync-34d34",
+    "storage_bucket": "medsync-34d34.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318380885884:android:e0d43b2da7eeb8434846f9",
+        "android_client_info": {
+          "package_name": "com.aritra.medsync"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318380885884-c8phqg1k7pibaohcihi2cial43d6jn1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aritra.medsync",
+            "certificate_hash": "509b7cae05fed4fc097a9260ac2503a90b1a3673"
+          }
+        },
+        {
+          "client_id": "318380885884-cto01b1l7bc73dv77u5bbfcbsht0o2jg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkvtKcpkB-E4njBGU8-VT0_eVFbi54TPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318380885884-cto01b1l7bc73dv77u5bbfcbsht0o2jg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

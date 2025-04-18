@@ -25,18 +25,4 @@ val backgroundColor = Color(0xFFF5F8FA)
 val dividerColor = Color(0xFFF6F5FA)
 val lightGreen = Color(0xFFD3F8D3)
 val lightRed = Color(0xFFFFCCCC)
-
-
-val AVAILABLE_BACKGROUND = Color(0xFFAEFFC0)
-val CHARGING_BACKGROUND = Color(0xFFFFDCA8)
-val INOPERATIVE_BACKGROUND = Color(0xFFFFB4B4)
-val UNKNOWN_BACKGROUND = Color(0xFFD6D6D6)
-
-val AVAILABLE_FOREGROUND = Color(0xFF15862E)
-val CHARGING_FOREGROUND = Color(0xFF895C19)
-val INOPERATIVE_FOREGROUND = Color(0xFF941919)
-val UNKNOWN_FOREGROUND = Color(0xFF545454)
-
-val progressBarTrackColor = Color(0xFFCFCFCF)
-val FaintedGreen = Color(0xFF405F65)
 val selectedBlue = Color(0xFA65A3FF)

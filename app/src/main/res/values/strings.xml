@@ -3,6 +3,7 @@
     <string name="add_plan">Add Plan</string>
     <string name="pill_name">Pill Name</string>
     <string name="amount_frequency"><![CDATA[Amount & Frequency]]></string>
+    <string name="dosage">Dosage</string>
     <string name="how_long">How Long?</string>
     <string name="reminder">Reminder</string>
     <string name="no_need_to_worry_we_are_here_to_remind_you_about_your_medicines">No need to worry we are here to remind you about your medicines</string>
@@ -11,9 +12,9 @@
     <string name="pills_amount_hint">eg. 1</string>
     <string name="pills_frequency_hint">eg. Daily</string>
     <string name="end_date_hint">eg. 20th Feb, 2023</string>
-    <string name="medicine_reminder_title">"Time for Your Health Boost!"</string>
+    <string name="medicine_reminder_title">"Pill reminder %s"</string>
     <string name="notification_for_medication_reminder">"Notification for medication reminder"</string>
-    <string name="medicine_reminder_text">"Time to take your medication, %s. Open the app to mark it."</string>
+    <string name="medicine_reminder_text">"Take, %s."</string>
     <string name="done">Done</string>
     <string name="your_plan_for_today">Your plan for today</string>
     <string name="preference">Preference</string>
@@ -31,4 +32,17 @@
     <string name="medication_taken_at">Taken at %s</string>
     <string name="medication_skipped_at">Skipped at %s</string>
     <string name="medication_scheduled_at">Scheduled at %s</string>
+    <string name="medications">Medications</string>
+    <string name="web_client_id">318380885884-cto01b1l7bc73dv77u5bbfcbsht0o2jg.apps.googleusercontent.com</string>
+    <string name="add_appointment">Add Appointment</string>
+    <string name="doctor_name">Doctor Name</string>
+    <string name="doctor_specialization">Doctor specialization</string>
+    <string name="save">Save</string>
+    <string name="appointment_date">Appointment Date</string>
+    <string name="appointment_time">Appointment Time</string>
+    <string name="made_with_in_india">Made with ❤️ in India</string>
+    <string name="select_doctor_specialization">Select Doctor Specialization</string>
+    <string name="appointment_details">Appointment Details</string>
+    <string name="update">Update</string>
+    <string name="next">Next</string>
 </resources>
