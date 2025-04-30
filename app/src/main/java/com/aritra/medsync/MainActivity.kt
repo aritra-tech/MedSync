@@ -69,13 +69,6 @@ class MainActivity : ComponentActivity(), InstallStateUpdatedListener {
     ) { result: ActivityResult ->
         if (result.resultCode != RESULT_OK) {
             Timber.d("Update flow failed! Result code: ${result.resultCode}")
-            if (BuildConfig.DEBUG) {
-                Toast.makeText(
-                    applicationContext,
-                    "Update flow failed! Result code: ${result.resultCode}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         } else {
             Timber.d("Update flow succeeded")
         }
