@@ -35,6 +35,7 @@ import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.PrimaryContainer
 import com.aritra.medsync.ui.theme.PrimarySurface
 import com.aritra.medsync.ui.theme.bold20
+import com.aritra.medsync.ui.theme.medium20
 import com.aritra.medsync.utils.Utils.formatDateHeader
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,7 +94,7 @@ fun AppointmentScreen(
                     Text(
                         modifier = Modifier.padding(vertical = 10.dp),
                         text = formatDateHeader(date),
-                        style = bold20.copy(OnPrimaryContainer),
+                        style = medium20.copy(OnPrimaryContainer),
                     )
 
                     appointmentList.forEach { appointment ->
