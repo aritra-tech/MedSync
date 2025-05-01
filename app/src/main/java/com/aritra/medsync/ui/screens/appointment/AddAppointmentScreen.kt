@@ -278,12 +278,19 @@ fun AddAppointmentScreen(
                         color = Color.Black,
                     )
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
+
                 OutlinedTextField(
                     value = doctorName,
                     onValueChange = { doctorName = it },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
+                    maxLines = 1,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = DMSansFontFamily,
+                        fontSize = 16.sp
+                    )
                 )
             }
 
@@ -313,7 +320,12 @@ fun AddAppointmentScreen(
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 1,
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -342,7 +354,12 @@ fun AddAppointmentScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -371,7 +388,12 @@ fun AddAppointmentScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
