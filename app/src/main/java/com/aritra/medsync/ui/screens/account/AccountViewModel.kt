@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens.settings
+package com.aritra.medsync.ui.screens.account
 
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(dataStoreUtil: DataStoreUtil) : ViewModel() {
+class AccountViewModel @Inject constructor(dataStoreUtil: DataStoreUtil) : ViewModel() {
     private val _themeState = MutableStateFlow(ThemeState(isDarkMode = false))
     val themeState: StateFlow<ThemeState> = _themeState
 

@@ -11,7 +11,7 @@ sealed class MedSyncScreens(val name: String) {
     object MedicationConfirmScreen : MedSyncScreens(Constants.MEDICATION_CONFIRMATION_SCREEN)
     object UpdateMedication : MedSyncScreens(Constants.UPDATE_MEDICATION_SCREEN)
     object History : MedSyncScreens(Constants.HISTORY_SCREEN)
-    object Settings : MedSyncScreens(Constants.SETTINGS_SCREEN)
+    object Account : MedSyncScreens(Constants.ACCOUNT_SCREEN)
     object ProfileScreen : MedSyncScreens(Constants.PROFILE_SCREEN)
     object PrescriptionScreen : MedSyncScreens(Constants.PRESCRIPTION_SCREEN)
     object AppointmentScreen : MedSyncScreens(Constants.APPOINTMENT_SCREEN)

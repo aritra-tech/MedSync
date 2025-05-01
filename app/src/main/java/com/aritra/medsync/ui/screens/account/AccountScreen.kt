@@ -1,4 +1,4 @@
-package com.aritra.medsync.ui.screens.settings
+package com.aritra.medsync.ui.screens.account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.aritra.medsync.BuildConfig
 import com.aritra.medsync.R
 import com.aritra.medsync.components.ProfileContainer
 import com.aritra.medsync.components.SettingsItem
@@ -48,10 +48,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @Composable
-fun SettingsScreen(
+fun AccountScreen(
     navController: NavController,
     userData: UserData?,
-    settingsViewModel: SettingsViewModel
 ) {
     val context = LocalContext.current
     var showLogoutDialog by remember { mutableStateOf(false) }
@@ -196,7 +195,7 @@ fun SettingsScreen(
             // Version Info
             Text(
                 modifier = Modifier.alpha(0.25f),
-                text = "v.1.0.0",
+                text = "v.${BuildConfig.VERSION_NAME}.(${BuildConfig.VERSION_CODE})",
                 color = OnSurface20,
                 style = normal14
             )

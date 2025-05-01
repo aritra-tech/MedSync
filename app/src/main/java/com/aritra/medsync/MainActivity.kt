@@ -41,7 +41,6 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.firebase.BuildConfig
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

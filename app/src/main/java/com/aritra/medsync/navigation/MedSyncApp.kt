@@ -28,6 +28,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aritra.medsync.R
 import com.aritra.medsync.domain.model.Medication
+import com.aritra.medsync.ui.screens.account.AccountScreen
+import com.aritra.medsync.ui.screens.account.AccountViewModel
 import com.aritra.medsync.ui.screens.addMedication.AddMedication
 import com.aritra.medsync.ui.screens.addMedication.MedicationConfirmationScreen
 import com.aritra.medsync.ui.screens.addMedication.viewModel.AddMedicationViewModel
@@ -45,8 +47,6 @@ import com.aritra.medsync.ui.screens.intro.GoogleAuthUiClient
 import com.aritra.medsync.ui.screens.intro.SigninViewModel
 import com.aritra.medsync.ui.screens.intro.SplashScreen
 import com.aritra.medsync.ui.screens.prescription.PrescriptionScreen
-import com.aritra.medsync.ui.screens.settings.SettingsScreen
-import com.aritra.medsync.ui.screens.settings.SettingsViewModel
 import com.aritra.medsync.ui.theme.Background
 import com.aritra.medsync.ui.theme.DMSansFontFamily
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
@@ -91,7 +91,6 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
         val signInViewModel: SigninViewModel = hiltViewModel()
         val medicationConfirmViewModel: MedicationConfirmViewModel = hiltViewModel()
         val homeViewModel: HomeViewModel = hiltViewModel()
-        val settingsViewModel: SettingsViewModel = hiltViewModel()
         val historyViewModel: HistoryViewModel = hiltViewModel()
         val appointmentViewModel: AppointmentViewModel = hiltViewModel()
 
@@ -156,11 +155,10 @@ fun MedSyncApp(googleAuthUiClient: GoogleAuthUiClient) {
                 HistoryScreen(historyViewModel)
             }
 
-            composable(MedSyncScreens.Settings.name) {
-                SettingsScreen(
+            composable(MedSyncScreens.Account.name) {
+                AccountScreen(
                     navController = navController,
-                    userData = googleAuthUiClient.getSignedInUser(),
-                    settingsViewModel = settingsViewModel
+                    userData = googleAuthUiClient.getSignedInUser()
                 )
             }
 
@@ -227,7 +225,7 @@ fun ShowBottomNavigation(
                 ),
                 BottomNavItem(
                     name = "Account",
-                    route = MedSyncScreens.Settings.name,
+                    route = MedSyncScreens.Account.name,
                     icon = painterResource(R.drawable.account_icon)
                 )
             )
