@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -278,12 +280,20 @@ fun AddAppointmentScreen(
                         color = Color.Black,
                     )
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
+
                 OutlinedTextField(
                     value = doctorName,
                     onValueChange = { doctorName = it },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
+                    maxLines = 1,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = DMSansFontFamily,
+                        fontSize = 16.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
             }
 
@@ -313,7 +323,12 @@ fun AddAppointmentScreen(
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 1,
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -342,7 +357,12 @@ fun AddAppointmentScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -371,7 +391,12 @@ fun AddAppointmentScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }

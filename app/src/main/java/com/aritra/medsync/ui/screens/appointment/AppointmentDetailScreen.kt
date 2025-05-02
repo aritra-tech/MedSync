@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -116,6 +118,22 @@ fun AppointmentDetailScreen(
         SimpleDateFormat("hh:mm a", Locale.getDefault()).apply { timeZone = istTimeZone }
     }
 
+    // Helper function to parse time string to Date with multiple format attempts
+    fun parseTimeString(timeString: String): Date? {
+        return try {
+            dbTimeFormatter.parse(timeString)
+        } catch (e: Exception) {
+            // If standard parsing fails, try alternate format(s)
+            try {
+                SimpleDateFormat("HH:mm", Locale.getDefault()).apply {
+                    timeZone = TimeZone.getTimeZone("Asia/Kolkata")
+                }.parse(timeString)
+            } catch (e: Exception) {
+                null // Return null if all parsing attempts fail
+            }
+        }
+    }
+
     // Date Picker State
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
@@ -151,12 +169,17 @@ fun AppointmentDetailScreen(
     // Formatted date and time text for display in IST
     val formattedDate = remember(appointmentDate) {
         if (appointmentDate > 0) dateFormatter.format(Date(appointmentDate))
-        else ""
+        else "Select date"
     }
 
     val formattedTime = remember(appointmentTime) {
-        if (appointmentTime > 0) timeFormatter.format(Date(appointmentTime))
-        else ""
+        if (appointmentTime > 0) {
+            try {
+                timeFormatter.format(Date(appointmentTime))
+            } catch (e: Exception) {
+                "Select time" // Fallback text
+            }
+        } else "Select time" // Default text when no time is set
     }
 
     val uiState by appointmentViewModel.uiState.observeAsState(AppointmentUiState.Idle)
@@ -177,12 +200,22 @@ fun AppointmentDetailScreen(
                     datePickerState.selectedDateMillis = it.time
                 }
 
-                // Set time - Add this block
-                val time = dbTimeFormatter.parse(appointment.appointmentTime)
+                // Set time with improved parsing
+                val timeString = appointment.appointmentTime
+                val time = parseTimeString(timeString)
                 time?.let {
                     appointmentTime = it.time
+
+                    // Update time picker state to match the parsed time
+                    val calendar = Calendar.getInstance().apply {
+                        timeInMillis = it.time
+                    }
+                    // These values would be used if we were creating a new timePickerState here
+                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                    val minute = calendar.get(Calendar.MINUTE)
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                println("Error parsing appointment details: ${e.message}")
                 // Handle parse error
             }
         }
@@ -371,7 +404,13 @@ fun AppointmentDetailScreen(
                     value = doctorName,
                     onValueChange = { doctorName = it },
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
+                    maxLines = 1,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = DMSansFontFamily,
+                        fontSize = 16.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
             }
 
@@ -401,7 +440,12 @@ fun AppointmentDetailScreen(
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 1,
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -430,7 +474,12 @@ fun AppointmentDetailScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -459,7 +508,12 @@ fun AppointmentDetailScreen(
                         onValueChange = { },
                         modifier = Modifier.fillMaxWidth(),
                         readOnly = true,
-                        enabled = false
+                        enabled = false,
+                        textStyle = TextStyle(
+                            color = Color.Black,
+                            fontFamily = DMSansFontFamily,
+                            fontSize = 16.sp
+                        )
                     )
                 }
             }
@@ -479,7 +533,7 @@ fun AppointmentDetailScreen(
 
             MedSyncButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.update),
+                text = stringResource(R.string.save),
                 buttonColor = selectedBlue,
                 onClick = {
                     val date = if (appointmentDate > 0L) Date(appointmentDate) else null

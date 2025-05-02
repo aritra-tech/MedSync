@@ -28,6 +28,7 @@ import com.aritra.medsync.domain.model.Appointment
 import com.aritra.medsync.ui.theme.MedicineCircleColor
 import com.aritra.medsync.ui.theme.OnPrimaryContainer
 import com.aritra.medsync.ui.theme.OnSurface60
+import com.aritra.medsync.ui.theme.medium16
 import com.aritra.medsync.ui.theme.medium18
 import com.aritra.medsync.ui.theme.normal14
 
@@ -78,7 +79,7 @@ fun AppointmentCard(
 
                     Text(
                         text = "Dr. ${appointment.doctorName}",
-                        style = medium18.copy(color = OnPrimaryContainer)
+                        style = medium16.copy(color = OnPrimaryContainer)
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
