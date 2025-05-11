@@ -37,8 +37,9 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
                         }
                     }
                     "android.intent.action.BOOT_COMPLETED" -> {
-                        NotificationLogger.debug("Device rebooted, should reschedule all notifications")
-                        // In a real app, you would reschedule all pending medications here
+                        NotificationLogger.debug("Device rebooted, rescheduling all notifications")
+                        // Start the service to reschedule all medications
+                        rescheduleAllMedications(context)
                     }
                     else -> {
                         // Show notification
@@ -79,7 +80,11 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(medicationId)
 
-            NotificationLogger.debug("Medication marked as taken and notification canceled")
+            // Cancel all future reminders for this medication
+            val notificationService = MedSyncNotificationService(context)
+            notificationService.cancelScheduledNotification(medicationId)
+
+            NotificationLogger.debug("Medication marked as taken and all notifications canceled")
         } catch (e: Exception) {
             NotificationLogger.error("Error handling medication taken", e)
         }
@@ -141,6 +146,17 @@ class MedSyncNotificationReceiver : BroadcastReceiver() {
             NotificationLogger.debug("Notification displayed successfully")
         } catch (e: Exception) {
             NotificationLogger.error("Error showing notification", e)
+        }
+    }
+
+    private fun rescheduleAllMedications(context: Context) {
+        try {
+            NotificationLogger.debug("Starting medication rescheduler service")
+            val intent = Intent(context, MedicationReschedulerService::class.java)
+            // Use normal service instead of foreground service to avoid permission issues
+            context.startService(intent)
+        } catch (e: Exception) {
+            NotificationLogger.error("Failed to start rescheduler service", e)
         }
     }
 }
