@@ -4,12 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.aritra.medsync.domain.extensions.runIO
 import com.aritra.medsync.domain.model.Medication
 import com.aritra.medsync.domain.repository.MedicationRepository
 import com.aritra.medsync.ui.screens.homeScreen.usecase.FetchMedicationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.security.PrivateKey
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +20,10 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     var medicationModel by mutableStateOf(emptyList<Medication>())
+    
+    init {
+        cleanupOldMedications()
+    }
 
     fun getMedications() = runIO {
         fetchMedicationUseCase.getAllMedications().collect { response ->
@@ -37,6 +42,10 @@ class HomeViewModel @Inject constructor(
                 isSkipped = isSkipped
             )
             medicineRepository.updateMedication(updatedMedication)
-
+    }
+    
+    fun cleanupOldMedications() = viewModelScope.launch {
+        val twentyFourHoursInMillis = 24 * 60 * 60 * 1000L
+        medicineRepository.deleteOldMedications(twentyFourHoursInMillis)
     }
 }

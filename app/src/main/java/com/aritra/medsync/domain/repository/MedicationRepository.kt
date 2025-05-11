@@ -12,4 +12,6 @@ interface MedicationRepository {
     fun getAllMedications(): Flow<List<Medication>>
 
     suspend fun getMedicationById(medicationId: Int): Medication?
+    
+    suspend fun deleteOldMedications(timeThreshold: Long)
 }
