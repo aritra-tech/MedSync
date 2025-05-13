@@ -78,6 +78,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         homeViewModel.getMedications()
+        homeViewModel.cleanupOldMedications()
     }
 
     LaunchedEffect(Unit) {

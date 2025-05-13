@@ -237,7 +237,7 @@ fun AddMedication(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            PillsEndDate { pillsEndDate = it }
+            // PillsEndDate { pillsEndDate = it }
 
             Spacer(modifier = Modifier.height(20.dp))
 

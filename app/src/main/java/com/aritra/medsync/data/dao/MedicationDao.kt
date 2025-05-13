@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.aritra.medsync.domain.model.Medication
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface MedicationDao {
@@ -22,4 +23,7 @@ interface MedicationDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateMedication(medicationModel: Medication)
+    
+    @Query("DELETE FROM medication WHERE startDate < :cutoffDate")
+    suspend fun deleteOldMedications(cutoffDate: Date)
 }
